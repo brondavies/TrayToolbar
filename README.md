@@ -1,5 +1,5 @@
 # TrayToolbar
- Places a menu with all your favorite shortcuts within easy reach just by putting them in a local folder.
+ Creates a menu with all your favorite shortcuts within easy reach just by putting them in a local folder.
 
 [![CodeQL](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml/badge.svg?branch=master&event=push)](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml) [![Download](https://badge.fury.io/gh/brondavies%2FTrayToolbar.svg)](https://github.com/brondavies/TrayToolbar/releases)
 
@@ -23,7 +23,7 @@ This application runs on .NET Desktop Runtime 8.  Download and install the runti
 
 ## Installation
 This application is "portable" so there is no setup package, just extract and go!
-- Download and extract the zip file to a writable folder such as C:\tools\TrayToolbar or C:\Users\%Username%\AppData\Local\TrayToolbar
+- Download and extract the zip file to a writable folder such as C:\tools\TrayToolbar or C:\Users\\%Username%\AppData\Local\TrayToolbar
 - Run TrayToolbar.exe from this folder
 - Select a folder containing your shortcuts
 - Select **Run on log in** to start the application every time
