@@ -135,6 +135,9 @@
   <data name="Options" xml:space="preserve">
     <value>Options</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
   <data name="Run on log in" xml:space="preserve">
     <value>Run on log in</value>
   </data>

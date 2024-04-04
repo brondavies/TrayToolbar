@@ -153,4 +153,7 @@
   <data name="TrayToolbar Settings" xml:space="preserve">
     <value>Configurações da barra de ferramentas da bandeja</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Atualizar</value>
+  </data>
 </root>

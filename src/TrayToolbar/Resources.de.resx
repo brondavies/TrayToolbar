@@ -153,4 +153,7 @@
   <data name="TrayToolbar Settings" xml:space="preserve">
     <value>TrayToolbar-Einstellungen</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Aktualisierung</value>
+  </data>
 </root>

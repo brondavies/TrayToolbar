@@ -39,18 +39,5 @@ namespace TrayToolbar
             key.SetValue("StartupTNotiTrayToolbar", 1, RegistryValueKind.DWord);
             key.Close();
         }
-
-        internal static void RunConfig(bool runOnLogin)
-        {
-            var yes = runOnLogin ? "yes" : "";
-            var startinfo = new ProcessStartInfo
-            {
-                UseShellExecute = true,
-                FileName = Assembly.GetExecutingAssembly().Location,
-                Arguments = $"--runonlogin {yes}",
-                Verb = "runas"
-            };
-            Process.Start(startinfo);
-        }
     }
 }

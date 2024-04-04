@@ -115,6 +115,15 @@ namespace TrayToolbar {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        internal static string Refresh {
+            get {
+                return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Run on log in.
         /// </summary>
         internal static string Run_on_log_in {

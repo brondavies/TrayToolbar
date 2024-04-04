@@ -3,7 +3,14 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34723.18
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrayToolbar", "TrayToolbar.csproj", "{B5556312-F7AB-4175-B429-DE186E579FAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrayToolbar", "TrayToolbar.csproj", "{B5556312-F7AB-4175-B429-DE186E579FAD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{34D161FE-5AFE-47FA-833C-EF4455E6067E}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\.gitignore = ..\..\.gitignore
+		..\..\.github\workflows\codeql.yml = ..\..\.github\workflows\codeql.yml
+		..\..\README.md = ..\..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

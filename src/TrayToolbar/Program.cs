@@ -13,12 +13,6 @@ namespace TrayToolbar
         [STAThread]
         static void Main()
         {
-            var args = Environment.GetCommandLineArgs();
-            if (args.Length > 0 && args[0] == "--runonlogin")
-            {
-                ConfigHelper.SetStartupKey(args.Length > 1);
-                return;
-            }
             ApplicationConfiguration.Initialize();
             Application.Run(new SettingsForm());
         }

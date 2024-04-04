@@ -118,42 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Cancel" xml:space="preserve">
-    <value>Annuler</value>
+    <value>취소</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Erreur</value>
+    <value>오류</value>
   </data>
   <data name="Exclude files" xml:space="preserve">
-    <value>Exclure des fichiers</value>
+    <value>파일 제외</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Quitter</value>
+    <value>출구</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>Dossier</value>
+    <value>폴더</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
-  </data>
-  <data name="Run on log in" xml:space="preserve">
-    <value>Exécuter lors de la connexion</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Enregistrer</value>
-  </data>
-  <data name="The folder does not exist" xml:space="preserve">
-    <value>Le dossier n'existe pas</value>
-  </data>
-  <data name="The folder value must be set" xml:space="preserve">
-    <value>La valeur du dossier doit être définie.</value>
-  </data>
-  <data name="TrayToolbar" xml:space="preserve">
-    <value>TrayToolbar</value>
-  </data>
-  <data name="TrayToolbar Settings" xml:space="preserve">
-    <value>Paramètres de TrayToolbar</value>
+    <value>옵션</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Rafraîchir</value>
+    <value>새로 고치다</value>
+  </data>
+  <data name="Run on log in" xml:space="preserve">
+    <value>로그인 시 실행</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>구하다</value>
+  </data>
+  <data name="The folder does not exist" xml:space="preserve">
+    <value>폴더가 존재하지 않습니다.</value>
+  </data>
+  <data name="The folder value must be set" xml:space="preserve">
+    <value>폴더 값을 설정해야 합니다.</value>
+  </data>
+  <data name="TrayToolbar" xml:space="preserve">
+    <value>트레이툴바</value>
+  </data>
+  <data name="TrayToolbar Settings" xml:space="preserve">
+    <value>트레이툴바 설정</value>
   </data>
 </root>

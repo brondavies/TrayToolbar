@@ -1,11 +1,14 @@
 # TrayToolbar
  Places a menu with all your favorite shortcuts within easy reach just by putting them in a local folder.
+
+[![CodeQL](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml/badge.svg?branch=master&event=push)](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml) [![Download](https://badge.fury.io/gh/brondavies%2FTrayToolbar.svg)](https://github.com/brondavies/TrayToolbar/releases)
+
 - Replaces the Windows 7-10 feature that no longer exists in Windows 11 for custom toolbars on the taskbar
 - Choose the folder and customize the file filter
 - Launches links, files and apps from this menu which exist in the chosen folder
 - Includes support for English, Spanish, French, German, Portuguese, Italian, and Japanese
 
-> 💡Can also be used in Windows 8 and 10!
+<p style="background:#f9f9f9">💡 Can also be used in Windows 8 and 10!</p>
 
 ## Download
 [Check the releases](https://github.com/brondavies/TrayToolbar/releases) or compile the source code in any modern version of Visual Studio.

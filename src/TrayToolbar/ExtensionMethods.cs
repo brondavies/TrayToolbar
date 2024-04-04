@@ -16,5 +16,10 @@
         {
             return string.Join(separator, value);
         }
+
+        public static Bitmap GetImage(this string file)
+        {
+            return (Icon.ExtractAssociatedIcon(file) ?? SystemIcons.Application).ToBitmap();
+        }
     }
 }

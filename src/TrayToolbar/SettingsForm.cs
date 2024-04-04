@@ -9,6 +9,9 @@ namespace TrayToolbar
     {
         internal TrayToolbarConfiguration Configuration = new();
         private bool init = false;
+
+        public MenuItemCollection MenuItems = [];
+
         public SettingsForm()
         {
             InitializeComponent();
@@ -53,25 +56,47 @@ namespace TrayToolbar
 
         private void LoadConfiguration()
         {
-            if (Configuration.Folder.HasValue())
+            lock (this)
             {
-                if (Directory.Exists(Configuration.Folder))
+                if (Configuration.Folder.HasValue())
                 {
-                    LeftClickMenu.Items.Clear();
-                    var files = Directory.GetFiles(Configuration.Folder);
-                    foreach (var file in files.Where(f =>
-                        !Configuration.IgnoreFiles.Any(i => i == f.FileExtension())
-                        ))
+                    if (Directory.Exists(Configuration.Folder))
                     {
-                        LeftClickMenu.Items.Add(new ToolStripMenuItem
-                        {
-                            Text = Path.GetFileNameWithoutExtension(file),
-                            CommandParameter = file,
-                            Image = GetImageForFile(file).ToBitmap()
-                        });
+                        StartWatchingFolder(Configuration.Folder);
+                    }
+                    else
+                    {
+                        watcher = null;
                     }
                 }
+                else
+                {
+                    watcher = null;
+                }
             }
+        }
+
+        private FileSystemWatcher? watcher;
+        private void StartWatchingFolder(string path)
+        {
+            watcher = new FileSystemWatcher(path)
+            {
+                Filter = "*.*",
+                IncludeSubdirectories = true,
+                EnableRaisingEvents = true,
+                NotifyFilter = NotifyFilters.CreationTime
+                             | NotifyFilters.FileName
+                             | NotifyFilters.LastWrite
+                             | NotifyFilters.Size,
+            };
+            watcher.Created += (_, _) => RefreshMenu();
+            watcher.Deleted += (_, _) => RefreshMenu();
+            watcher.Renamed += (_, _) => RefreshMenu();
+        }
+
+        private void RefreshMenu()
+        {
+            MenuItems.NeedsRefresh = true;
         }
 
         private void PopulateConfig()
@@ -80,9 +105,6 @@ namespace TrayToolbar
             IgnoreFilesTextBox.Text = Configuration.IgnoreFiles.Join("; ");
             RunOnLoginCheckbox.Checked = ConfigHelper.GetStartupKey();
         }
-
-        private static Icon GetImageForFile(string file)
-            => Icon.ExtractAssociatedIcon(file) ?? SystemIcons.Application;
 
         private void ReadConfiguration()
         {
@@ -99,15 +121,15 @@ namespace TrayToolbar
             }
         }
 
+        readonly JsonSerializerOptions jsonOption = new()
+        {
+            WriteIndented = true,
+        };
         private bool WriteConfiguration()
         {
             try
             {
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                };
-                var json = JsonSerializer.Serialize(Configuration, options);
+                var json = JsonSerializer.Serialize(Configuration, jsonOption);
                 File.WriteAllText(Program.ConfigurationFile, json);
             }
             catch (Exception ex)
@@ -125,17 +147,44 @@ namespace TrayToolbar
             {
                 TrayIcon.ContextMenuStrip = RightClickMenu;
             }
-            else if (LeftClickMenu.Items.Count == 0)
+            else 
             {
-                ShowNormal();
-                return;
-            }
-            else
-            {
+                if (MenuItems.NeedsRefresh)
+                {
+                    ReloadMenuItems();
+                }
                 TrayIcon.ContextMenuStrip = LeftClickMenu;
+            
+                if (LeftClickMenu.Items.Count == 0)
+                {
+                    ShowNormal();
+                    return;
+                }
             }
+            
             MethodInfo? mi = typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
             mi?.Invoke(TrayIcon, null);
+        }
+
+        private void ReloadMenuItems()
+        {
+            MenuItems.NeedsRefresh = false;
+            MenuItems.Clear();
+            if (Configuration.Folder == null) return;
+            var files = Directory.GetFiles(Configuration.Folder);
+            foreach (var file in files.Where(f =>
+                !Configuration.IgnoreFiles.Any(i => i == f.FileExtension())
+                ))
+            {
+                MenuItems.Add(new ToolStripMenuItem
+                {
+                    Text = Path.GetFileNameWithoutExtension(file),
+                    CommandParameter = file,
+                    Image = file.GetImage()
+                });
+            }
+            LeftClickMenu.Items.Clear();
+            LeftClickMenu.Items.AddRange(MenuItems.ToArray());
         }
 
         private void TrayIcon_DoubleClick(object sender, EventArgs e)
@@ -189,6 +238,10 @@ namespace TrayToolbar
             {
                 case "Options":
                     ShowNormal();
+                    break;
+                case "Refresh":
+                    LoadConfiguration();
+                    RefreshMenu();
                     break;
                 case "Exit":
                     Quit();
@@ -245,7 +298,7 @@ namespace TrayToolbar
             }
         }
 
-        private void CancelButton_Click(object sender, EventArgs e)
+        private void CancelBtn_Click(object sender, EventArgs e)
         {
             PopulateConfig();
             Close();

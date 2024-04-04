@@ -153,4 +153,7 @@
   <data name="TrayToolbar Settings" xml:space="preserve">
     <value>トレイツールバーの設定</value>
   </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>リフレッシュ</value>
+  </data>
 </root>

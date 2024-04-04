@@ -76,6 +76,7 @@
             CancelBtn.TabIndex = 0;
             CancelBtn.Text = "Cancel";
             CancelBtn.UseVisualStyleBackColor = true;
+            CancelBtn.Click += CancelBtn_Click;
             // 
             // SaveButton
             // 
@@ -235,7 +236,6 @@
         private NotifyIcon TrayIcon;
         private ContextMenuStrip RightClickMenu;
         private ContextMenuStrip LeftClickMenu;
-        private TableLayoutPanel tableLayoutPanel1;
         private Label label1;
         private Label label2;
         private TextBox IgnoreFilesTextBox;
