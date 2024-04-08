@@ -156,4 +156,7 @@
   <data name="Refresh" xml:space="preserve">
     <value>Aktualisierung</value>
   </data>
+  <data name="A_new_version_is_available" xml:space="preserve">
+    <value>Eine neue Version ist verfügbar!</value>
+  </data>
 </root>

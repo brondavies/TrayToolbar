@@ -156,4 +156,7 @@
   <data name="TrayToolbar Settings" xml:space="preserve">
     <value>托盘工具栏设置</value>
   </data>
+  <data name="A_new_version_is_available" xml:space="preserve">
+    <value>新版本已发布！</value>
+  </data>
 </root>

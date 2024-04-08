@@ -1,6 +1,3 @@
-using System.Diagnostics;
-using System.Reflection;
-using System.Text.Json;
 using R = TrayToolbar.Resources;
 
 namespace TrayToolbar
@@ -8,7 +5,6 @@ namespace TrayToolbar
     public partial class SettingsForm : Form
     {
         internal TrayToolbarConfiguration Configuration = new();
-        private bool init = false;
 
         public MenuItemCollection MenuItems = [];
 
@@ -29,6 +25,18 @@ namespace TrayToolbar
             RunOnLoginCheckbox.Text = R.Run_on_log_in;
             SaveButton.Text = R.Save;
             CancelBtn.Text = R.Cancel;
+            Text = R.TrayToolbar_Settings + " (" + ConfigHelper.ApplicationVersion + ")";
+            NewVersionLabel.Text = R.A_new_version_is_available;
+            ConfigHelper.CheckForUpdate().ContinueWith(r =>
+            {
+                if (r.Result?.Name != null)
+                {
+                    if (r.Result.Name != "v" + ConfigHelper.ApplicationVersion)
+                    {
+                        ShowUpdateAvailable(r.Result.UpdateUrl);
+                    }
+                }
+            });
 
             RightClickMenu.Items.AddRange(new[] {
                 new ToolStripMenuItem { Text = R.Options, CommandParameter = "Options" },
@@ -36,11 +44,23 @@ namespace TrayToolbar
             });
         }
 
+        private void ShowUpdateAvailable(string updateUri)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => { ShowUpdateAvailable(updateUri); }));
+                return;
+            }
+            NewVersionLabel.Visible = true;
+            NewVersionLabel.Tag = "https://github.com" + updateUri;
+        }
+
         #endregion
 
+        private bool init = false;
         protected override void SetVisibleCore(bool value)
         {
-            if (!init && File.Exists(Program.ConfigurationFile))
+            if (!init && File.Exists(ConfigHelper.ConfigurationFile))
             {
                 init = true;
                 return;
@@ -50,7 +70,7 @@ namespace TrayToolbar
 
         private void SetupMenu()
         {
-            ReadConfiguration();
+            Configuration = ConfigHelper.ReadConfiguration();
             LoadConfiguration();
         }
 
@@ -60,7 +80,7 @@ namespace TrayToolbar
             {
                 if (Configuration.Folder.HasValue())
                 {
-                    if (Directory.Exists(Configuration.Folder))
+                    if (Directory.Exists(Configuration.Folder.ToLocalPath()))
                     {
                         StartWatchingFolder(Configuration.Folder);
                     }
@@ -106,40 +126,6 @@ namespace TrayToolbar
             RunOnLoginCheckbox.Checked = ConfigHelper.GetStartupKey();
         }
 
-        private void ReadConfiguration()
-        {
-            try
-            {
-                if (File.Exists(Program.ConfigurationFile))
-                {
-                    Configuration = JsonSerializer.Deserialize<TrayToolbarConfiguration>(File.ReadAllText(Program.ConfigurationFile))!;
-                }
-            }
-            catch
-            {
-                Configuration = new();
-            }
-        }
-
-        readonly JsonSerializerOptions jsonOption = new()
-        {
-            WriteIndented = true,
-        };
-        private bool WriteConfiguration()
-        {
-            try
-            {
-                var json = JsonSerializer.Serialize(Configuration, jsonOption);
-                File.WriteAllText(Program.ConfigurationFile, json);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
-            }
-            return true;
-        }
-
         private void TrayIcon_Click(object sender, EventArgs e)
         {
             var me = (MouseEventArgs)e;
@@ -147,31 +133,28 @@ namespace TrayToolbar
             {
                 TrayIcon.ContextMenuStrip = RightClickMenu;
             }
-            else 
+            else
             {
                 if (MenuItems.NeedsRefresh)
                 {
                     ReloadMenuItems();
                 }
                 TrayIcon.ContextMenuStrip = LeftClickMenu;
-            
+
                 if (LeftClickMenu.Items.Count == 0)
                 {
                     ShowNormal();
                     return;
                 }
             }
-            
-            MethodInfo? mi = typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
-            mi?.Invoke(TrayIcon, null);
+            TrayIcon.ShowContextMenu();
         }
 
         private void ReloadMenuItems()
         {
-            MenuItems.NeedsRefresh = false;
             MenuItems.Clear();
-            if (Configuration.Folder == null) return;
-            var files = Directory.GetFiles(Configuration.Folder);
+            if (!Configuration.Folder.HasValue() || !Directory.Exists(Configuration.Folder.ToLocalPath())) return;
+            var files = Directory.GetFiles(Configuration.Folder.ToLocalPath());
             foreach (var file in files.Where(f =>
                 !Configuration.IgnoreFiles.Any(i => i == f.FileExtension())
                 ))
@@ -185,6 +168,7 @@ namespace TrayToolbar
             }
             LeftClickMenu.Items.Clear();
             LeftClickMenu.Items.AddRange(MenuItems.ToArray());
+            MenuItems.NeedsRefresh = false;
         }
 
         private void TrayIcon_DoubleClick(object sender, EventArgs e)
@@ -247,9 +231,6 @@ namespace TrayToolbar
                     Quit();
                     Application.Exit();
                     break;
-                default:
-                    Debug.WriteLine(e.ClickedItem.CommandParameter, "Unknown Command");
-                    break;
             }
         }
 
@@ -257,11 +238,7 @@ namespace TrayToolbar
         {
             if (e.ClickedItem?.CommandParameter != null)
             {
-                Process.Start(
-                    new ProcessStartInfo($"{e.ClickedItem.CommandParameter}")
-                    {
-                        UseShellExecute = true,
-                    });
+                Program.Launch($"{e.ClickedItem.CommandParameter}");
             }
         }
 
@@ -280,21 +257,20 @@ namespace TrayToolbar
             {
                 MessageBox.Show(R.The_folder_value_must_be_set, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            else if (Directory.Exists(FolderComboBox.Text))
+            else if (!Directory.Exists(FolderComboBox.Text.ToLocalPath()))
+            {
+                MessageBox.Show(R.The_folder_does_not_exist, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+            else
             {
                 Configuration.Folder = FolderComboBox.Text;
                 Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
                 LoadConfiguration();
-                if (WriteConfiguration())
+                if (ConfigHelper.WriteConfiguration(Configuration))
                 {
                     Close();
                 }
-                ConfigHelper.SetShowInTray();
                 ConfigHelper.SetStartupKey(RunOnLoginCheckbox.Checked);
-            }
-            else
-            {
-                MessageBox.Show(R.The_folder_does_not_exist, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
@@ -302,6 +278,11 @@ namespace TrayToolbar
         {
             PopulateConfig();
             Close();
+        }
+
+        private void NewVersionLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Program.Launch($"{NewVersionLabel.Tag}");
         }
     }
 }

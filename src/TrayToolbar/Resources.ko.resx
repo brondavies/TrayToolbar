@@ -156,4 +156,7 @@
   <data name="TrayToolbar Settings" xml:space="preserve">
     <value>트레이툴바 설정</value>
   </data>
+  <data name="A_new_version_is_available" xml:space="preserve">
+    <value>새 버전을 사용할 수 있습니다!</value>
+  </data>
 </root>

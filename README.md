@@ -6,7 +6,8 @@
 - Replaces the Windows 7-10 feature that no longer exists in Windows 11 for custom toolbars on the taskbar
 - Choose the folder and customize the file filter
 - Launches links, files and apps from this menu which exist in the chosen folder
-- Includes support for English, Spanish, French, German, Portuguese, Italian, and Japanese
+- Automatically updates the menu with changes in the folder
+- Includes support for English, Spanish, French, German, Portuguese, Italian, Japanese, Chinese, Russian, and Korean
 
 <p style="background:#f9f9f9">💡 Can also be used in Windows 8 and 10!</p>
 

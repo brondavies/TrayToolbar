@@ -61,6 +61,15 @@ namespace TrayToolbar {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A new version is available!.
+        /// </summary>
+        internal static string A_new_version_is_available {
+            get {
+                return ResourceManager.GetString("A_new_version_is_available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         internal static string Cancel {

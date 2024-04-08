@@ -8,10 +8,19 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>TrayToolbar.Program</StartupObject>
     <ApplicationIcon>TrayIcon.ico</ApplicationIcon>
+    <Version>1.1.1</Version>
+    <Title>TrayToolbar</Title>
+    <Copyright>© Brontech, LLC</Copyright>
+    <PackageProjectUrl>https://github.com/brondavies/TrayToolbar</PackageProjectUrl>
+    <PackageIcon>TrayIcon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Include="TrayIcon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../../README.md" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +36,13 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TrayIcon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

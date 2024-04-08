@@ -156,4 +156,7 @@
   <data name="TrayToolbar Settings" xml:space="preserve">
     <value>Настройки панели инструментов трея</value>
   </data>
+  <data name="A_new_version_is_available" xml:space="preserve">
+    <value>Доступна новая версия!</value>
+  </data>
 </root>

@@ -30,10 +30,11 @@
         {
             components = new System.ComponentModel.Container();
             FlowLayoutPanel flowLayoutPanel1;
-            TableLayoutPanel tableLayoutPanel1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+            TableLayoutPanel tableLayoutPanel1;
             CancelBtn = new Button();
             SaveButton = new Button();
+            NewVersionLabel = new LinkLabel();
             label1 = new Label();
             label2 = new Label();
             IgnoreFilesTextBox = new TextBox();
@@ -57,6 +58,7 @@
             flowLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             flowLayoutPanel1.Controls.Add(CancelBtn);
             flowLayoutPanel1.Controls.Add(SaveButton);
+            flowLayoutPanel1.Controls.Add(NewVersionLabel);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
             flowLayoutPanel1.Location = new Point(10, 172);
@@ -90,6 +92,25 @@
             SaveButton.Text = "Save";
             SaveButton.UseVisualStyleBackColor = true;
             SaveButton.Click += SaveButton_Click;
+            // 
+            // NewVersionLabel
+            // 
+            NewVersionLabel.ActiveLinkColor = Color.RoyalBlue;
+            NewVersionLabel.AutoSize = true;
+            NewVersionLabel.Dock = DockStyle.Left;
+            NewVersionLabel.Image = (Image)resources.GetObject("NewVersionLabel.Image");
+            NewVersionLabel.ImageAlign = ContentAlignment.MiddleLeft;
+            NewVersionLabel.Location = new Point(56, 3);
+            NewVersionLabel.Margin = new Padding(3, 0, 30, 0);
+            NewVersionLabel.Name = "NewVersionLabel";
+            NewVersionLabel.Padding = new Padding(24, 0, 0, 0);
+            NewVersionLabel.Size = new Size(168, 31);
+            NewVersionLabel.TabIndex = 2;
+            NewVersionLabel.TabStop = true;
+            NewVersionLabel.Text = "A new version is available!";
+            NewVersionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            NewVersionLabel.VisitedLinkColor = Color.Blue;
+            NewVersionLabel.LinkClicked += NewVersionLabel_LinkClicked;
             // 
             // tableLayoutPanel1
             // 
@@ -245,5 +266,6 @@
         private ComboBox FolderComboBox;
         private PictureBox BrowseFolderButton;
         private CheckBox RunOnLoginCheckbox;
+        private LinkLabel NewVersionLabel;
     }
 }
