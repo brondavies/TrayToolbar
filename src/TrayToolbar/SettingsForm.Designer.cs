@@ -109,6 +109,7 @@
             NewVersionLabel.TabStop = true;
             NewVersionLabel.Text = "A new version is available!";
             NewVersionLabel.TextAlign = ContentAlignment.MiddleLeft;
+            NewVersionLabel.Visible = false;
             NewVersionLabel.VisitedLinkColor = Color.Blue;
             NewVersionLabel.LinkClicked += NewVersionLabel_LinkClicked;
             // 
