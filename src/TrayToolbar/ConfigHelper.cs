@@ -11,6 +11,7 @@ namespace TrayToolbar
         const string REGKEY_STARTUP = @"Software\Microsoft\Windows\CurrentVersion\Run";
         const string REGKEY_SHOWINTRAY = @"Software\Microsoft\Windows\CurrentVersion\RunNotification"; //StartupTNotiTrayToolbar (DWORD) = 1
         const string UPDATE_URL = "https://github.com/brondavies/TrayToolbar/releases/latest";
+        const string STARTUP_VALUE = "TrayToolbar";
 
         internal static readonly string ApplicationRoot =
             new FileInfo(
@@ -25,7 +26,7 @@ namespace TrayToolbar
         internal static bool GetStartupKey()
         {
             using RegistryKey key = Registry.CurrentUser.CreateSubKey(REGKEY_STARTUP);
-            var val = key.GetValue("TrayToolbar");
+            var val = key.GetValue(STARTUP_VALUE);
             var value = (string?)val == Assembly.GetExecutingAssembly().Location;
 
             key.Close();
@@ -37,11 +38,14 @@ namespace TrayToolbar
             using RegistryKey key = Registry.CurrentUser.CreateSubKey(REGKEY_STARTUP);
             if (value)
             {
-                key.SetValue("TrayToolbar", Assembly.GetExecutingAssembly().Location, RegistryValueKind.String);
+                key.SetValue(STARTUP_VALUE, Assembly.GetExecutingAssembly().Location, RegistryValueKind.String);
             }
             else
             {
-                key.DeleteValue("TrayToolbar");
+                if (key.GetValueNames().Contains(STARTUP_VALUE))
+                {
+                    key.DeleteValue(STARTUP_VALUE);
+                }
             }
             key.Close();
         }
@@ -78,8 +82,11 @@ namespace TrayToolbar
                     Directory.CreateDirectory(ProfileFolder);
                 }
                 var json = JsonSerializer.Serialize(configuration, jsonOption);
+                if (File.Exists(ConfigurationFile))
+                {
+                    File.Delete(ConfigurationFile);
+                }
                 File.WriteAllText(ConfigurationFile, json);
-                File.SetAttributes(ConfigurationFile, FileAttributes.Hidden);
             }
             catch (Exception ex)
             {
