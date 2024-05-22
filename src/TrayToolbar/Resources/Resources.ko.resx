@@ -130,7 +130,7 @@
     <value>출구</value>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value />
+    <value>폴더</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>옵션</value>
@@ -158,5 +158,20 @@
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>새 버전을 사용할 수 있습니다!</value>
+  </data>
+  <data name="Add Folder" xml:space="preserve">
+    <value>폴더 추가</value>
+  </data>
+  <data name="Browse Folder" xml:space="preserve">
+    <value>폴더 찾아보기</value>
+  </data>
+  <data name="Include Subfolders" xml:space="preserve">
+    <value>하위 폴더 포함</value>
+  </data>
+  <data name="Open Folder" xml:space="preserve">
+    <value>폴더 열기</value>
+  </data>
+  <data name="Remove Folder" xml:space="preserve">
+    <value>폴더 제거</value>
   </data>
 </root>

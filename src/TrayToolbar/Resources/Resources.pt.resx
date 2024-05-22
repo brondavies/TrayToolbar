@@ -159,4 +159,19 @@
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>Uma nova versão está disponível!</value>
   </data>
+  <data name="Add Folder" xml:space="preserve">
+    <value>Adicionar pasta</value>
+  </data>
+  <data name="Browse Folder" xml:space="preserve">
+    <value>Navegar na pasta</value>
+  </data>
+  <data name="Include Subfolders" xml:space="preserve">
+    <value>Incluir subpastas</value>
+  </data>
+  <data name="Open Folder" xml:space="preserve">
+    <value>Pasta aberta</value>
+  </data>
+  <data name="Remove Folder" xml:space="preserve">
+    <value>Remover pasta</value>
+  </data>
 </root>

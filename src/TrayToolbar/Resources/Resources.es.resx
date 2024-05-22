@@ -159,4 +159,19 @@
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>¡Una nueva version esta disponible!</value>
   </data>
+  <data name="Add Folder" xml:space="preserve">
+    <value>Agregar carpeta</value>
+  </data>
+  <data name="Browse Folder" xml:space="preserve">
+    <value>Examinar carpeta</value>
+  </data>
+  <data name="Include Subfolders" xml:space="preserve">
+    <value>Incluir subcarpétas</value>
+  </data>
+  <data name="Open Folder" xml:space="preserve">
+    <value>Carpeta abierta</value>
+  </data>
+  <data name="Remove Folder" xml:space="preserve">
+    <value>Quitar carpeta</value>
+  </data>
 </root>

@@ -130,7 +130,7 @@
     <value>出口</value>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value />
+    <value>文件夹</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>选项</value>
@@ -158,5 +158,20 @@
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>新版本已发布！</value>
+  </data>
+  <data name="Add Folder" xml:space="preserve">
+    <value>新增文件夹</value>
+  </data>
+  <data name="Browse Folder" xml:space="preserve">
+    <value>浏览文件夹</value>
+  </data>
+  <data name="Include Subfolders" xml:space="preserve">
+    <value>包括子文件夹</value>
+  </data>
+  <data name="Open Folder" xml:space="preserve">
+    <value>打开文件夹</value>
+  </data>
+  <data name="Remove Folder" xml:space="preserve">
+    <value>移除文件夹</value>
   </data>
 </root>

@@ -159,4 +159,19 @@
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>Une nouvelle version est disponible !</value>
   </data>
+  <data name="Add Folder" xml:space="preserve">
+    <value>Ajouter le dossier</value>
+  </data>
+  <data name="Browse Folder" xml:space="preserve">
+    <value>Parcourir le dossier</value>
+  </data>
+  <data name="Include Subfolders" xml:space="preserve">
+    <value>Inclure les sous-dossiers</value>
+  </data>
+  <data name="Open Folder" xml:space="preserve">
+    <value>Dossier ouvert</value>
+  </data>
+  <data name="Remove Folder" xml:space="preserve">
+    <value>Supprimer le dossier</value>
+  </data>
 </root>

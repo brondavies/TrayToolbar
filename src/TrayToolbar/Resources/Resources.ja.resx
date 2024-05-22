@@ -130,7 +130,7 @@
     <value>出口</value>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value />
+    <value>フォルダ</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>オプション</value>
@@ -158,5 +158,20 @@
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>新しいバージョンが利用可能になりました!</value>
+  </data>
+  <data name="Add Folder" xml:space="preserve">
+    <value>フォルダーを追加</value>
+  </data>
+  <data name="Browse Folder" xml:space="preserve">
+    <value>フォルダを参照</value>
+  </data>
+  <data name="Include Subfolders" xml:space="preserve">
+    <value>サブフォルダを含める</value>
+  </data>
+  <data name="Open Folder" xml:space="preserve">
+    <value>開いたフォルダ</value>
+  </data>
+  <data name="Remove Folder" xml:space="preserve">
+    <value>フォルダを削除</value>
   </data>
 </root>

@@ -130,7 +130,7 @@
     <value>Выход</value>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value />
+    <value>Папки</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Параметры</value>
@@ -158,5 +158,20 @@
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>Доступна новая версия!</value>
+  </data>
+  <data name="Add Folder" xml:space="preserve">
+    <value>Добавить папку</value>
+  </data>
+  <data name="Browse Folder" xml:space="preserve">
+    <value>Обзор папки</value>
+  </data>
+  <data name="Include Subfolders" xml:space="preserve">
+    <value>Включить подпапки</value>
+  </data>
+  <data name="Open Folder" xml:space="preserve">
+    <value>Открыть папку</value>
+  </data>
+  <data name="Remove Folder" xml:space="preserve">
+    <value>Удалить папку</value>
   </data>
 </root>

@@ -130,7 +130,7 @@
     <value>Uscita</value>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value />
+    <value>Cartelle</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opzioni</value>
@@ -158,5 +158,20 @@
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>Una nuova versione è disponibile!</value>
+  </data>
+  <data name="Add Folder" xml:space="preserve">
+    <value>Aggiungi cartella</value>
+  </data>
+  <data name="Browse Folder" xml:space="preserve">
+    <value>Sfoglia cartella</value>
+  </data>
+  <data name="Include Subfolders" xml:space="preserve">
+    <value>Includere sottocartelle</value>
+  </data>
+  <data name="Open Folder" xml:space="preserve">
+    <value>Cartella aperta</value>
+  </data>
+  <data name="Remove Folder" xml:space="preserve">
+    <value>Rimuovi cartella</value>
   </data>
 </root>
