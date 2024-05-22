@@ -129,8 +129,8 @@
   <data name="Exit" xml:space="preserve">
     <value>出口</value>
   </data>
-  <data name="Folder" xml:space="preserve">
-    <value>フォルダ</value>
+  <data name="Folders" xml:space="preserve">
+    <value />
   </data>
   <data name="Options" xml:space="preserve">
     <value>オプション</value>

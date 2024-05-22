@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Net.Http.Json;
 using System.Reflection;
+using System.Text;
 using System.Text.Json;
 using R = TrayToolbar.Resources;
 

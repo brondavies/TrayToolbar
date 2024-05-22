@@ -106,11 +106,11 @@ namespace TrayToolbar {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Folder.
+        ///   Looks up a localized string similar to Folders.
         /// </summary>
-        internal static string Folder {
+        internal static string Folders {
             get {
-                return ResourceManager.GetString("Folder", resourceCulture);
+                return ResourceManager.GetString("Folders", resourceCulture);
             }
         }
         

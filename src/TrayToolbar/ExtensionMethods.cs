@@ -5,6 +5,15 @@ namespace TrayToolbar
 {
     public static class ExtensionMethods
     {
+        public static RowStyle Clone(this RowStyle self)
+        {
+            return new RowStyle
+            {
+                Height = self.Height,
+                SizeType = self.SizeType,
+            };
+        }
+
         public static string FileExtension(this string file)
         {
             return Path.GetExtension(file).ToLowerInvariant();

@@ -1,4 +1,5 @@
 using R = TrayToolbar.Resources;
+using System.Linq;
 
 namespace TrayToolbar
 {
@@ -20,7 +21,7 @@ namespace TrayToolbar
 
         private void LoadResources()
         {
-            label1.Text = R.Folder;
+            label1.Text = R.Folders;
             label2.Text = R.Exclude_files;
             RunOnLoginCheckbox.Text = R.Run_on_log_in;
             SaveButton.Text = R.Save;
@@ -78,28 +79,20 @@ namespace TrayToolbar
         {
             lock (this)
             {
-                if (Configuration.Folder.HasValue())
+                foreach (var folder in Configuration.Folders)
                 {
-                    if (Directory.Exists(Configuration.Folder.ToLocalPath()))
+                    if (folder.Name.HasValue() && Directory.Exists(folder.Name.ToLocalPath()))
                     {
-                        StartWatchingFolder(Configuration.Folder);
+                        StartWatchingFolder(folder.Name);
                     }
-                    else
-                    {
-                        watcher = null;
-                    }
-                }
-                else
-                {
-                    watcher = null;
                 }
             }
         }
 
-        private FileSystemWatcher? watcher;
+        private readonly Dictionary<string, FileSystemWatcher> watchers = [];
         private void StartWatchingFolder(string path)
         {
-            watcher = new FileSystemWatcher(path)
+            var watcher = new FileSystemWatcher(path)
             {
                 Filter = "*.*",
                 IncludeSubdirectories = true,
@@ -112,6 +105,7 @@ namespace TrayToolbar
             watcher.Created += (_, _) => RefreshMenu();
             watcher.Deleted += (_, _) => RefreshMenu();
             watcher.Renamed += (_, _) => RefreshMenu();
+            watchers[path] = watcher;
         }
 
         private void RefreshMenu()
@@ -121,9 +115,27 @@ namespace TrayToolbar
 
         private void PopulateConfig()
         {
-            FolderComboBox.Text = Configuration.Folder;
+            var list = FolderControls().ToArray();
+            foreach (var c in list) foldersLayout.Controls.Remove(c);
+            var i = 0;
+            if (Configuration.Folders.Count == 0)
+            {
+                Configuration.Folders.Add(new FolderConfig { Recursive = true });
+            }
+            Configuration.Folders.ForEach(f => AddFolder(f, i++));
             IgnoreFilesTextBox.Text = Configuration.IgnoreFiles.Join("; ");
             RunOnLoginCheckbox.Checked = ConfigHelper.GetStartupKey();
+        }
+
+        private IEnumerable<FolderControl> FolderControls()
+        {
+            foreach (var c in foldersLayout.Controls)
+            {
+                if (c is FolderControl control)
+                {
+                    yield return control;
+                }
+            }
         }
 
         private void TrayIcon_Click(object sender, EventArgs e)
@@ -242,28 +254,33 @@ namespace TrayToolbar
             }
         }
 
-        private void BrowseFolderButton_Click(object sender, EventArgs e)
+        private void FolderControl_BrowseClicked(object? sender, EventArgs e)
         {
-            var result = FolderDialog.ShowDialog(this);
-            if (result == DialogResult.OK)
+            var control = (FolderControl?)sender;
+            if (control != null)
             {
-                FolderComboBox.Text = FolderDialog.SelectedPath;
+                var result = FolderDialog.ShowDialog(this);
+                if (result == DialogResult.OK)
+                {
+                    control.Config.Name = FolderDialog.SelectedPath;
+                    control.UpdateConfig();
+                }
             }
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (!FolderComboBox.Text.HasValue())
+            if (!FolderControls().All(c => c.Config.Name.HasValue()))
             {
                 MessageBox.Show(R.The_folder_value_must_be_set, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            else if (!Directory.Exists(FolderComboBox.Text.ToLocalPath()))
+            else if (!FolderControls().All(c => Directory.Exists(c.Config.Name!.ToLocalPath())))
             {
                 MessageBox.Show(R.The_folder_does_not_exist, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             else
             {
-                Configuration.Folder = FolderComboBox.Text;
+                Configuration.Folders = FolderControls().Select(c => c.Config).ToList();
                 Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
                 LoadConfiguration();
                 if (ConfigHelper.WriteConfiguration(Configuration))
@@ -283,6 +300,52 @@ namespace TrayToolbar
         private void NewVersionLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Program.Launch($"{NewVersionLabel.Tag}");
+        }
+
+        private void AddFolderButton_Click(object sender, EventArgs e)
+        {
+            var folderConfig = new FolderConfig { Recursive = true };
+            Configuration.Folders.Add(folderConfig);
+            AddFolder(folderConfig);
+        }
+
+        private void FolderControl_DeleteClicked(object? sender, EventArgs e)
+        {
+            var control = (FolderControl)sender!;
+            control.BrowseFolder -= FolderControl_BrowseClicked;
+            control.DeleteFolder -= FolderControl_DeleteClicked;
+            Configuration.Folders.Remove(control.Config);
+            foldersLayout.Controls.Remove(control);
+            FoldersUpdated();
+        }
+
+        private void AddFolder(FolderConfig folderConfig, int i = -1)
+        {
+            if (i == -1)
+            {
+                i = FolderControls().Count();
+            }
+            var folderControl = new FolderControl
+            {
+                Config = folderConfig,
+                Height = 28,
+                Width = 420,
+                Margin = new Padding { All = 0 },
+            };
+            folderControl.BrowseFolder += FolderControl_BrowseClicked;
+            folderControl.DeleteFolder += FolderControl_DeleteClicked;
+            foldersLayout.Controls.Add(folderControl);
+            FoldersUpdated();
+        }
+
+        private void FoldersUpdated()
+        {
+            var list = FolderControls();
+            var count = list.Count();
+            foreach(var c in list)
+            {
+                c.HideDeleteButton = count == 1;
+            }
         }
     }
 }

@@ -129,8 +129,8 @@
   <data name="Exit" xml:space="preserve">
     <value>Выход</value>
   </data>
-  <data name="Folder" xml:space="preserve">
-    <value>Папка</value>
+  <data name="Folders" xml:space="preserve">
+    <value />
   </data>
   <data name="Options" xml:space="preserve">
     <value>Параметры</value>

@@ -129,8 +129,8 @@
   <data name="Exit" xml:space="preserve">
     <value>Salida</value>
   </data>
-  <data name="Folder" xml:space="preserve">
-    <value>Carpeta</value>
+  <data name="Folders" xml:space="preserve">
+    <value>Carpetas</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opciones</value>
