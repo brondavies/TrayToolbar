@@ -1,5 +1,4 @@
-using R = TrayToolbar.Resources;
-using System.Linq;
+using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar
 {
@@ -7,7 +6,9 @@ namespace TrayToolbar
     {
         internal TrayToolbarConfiguration Configuration = new();
 
-        public MenuItemCollection MenuItems = [];
+        public Dictionary<FolderConfig, MenuItemCollection> MenuItems = [];
+
+        internal List<NotifyIcon> TrayIcons = [];
 
         public SettingsForm()
         {
@@ -26,6 +27,7 @@ namespace TrayToolbar
             RunOnLoginCheckbox.Text = R.Run_on_log_in;
             SaveButton.Text = R.Save;
             CancelBtn.Text = R.Cancel;
+            AddFolderButton.Text = R.Add_Folder;
             Text = R.TrayToolbar_Settings + " (" + ConfigHelper.ApplicationVersion + ")";
             NewVersionLabel.Text = R.A_new_version_is_available;
             ConfigHelper.CheckForUpdate().ContinueWith(r =>
@@ -41,6 +43,7 @@ namespace TrayToolbar
 
             RightClickMenu.Items.AddRange(new[] {
                 new ToolStripMenuItem { Text = R.Options, CommandParameter = "Options" },
+                new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = "Open" },
                 new ToolStripMenuItem { Text = R.Exit, CommandParameter = "Exit" }
             });
         }
@@ -79,79 +82,106 @@ namespace TrayToolbar
         {
             lock (this)
             {
+                foreach (var watcher in Watchers)
+                    watcher.Value.EnableRaisingEvents = false;
+                Watchers.Clear();
+                TrayIcons.ForEach(i => i.Visible = false);
+                TrayIcons.Clear();
                 foreach (var folder in Configuration.Folders)
                 {
-                    if (folder.Name.HasValue() && Directory.Exists(folder.Name.ToLocalPath()))
-                    {
-                        StartWatchingFolder(folder.Name);
-                    }
+                    StartWatchingFolder(folder);
                 }
             }
         }
 
-        private readonly Dictionary<string, FileSystemWatcher> watchers = [];
-        private void StartWatchingFolder(string path)
+        private readonly Dictionary<string, FileSystemWatcher> Watchers = [];
+        private void StartWatchingFolder(FolderConfig folder)
         {
-            var watcher = new FileSystemWatcher(path)
+            if (folder.Name.HasValue() && Directory.Exists(folder.Name.ToLocalPath()))
             {
-                Filter = "*.*",
-                IncludeSubdirectories = true,
-                EnableRaisingEvents = true,
-                NotifyFilter = NotifyFilters.CreationTime
-                             | NotifyFilters.FileName
-                             | NotifyFilters.LastWrite
-                             | NotifyFilters.Size,
-            };
-            watcher.Created += (_, _) => RefreshMenu();
-            watcher.Deleted += (_, _) => RefreshMenu();
-            watcher.Renamed += (_, _) => RefreshMenu();
-            watchers[path] = watcher;
+                var watcher = new FileSystemWatcher(folder.Name)
+                {
+                    Filter = "*.*",
+                    IncludeSubdirectories = folder.Recursive,
+                    EnableRaisingEvents = true,
+                    NotifyFilter = NotifyFilters.CreationTime
+                                 | NotifyFilters.FileName
+                                 | NotifyFilters.LastWrite
+                                 | NotifyFilters.Size,
+                };
+                watcher.Created += (_, _) => RefreshMenu(folder);
+                watcher.Deleted += (_, _) => RefreshMenu(folder);
+                watcher.Renamed += (_, _) => RefreshMenu(folder);
+                Watchers[folder.Name] = watcher;
+                MenuItems[folder] = [];
+                TrayIcons.Add(CreateTrayIcon(folder));
+            }
         }
 
-        private void RefreshMenu()
+        private NotifyIcon CreateTrayIcon(FolderConfig folder)
         {
-            MenuItems.NeedsRefresh = true;
+            var text = Path.GetFileName(folder.Name);
+            var icon = new NotifyIcon(components)
+            {
+                Icon = folder.Name!.GetIcon() ?? this.Icon,
+                Text = text,
+                Visible = true
+            };
+            icon.Click += TrayIcon_Click;
+            icon.DoubleClick += TrayIcon_DoubleClick;
+            icon.Tag = folder;
+            return icon;
+        }
+
+        private void RefreshMenu(FolderConfig folder)
+        {
+            MenuItems[folder].NeedsRefresh = true;
         }
 
         private void PopulateConfig()
         {
             var list = FolderControls().ToArray();
-            foreach (var c in list) foldersLayout.Controls.Remove(c);
+            foreach (var c in list) FoldersLayout.Controls.Remove(c);
             var i = 0;
             if (Configuration.Folders.Count == 0)
             {
                 Configuration.Folders.Add(new FolderConfig { Recursive = true });
             }
             Configuration.Folders.ForEach(f => AddFolder(f, i++));
+            FoldersUpdated();
             IgnoreFilesTextBox.Text = Configuration.IgnoreFiles.Join("; ");
             RunOnLoginCheckbox.Checked = ConfigHelper.GetStartupKey();
         }
 
         private IEnumerable<FolderControl> FolderControls()
         {
-            foreach (var c in foldersLayout.Controls)
-            {
+            foreach (var c in FoldersLayout.Controls)
                 if (c is FolderControl control)
-                {
                     yield return control;
-                }
-            }
         }
 
-        private void TrayIcon_Click(object sender, EventArgs e)
+        private void TrayIcon_Click(object? sender, EventArgs e)
         {
+            var trayIcon = (NotifyIcon)sender!;
             var me = (MouseEventArgs)e;
+            var folder = (FolderConfig)trayIcon.Tag!;
             if (me.Button == MouseButtons.Right)
             {
-                TrayIcon.ContextMenuStrip = RightClickMenu;
+                RightClickMenu.Tag = folder;
+                trayIcon.ContextMenuStrip = RightClickMenu;
             }
             else
             {
-                if (MenuItems.NeedsRefresh)
+                if (MenuItems[folder].NeedsRefresh)
                 {
-                    ReloadMenuItems();
+                    ReloadMenuItems(folder);
                 }
-                TrayIcon.ContextMenuStrip = LeftClickMenu;
+                else
+                {
+                    LeftClickMenu.Items.Clear();
+                    LeftClickMenu.Items.AddRange(MenuItems[folder].ToArray());
+                }
+                trayIcon.ContextMenuStrip = LeftClickMenu;
 
                 if (LeftClickMenu.Items.Count == 0)
                 {
@@ -159,31 +189,58 @@ namespace TrayToolbar
                     return;
                 }
             }
-            TrayIcon.ShowContextMenu();
+            trayIcon.ShowContextMenu();
         }
 
-        private void ReloadMenuItems()
+        private void ReloadMenuItems(FolderConfig folder)
         {
-            MenuItems.Clear();
-            if (!Configuration.Folder.HasValue() || !Directory.Exists(Configuration.Folder.ToLocalPath())) return;
-            var files = Directory.GetFiles(Configuration.Folder.ToLocalPath());
-            foreach (var file in files.Where(f =>
-                !Configuration.IgnoreFiles.Any(i => i == f.FileExtension())
-                ))
+            var menu = MenuItems[folder];
+            menu.Clear();
+            if (!folder.Name.HasValue() || !Directory.Exists(folder.Name.ToLocalPath())) return;
+            
+            foreach (var file in EnumerateFiles(folder.Name.ToLocalPath(), folder.Recursive))
             {
-                MenuItems.Add(new ToolStripMenuItem
+                //If path is not in the root folder, create a submenu to add it into
+                ToolStripMenuItem? submenu = null;
+                var parentPath = Path.GetDirectoryName(file);
+                if (parentPath.HasValue() && !parentPath.Is(folder.Name))
+                {
+                    if (parentPath.Contains(@"\.")) continue; //it's in a dot folder like .git or it's a dot file
+                    submenu = menu.CreateFolder(Path.GetRelativePath(folder.Name, parentPath), LeftClickMenu_ItemClicked);
+                }
+                var entry = new ToolStripMenuItem
                 {
                     Text = Path.GetFileNameWithoutExtension(file),
                     CommandParameter = file,
                     Image = file.GetImage()
-                });
+                };
+                if (submenu != null)
+                {
+                    submenu.DropDownItems.Add(entry);
+                }
+                else
+                {
+                    menu.Add(entry);
+                }
             }
             LeftClickMenu.Items.Clear();
-            LeftClickMenu.Items.AddRange(MenuItems.ToArray());
-            MenuItems.NeedsRefresh = false;
+            LeftClickMenu.Items.AddRange(menu.ToArray());
+            menu.NeedsRefresh = false;
         }
 
-        private void TrayIcon_DoubleClick(object sender, EventArgs e)
+        private IEnumerable<string> EnumerateFiles(string path, bool recursive)
+        {
+            var options = new EnumerationOptions
+            {
+                RecurseSubdirectories = recursive,
+                ReturnSpecialDirectories = false,
+                MaxRecursionDepth = 3
+            };
+            return Directory.EnumerateFiles(path, "*.*", options)
+                .Where(f => !Configuration.IgnoreFiles.Any(i => i.Is(f.FileExtension())));
+        }
+
+        private void TrayIcon_DoubleClick(object? sender, EventArgs e)
         {
             ShowNormal();
         }
@@ -201,6 +258,7 @@ namespace TrayToolbar
             quitting = true;
             Close();
         }
+
         private void SettingsForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!quitting)
@@ -235,9 +293,14 @@ namespace TrayToolbar
                 case "Options":
                     ShowNormal();
                     break;
+                case "Open":
+                    var folder = (FolderConfig?)RightClickMenu.Tag;
+                    if (folder?.Name != null)
+                        Program.Launch(folder.Name);
+                    break;
                 case "Refresh":
                     LoadConfiguration();
-                    RefreshMenu();
+                    Configuration.Folders.ForEach(RefreshMenu);
                     break;
                 case "Exit":
                     Quit();
@@ -246,7 +309,7 @@ namespace TrayToolbar
             }
         }
 
-        private void LeftClickMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        private void LeftClickMenu_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
         {
             if (e.ClickedItem?.CommandParameter != null)
             {
@@ -281,7 +344,7 @@ namespace TrayToolbar
             else
             {
                 Configuration.Folders = FolderControls().Select(c => c.Config).ToList();
-                Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.Split(";", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+                Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.Split(";,".ToCharArray(), StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
                 LoadConfiguration();
                 if (ConfigHelper.WriteConfiguration(Configuration))
                 {
@@ -293,8 +356,9 @@ namespace TrayToolbar
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
-            PopulateConfig();
             Close();
+            SetupMenu();
+            PopulateConfig();
         }
 
         private void NewVersionLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -307,6 +371,7 @@ namespace TrayToolbar
             var folderConfig = new FolderConfig { Recursive = true };
             Configuration.Folders.Add(folderConfig);
             AddFolder(folderConfig);
+            FoldersUpdated();
         }
 
         private void FolderControl_DeleteClicked(object? sender, EventArgs e)
@@ -315,7 +380,7 @@ namespace TrayToolbar
             control.BrowseFolder -= FolderControl_BrowseClicked;
             control.DeleteFolder -= FolderControl_DeleteClicked;
             Configuration.Folders.Remove(control.Config);
-            foldersLayout.Controls.Remove(control);
+            FoldersLayout.Controls.Remove(control);
             FoldersUpdated();
         }
 
@@ -328,21 +393,19 @@ namespace TrayToolbar
             var folderControl = new FolderControl
             {
                 Config = folderConfig,
-                Height = 28,
                 Width = 420,
                 Margin = new Padding { All = 0 },
             };
             folderControl.BrowseFolder += FolderControl_BrowseClicked;
             folderControl.DeleteFolder += FolderControl_DeleteClicked;
-            foldersLayout.Controls.Add(folderControl);
-            FoldersUpdated();
+            FoldersLayout.Controls.Add(folderControl);
         }
 
         private void FoldersUpdated()
         {
             var list = FolderControls();
             var count = list.Count();
-            foreach(var c in list)
+            foreach (var c in list)
             {
                 c.HideDeleteButton = count == 1;
             }

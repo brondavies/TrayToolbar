@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace TrayToolbar {
+namespace TrayToolbar.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace TrayToolbar {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TrayToolbar.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TrayToolbar.Resources.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -66,6 +66,24 @@ namespace TrayToolbar {
         internal static string A_new_version_is_available {
             get {
                 return ResourceManager.GetString("A_new_version_is_available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Folder.
+        /// </summary>
+        internal static string Add_Folder {
+            get {
+                return ResourceManager.GetString("Add Folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Browse Folder.
+        /// </summary>
+        internal static string Browse_Folder {
+            get {
+                return ResourceManager.GetString("Browse Folder", resourceCulture);
             }
         }
         
@@ -115,6 +133,24 @@ namespace TrayToolbar {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include Subfolders.
+        /// </summary>
+        internal static string Include_Subfolders {
+            get {
+                return ResourceManager.GetString("Include Subfolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Folder.
+        /// </summary>
+        internal static string Open_Folder {
+            get {
+                return ResourceManager.GetString("Open Folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         internal static string Options {
@@ -129,6 +165,15 @@ namespace TrayToolbar {
         internal static string Refresh {
             get {
                 return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Folder.
+        /// </summary>
+        internal static string Remove_Folder {
+            get {
+                return ResourceManager.GetString("Remove Folder", resourceCulture);
             }
         }
         

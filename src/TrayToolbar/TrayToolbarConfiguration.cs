@@ -4,7 +4,7 @@ namespace TrayToolbar
 {
     public class TrayToolbarConfiguration
     {
-        public string[] IgnoreFiles { get; set; } = [".bak", ".dll", ".ini"];
+        public string[] IgnoreFiles { get; set; } = [".bak", ".config", ".dll", ".ico", ".ini"];
 
         [Obsolete]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

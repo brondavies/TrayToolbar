@@ -10,12 +10,15 @@ namespace TrayToolbar
             ApplicationConfiguration.Initialize();
             ConfigHelper.SetShowInTray();
             ConfigHelper.MigrateConfiguration();
-            Application.Run(new SettingsForm());
+            try
+            {
+                Application.Run(new SettingsForm());
+            } catch (ObjectDisposedException) { }
         }
 
         internal static void Launch(string fileName)
         {
-            if (File.Exists(fileName) || fileName.IsHttps())
+            if (File.Exists(fileName) || Directory.Exists(fileName) || fileName.IsHttps())
             {
                 Process.Start(
                     new ProcessStartInfo(fileName)

@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
-using R = TrayToolbar.Resources;
+using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar
 {

@@ -1,31 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar
 {
     public partial class FolderControl : UserControl
     {
         private FolderConfig config = new();
-        private bool hideDeleteButton;
 
         public event EventHandler? BrowseFolder;
         public event EventHandler? DeleteFolder;
 
+        public FolderControl()
+        {
+            InitializeComponent();
+            UpdateConfig();
+            RecursiveCheckbox.Text = R.Include_Subfolders;
+            toolTips.SetToolTip(BrowseFolderButton, R.Browse_Folder);
+            toolTips.SetToolTip(DeleteFolderButton, R.Remove_Folder);
+        }
+
         public bool HideDeleteButton
         {
-            get => hideDeleteButton;
-            set
-            {
-                hideDeleteButton = value;
-                DeleteFolderButton.Visible = !hideDeleteButton;
-            }
+            get => !DeleteFolderButton.Visible;
+            set => DeleteFolderButton.Visible = !value;
         }
 
         public FolderConfig Config
@@ -38,12 +34,6 @@ namespace TrayToolbar
             }
         }
 
-        public FolderControl()
-        {
-            InitializeComponent();
-            UpdateConfig();
-        }
-
         public void UpdateConfig()
         {
             if (InvokeRequired)
@@ -54,6 +44,7 @@ namespace TrayToolbar
             if (config != null)
             {
                 if (FolderComboBox != null) FolderComboBox.Text = config.Name;
+                if (RecursiveCheckbox != null) RecursiveCheckbox.Checked = config.Recursive;
             }
         }
 
@@ -70,6 +61,11 @@ namespace TrayToolbar
         private void FolderComboBox_TextUpdate(object sender, EventArgs e)
         {
             Config.Name = FolderComboBox.Text;
+        }
+
+        private void RecursiveCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            Config.Recursive = RecursiveCheckbox.Checked;
         }
     }
 }

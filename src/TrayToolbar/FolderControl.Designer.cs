@@ -28,10 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FolderControl));
             FolderComboBox = new ComboBox();
             BrowseFolderButton = new PictureBox();
             DeleteFolderButton = new PictureBox();
+            RecursiveCheckbox = new CheckBox();
+            toolTips = new ToolTip(components);
             ((System.ComponentModel.ISupportInitialize)BrowseFolderButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DeleteFolderButton).BeginInit();
             SuspendLayout();
@@ -46,7 +49,7 @@
             FolderComboBox.Location = new Point(3, 3);
             FolderComboBox.MaxDropDownItems = 15;
             FolderComboBox.Name = "FolderComboBox";
-            FolderComboBox.Size = new Size(346, 23);
+            FolderComboBox.Size = new Size(350, 23);
             FolderComboBox.TabIndex = 6;
             FolderComboBox.TextUpdate += FolderComboBox_TextUpdate;
             // 
@@ -55,7 +58,7 @@
             BrowseFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             BrowseFolderButton.BackgroundImage = (Image)resources.GetObject("BrowseFolderButton.BackgroundImage");
             BrowseFolderButton.BackgroundImageLayout = ImageLayout.Center;
-            BrowseFolderButton.Location = new Point(387, 3);
+            BrowseFolderButton.Location = new Point(355, 3);
             BrowseFolderButton.Name = "BrowseFolderButton";
             BrowseFolderButton.Size = new Size(30, 23);
             BrowseFolderButton.TabIndex = 7;
@@ -67,26 +70,39 @@
             DeleteFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             DeleteFolderButton.BackgroundImage = (Image)resources.GetObject("DeleteFolderButton.BackgroundImage");
             DeleteFolderButton.BackgroundImageLayout = ImageLayout.Center;
-            DeleteFolderButton.Location = new Point(355, 3);
+            DeleteFolderButton.Location = new Point(387, 3);
             DeleteFolderButton.Name = "DeleteFolderButton";
             DeleteFolderButton.Size = new Size(30, 23);
             DeleteFolderButton.TabIndex = 8;
             DeleteFolderButton.TabStop = false;
             DeleteFolderButton.Click += DeleteFolderButton_Click;
             // 
+            // RecursiveCheckbox
+            // 
+            RecursiveCheckbox.AutoSize = true;
+            RecursiveCheckbox.Location = new Point(3, 32);
+            RecursiveCheckbox.Name = "RecursiveCheckbox";
+            RecursiveCheckbox.Size = new Size(124, 19);
+            RecursiveCheckbox.TabIndex = 9;
+            RecursiveCheckbox.Text = "Include Subfolders";
+            RecursiveCheckbox.UseVisualStyleBackColor = true;
+            RecursiveCheckbox.CheckedChanged += RecursiveCheckbox_CheckedChanged;
+            // 
             // FolderControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
+            Controls.Add(RecursiveCheckbox);
             Controls.Add(DeleteFolderButton);
             Controls.Add(BrowseFolderButton);
             Controls.Add(FolderComboBox);
             Name = "FolderControl";
-            Size = new Size(420, 29);
+            Size = new Size(420, 60);
             ((System.ComponentModel.ISupportInitialize)BrowseFolderButton).EndInit();
             ((System.ComponentModel.ISupportInitialize)DeleteFolderButton).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -94,5 +110,7 @@
         private ComboBox FolderComboBox;
         private PictureBox BrowseFolderButton;
         private PictureBox DeleteFolderButton;
+        private CheckBox RecursiveCheckbox;
+        private ToolTip toolTips;
     }
 }

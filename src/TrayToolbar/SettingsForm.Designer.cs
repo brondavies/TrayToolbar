@@ -40,8 +40,7 @@
             IgnoreFilesTextBox = new TextBox();
             RunOnLoginCheckbox = new CheckBox();
             AddFolderButton = new Button();
-            foldersLayout = new FlowLayoutPanel();
-            TrayIcon = new NotifyIcon(components);
+            FoldersLayout = new FlowLayoutPanel();
             RightClickMenu = new ContextMenuStrip(components);
             LeftClickMenu = new ContextMenuStrip(components);
             FolderDialog = new FolderBrowserDialog();
@@ -62,14 +61,14 @@
             flowLayoutPanel1.Location = new Point(10, 187);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(3);
-            flowLayoutPanel1.Size = new Size(472, 37);
+            flowLayoutPanel1.Size = new Size(520, 37);
             flowLayoutPanel1.TabIndex = 2;
             // 
             // CancelBtn
             // 
             CancelBtn.AutoSize = true;
             CancelBtn.DialogResult = DialogResult.Cancel;
-            CancelBtn.Location = new Point(363, 6);
+            CancelBtn.Location = new Point(411, 6);
             CancelBtn.MinimumSize = new Size(100, 25);
             CancelBtn.Name = "CancelBtn";
             CancelBtn.Size = new Size(100, 25);
@@ -82,7 +81,7 @@
             // 
             SaveButton.AutoSize = true;
             SaveButton.DialogResult = DialogResult.OK;
-            SaveButton.Location = new Point(257, 6);
+            SaveButton.Location = new Point(305, 6);
             SaveButton.MinimumSize = new Size(100, 25);
             SaveButton.Name = "SaveButton";
             SaveButton.Size = new Size(100, 25);
@@ -98,7 +97,7 @@
             NewVersionLabel.Dock = DockStyle.Left;
             NewVersionLabel.Image = (Image)resources.GetObject("NewVersionLabel.Image");
             NewVersionLabel.ImageAlign = ContentAlignment.MiddleLeft;
-            NewVersionLabel.Location = new Point(56, 3);
+            NewVersionLabel.Location = new Point(104, 3);
             NewVersionLabel.Margin = new Padding(3, 0, 30, 0);
             NewVersionLabel.Name = "NewVersionLabel";
             NewVersionLabel.Padding = new Padding(24, 0, 0, 0);
@@ -123,7 +122,7 @@
             tableLayout.Controls.Add(IgnoreFilesTextBox, 1, 2);
             tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 3);
             tableLayout.Controls.Add(AddFolderButton, 1, 1);
-            tableLayout.Controls.Add(foldersLayout, 1, 0);
+            tableLayout.Controls.Add(FoldersLayout, 1, 0);
             tableLayout.Dock = DockStyle.Fill;
             tableLayout.Location = new Point(10, 10);
             tableLayout.Margin = new Padding(10);
@@ -133,7 +132,7 @@
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayout.Size = new Size(472, 177);
+            tableLayout.Size = new Size(520, 177);
             tableLayout.TabIndex = 3;
             // 
             // label1
@@ -165,8 +164,8 @@
             IgnoreFilesTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             IgnoreFilesTextBox.Location = new Point(93, 78);
             IgnoreFilesTextBox.Name = "IgnoreFilesTextBox";
-            IgnoreFilesTextBox.PlaceholderText = ".dll; .bak; .ini";
-            IgnoreFilesTextBox.Size = new Size(376, 23);
+            IgnoreFilesTextBox.PlaceholderText = ".bak; .config; .dll; .ico; .ini";
+            IgnoreFilesTextBox.Size = new Size(424, 23);
             IgnoreFilesTextBox.TabIndex = 3;
             // 
             // RunOnLoginCheckbox
@@ -193,23 +192,17 @@
             AddFolderButton.UseVisualStyleBackColor = true;
             AddFolderButton.Click += AddFolderButton_Click;
             // 
-            // foldersLayout
+            // FoldersLayout
             // 
-            foldersLayout.AutoSize = true;
-            foldersLayout.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            foldersLayout.FlowDirection = FlowDirection.TopDown;
-            foldersLayout.Location = new Point(93, 3);
-            foldersLayout.Name = "foldersLayout";
-            foldersLayout.Size = new Size(0, 0);
-            foldersLayout.TabIndex = 11;
-            // 
-            // TrayIcon
-            // 
-            TrayIcon.Icon = (Icon)resources.GetObject("TrayIcon.Icon");
-            TrayIcon.Text = "TrayToolbar";
-            TrayIcon.Visible = true;
-            TrayIcon.Click += TrayIcon_Click;
-            TrayIcon.DoubleClick += TrayIcon_DoubleClick;
+            FoldersLayout.AutoSize = true;
+            FoldersLayout.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            FoldersLayout.FlowDirection = FlowDirection.TopDown;
+            FoldersLayout.Location = new Point(93, 3);
+            FoldersLayout.MinimumSize = new Size(420, 0);
+            FoldersLayout.Name = "FoldersLayout";
+            FoldersLayout.Size = new Size(420, 0);
+            FoldersLayout.TabIndex = 11;
+            FoldersLayout.WrapContents = false;
             // 
             // RightClickMenu
             // 
@@ -230,7 +223,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(492, 234);
+            ClientSize = new Size(540, 234);
             Controls.Add(tableLayout);
             Controls.Add(flowLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -252,8 +245,6 @@
         }
 
         #endregion
-
-        private NotifyIcon TrayIcon;
         private ContextMenuStrip RightClickMenu;
         private ContextMenuStrip LeftClickMenu;
         private Label label1;
@@ -266,6 +257,6 @@
         private LinkLabel NewVersionLabel;
         private TableLayoutPanel tableLayout;
         private Button AddFolderButton;
-        private FlowLayoutPanel foldersLayout;
+        private FlowLayoutPanel FoldersLayout;
     }
 }
