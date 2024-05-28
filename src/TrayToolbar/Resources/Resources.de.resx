@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Cancel" xml:space="preserve">
-    <value>Stornieren</value>
+    <value>Abbrechen</value>
   </data>
   <data name="Error" xml:space="preserve">
     <value>Fehler</value>
@@ -127,10 +127,10 @@
     <value>Dateien ausschließen</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Ausfahrt</value>
+    <value>Beenden</value>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Ordneren</value>
+    <value>Ordner</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Optionen</value>
@@ -154,7 +154,7 @@
     <value>TrayToolbar-Einstellungen</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Aktualisierung</value>
+    <value>Aktualisieren</value>
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>Eine neue Version ist verfügbar!</value>
