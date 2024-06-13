@@ -1,7 +1,6 @@
 ﻿using Microsoft.Win32;
 using System.Net.Http.Json;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using R = TrayToolbar.Resources.Resources;
 
@@ -9,15 +8,13 @@ namespace TrayToolbar
 {
     internal class ConfigHelper
     {
-        const string REGKEY_STARTUP = @"Software\Microsoft\Windows\CurrentVersion\Run";
+        const string REGKEY_STARTUP = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
         const string REGKEY_SHOWINTRAY = @"Software\Microsoft\Windows\CurrentVersion\RunNotification"; //StartupTNotiTrayToolbar (DWORD) = 1
         const string UPDATE_URL = "https://github.com/brondavies/TrayToolbar/releases/latest";
         const string STARTUP_VALUE = "TrayToolbar";
 
-        internal static readonly string ApplicationRoot =
-            new FileInfo(
-                    Assembly.GetExecutingAssembly().Location
-                ).DirectoryName!;
+        internal static string ApplicationExe => Path.ChangeExtension(Assembly.GetExecutingAssembly().Location, "exe")!;
+        internal static readonly string ApplicationRoot = new FileInfo(ApplicationExe!).DirectoryName!;
         internal static readonly string ApplicationVersion = Application.ProductVersion.Split('+')[0];
         internal static string LocalAppData => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         internal static string ProfileFolder => Path.Combine(LocalAppData, "TrayToolbar");
@@ -28,7 +25,7 @@ namespace TrayToolbar
         {
             using RegistryKey key = Registry.CurrentUser.CreateSubKey(REGKEY_STARTUP);
             var val = key.GetValue(STARTUP_VALUE);
-            var value = (string?)val == Assembly.GetExecutingAssembly().Location;
+            var value = (string?)val == ApplicationExe;
 
             key.Close();
             return value;
@@ -39,7 +36,7 @@ namespace TrayToolbar
             using RegistryKey key = Registry.CurrentUser.CreateSubKey(REGKEY_STARTUP);
             if (value)
             {
-                key.SetValue(STARTUP_VALUE, Assembly.GetExecutingAssembly().Location, RegistryValueKind.String);
+                key.SetValue(STARTUP_VALUE, ApplicationExe, RegistryValueKind.String);
             }
             else
             {
