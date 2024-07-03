@@ -97,6 +97,15 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dark.
+        /// </summary>
+        internal static string Dark {
+            get {
+                return ResourceManager.GetString("Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error.
         /// </summary>
         internal static string Error {
@@ -138,6 +147,15 @@ namespace TrayToolbar.Resources {
         internal static string Include_Subfolders {
             get {
                 return ResourceManager.GetString("Include Subfolders", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        internal static string Light {
+            get {
+                return ResourceManager.GetString("Light", resourceCulture);
             }
         }
         
@@ -196,6 +214,15 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to System.
+        /// </summary>
+        internal static string System {
+            get {
+                return ResourceManager.GetString("System", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The folder does not exist..
         /// </summary>
         internal static string The_folder_does_not_exist {
@@ -210,6 +237,15 @@ namespace TrayToolbar.Resources {
         internal static string The_folder_value_must_be_set {
             get {
                 return ResourceManager.GetString("The folder value must be set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Theme.
+        /// </summary>
+        internal static string Theme {
+            get {
+                return ResourceManager.GetString("Theme", resourceCulture);
             }
         }
         

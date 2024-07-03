@@ -127,7 +127,7 @@
     <value>Excluir archivos</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Salida</value>
+    <value>Salir</value>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Carpetas</value>
@@ -139,7 +139,7 @@
     <value>Ejecutar al iniciar sesión</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Ahorrar</value>
+    <value>Guardar</value>
   </data>
   <data name="The folder does not exist" xml:space="preserve">
     <value>La carpeta no existe.</value>
@@ -148,7 +148,7 @@
     <value>Se debe establecer el valor de la carpeta.</value>
   </data>
   <data name="TrayToolbar" xml:space="preserve">
-    <value>BandejaBarra de herramientas</value>
+    <value>TrayToolbar</value>
   </data>
   <data name="TrayToolbar Settings" xml:space="preserve">
     <value>Configuración de la barra de herramientas de la bandeja</value>
@@ -169,9 +169,21 @@
     <value>Incluir subcarpétas</value>
   </data>
   <data name="Open Folder" xml:space="preserve">
-    <value>Carpeta abierta</value>
+    <value>Abrir Carpeta</value>
   </data>
   <data name="Remove Folder" xml:space="preserve">
     <value>Quitar carpeta</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Oscuro</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Ligero</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>Sistema</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Tema</value>
   </data>
 </root>

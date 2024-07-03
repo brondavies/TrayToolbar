@@ -1,4 +1,5 @@
-﻿using R = TrayToolbar.Resources.Resources;
+﻿using System.Diagnostics.Eventing.Reader;
+using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar
 {
@@ -32,6 +33,20 @@ namespace TrayToolbar
                 config = value;
                 UpdateConfig();
             }
+        }
+
+        public bool Error
+        {
+            get => ErrorIcon.Visible;
+            set {
+                ErrorIcon.BackColor = FolderComboBox.BackColor;
+                ErrorIcon.Visible = value; 
+            }
+        }
+
+        public void OnThemeChanged(bool darkMode)
+        {
+            ErrorIcon.BackColor = FolderComboBox.BackColor;
         }
 
         public void UpdateConfig()

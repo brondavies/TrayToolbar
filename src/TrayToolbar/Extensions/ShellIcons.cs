@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace TrayToolbar
+namespace TrayToolbar.Extensions
 {
     public static class ShellIcons
     {

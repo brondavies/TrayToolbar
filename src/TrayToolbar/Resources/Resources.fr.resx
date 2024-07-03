@@ -157,7 +157,7 @@
     <value>Rafraîchir</value>
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
-    <value>Une nouvelle version est disponible !</value>
+    <value>Une nouvelle version est disponible!</value>
   </data>
   <data name="Add Folder" xml:space="preserve">
     <value>Ajouter le dossier</value>
@@ -173,5 +173,17 @@
   </data>
   <data name="Remove Folder" xml:space="preserve">
     <value>Supprimer le dossier</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Léger</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>Système</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Thème</value>
   </data>
 </root>

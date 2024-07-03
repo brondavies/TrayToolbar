@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using TrayToolbar.Extensions;
 
 namespace TrayToolbar
 {
@@ -10,6 +11,8 @@ namespace TrayToolbar
             ApplicationConfiguration.Initialize();
             ConfigHelper.SetShowInTray();
             ConfigHelper.MigrateConfiguration();
+            DropDownMenuScrollWheelHandler.Enable(true);
+            ThemeChangeMessageFilter.Enable(true);
             try
             {
                 Application.Run(new SettingsForm());

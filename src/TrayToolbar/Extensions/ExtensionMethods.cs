@@ -1,13 +1,29 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace TrayToolbar
+namespace TrayToolbar.Extensions
 {
     public static class ExtensionMethods
     {
         public static string FileExtension(this string file)
         {
             return Path.GetExtension(file).ToLowerInvariant();
+        }
+
+        public static Icon GetIcon(this string path)
+        {
+            return ShellIcons.FetchIcon(path, true);
+        }
+
+        public static Bitmap GetImage(this string file)
+        {
+            Icon? icon = null;
+            try
+            {
+                icon = Icon.ExtractAssociatedIcon(file);
+            }
+            catch { }
+            return (icon ?? SystemIcons.Application).ToBitmap();
         }
 
         public static bool HasValue([NotNullWhen(true)] this string? value)
@@ -21,6 +37,11 @@ namespace TrayToolbar
             return (value ?? "").Equals(compare, StringComparison.InvariantCultureIgnoreCase);
         }
 
+        public static bool IsDirectory(this string? value)
+        {
+            return value.HasValue() && File.GetAttributes(value).HasFlag(FileAttributes.Directory);
+        }
+
         public static bool IsHttps(this string value)
         {
             return value.HasValue() && value.StartsWith("https://");
@@ -31,14 +52,9 @@ namespace TrayToolbar
             return string.Join(separator, value);
         }
 
-        public static Bitmap GetImage(this string file)
+        public static string? Or(this string? value, string? defaultValue)
         {
-            return (Icon.ExtractAssociatedIcon(file) ?? SystemIcons.Application).ToBitmap();
-        }
-
-        public static Icon GetIcon(this string path)
-        {
-            return ShellIcons.FetchIcon(path, true);
+            return string.IsNullOrEmpty(value) ? defaultValue : value;
         }
 
         public static string ToLocalPath(this string value)

@@ -1,3 +1,7 @@
+using System.Collections.Concurrent;
+using TrayToolbar.Controls;
+using TrayToolbar.Extensions;
+using TrayToolbar.Models;
 using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar
@@ -16,6 +20,14 @@ namespace TrayToolbar
             LoadResources();
             SetupMenu();
             PopulateConfig();
+            this.HandleCreated += SettingsForm_HandleCreated;
+        }
+
+        private void SettingsForm_HandleCreated(object? sender, EventArgs e)
+        {
+            var darkmode = UseDarkMode();
+            SystemTheme.UseImmersiveDarkMode(this.Handle, darkmode);
+            ThemeChangeMessageFilter.ThemeChanged += SettingsForm_SystemThemeChanged;
         }
 
         #region LoadResources
@@ -24,6 +36,7 @@ namespace TrayToolbar
         {
             label1.Text = R.Folders;
             label2.Text = R.Exclude_files;
+            label3.Text = R.Theme;
             RunOnLoginCheckbox.Text = R.Run_on_log_in;
             SaveButton.Text = R.Save;
             CancelBtn.Text = R.Cancel;
@@ -50,9 +63,9 @@ namespace TrayToolbar
 
         private void ShowUpdateAvailable(string updateUri)
         {
-            if (InvokeRequired)
+            if (NewVersionLabel.InvokeRequired)
             {
-                Invoke(new Action(() => { ShowUpdateAvailable(updateUri); }));
+                NewVersionLabel.Invoke(ShowUpdateAvailable, updateUri);
                 return;
             }
             NewVersionLabel.Visible = true;
@@ -61,12 +74,12 @@ namespace TrayToolbar
 
         #endregion
 
-        private bool init = false;
+        private bool initVisible = false;
         protected override void SetVisibleCore(bool value)
         {
-            if (!init && File.Exists(ConfigHelper.ConfigurationFile))
+            if (!initVisible && File.Exists(ConfigHelper.ConfigurationFile))
             {
-                init = true;
+                initVisible = true;
                 return;
             }
             base.SetVisibleCore(value);
@@ -90,6 +103,7 @@ namespace TrayToolbar
                 foreach (var folder in Configuration.Folders)
                 {
                     StartWatchingFolder(folder);
+                    RefreshMenu(folder);
                 }
             }
         }
@@ -107,8 +121,10 @@ namespace TrayToolbar
                     NotifyFilter = NotifyFilters.CreationTime
                                  | NotifyFilters.FileName
                                  | NotifyFilters.LastWrite
-                                 | NotifyFilters.Size,
+                                 | NotifyFilters.Size
+                                 | NotifyFilters.DirectoryName,
                 };
+                //TODO: Handle each event atomically
                 watcher.Created += (_, _) => RefreshMenu(folder);
                 watcher.Deleted += (_, _) => RefreshMenu(folder);
                 watcher.Renamed += (_, _) => RefreshMenu(folder);
@@ -120,7 +136,7 @@ namespace TrayToolbar
 
         private NotifyIcon CreateTrayIcon(FolderConfig folder)
         {
-            var text = Path.GetFileName(folder.Name);
+            var text = Path.GetFileName(folder.Name).Or(folder.Name!);
             var icon = new NotifyIcon(components)
             {
                 Icon = folder.Name!.GetIcon() ?? this.Icon,
@@ -133,9 +149,26 @@ namespace TrayToolbar
             return icon;
         }
 
+        readonly ConcurrentDictionary<FolderConfig, CancellationTokenSource> refreshCancellation = [];
         private void RefreshMenu(FolderConfig folder)
         {
-            MenuItems[folder].NeedsRefresh = true;
+            if (refreshCancellation.TryGetValue(folder, out var c))
+            {
+                c.Cancel();
+            }
+            if (MenuItems.TryGetValue(folder, out var menu))
+            {
+                menu.NeedsRefresh = true;
+                var cancellation = new CancellationTokenSource();
+                refreshCancellation[folder] = cancellation;
+                Task.Run(() =>
+                {
+                    Task.Delay(500, cancellation.Token);
+                    if (cancellation.IsCancellationRequested) { return; }
+                    ReloadMenuItems(folder, cancellation.Token);
+                    refreshCancellation.TryRemove(folder, out _);
+                }, cancellation.Token);
+            }
         }
 
         private void PopulateConfig()
@@ -151,6 +184,17 @@ namespace TrayToolbar
             FoldersUpdated();
             IgnoreFilesTextBox.Text = Configuration.IgnoreFiles.Join("; ");
             RunOnLoginCheckbox.Checked = ConfigHelper.GetStartupKey();
+            if (SystemTheme.IsDarkModeSupported())
+            {
+                ThemeToggleButton.Theme = (ThemeToggleEnum)Configuration.Theme;
+            }
+            else
+            {
+                label3.Visible = false;
+                ThemeToggleButton.Visible = false;
+                var row = tableLayout.GetRow(ThemeToggleButton);
+                tableLayout.RowStyles[row].Height = 0;
+            }
         }
 
         private IEnumerable<FolderControl> FolderControls()
@@ -163,25 +207,24 @@ namespace TrayToolbar
         private void TrayIcon_Click(object? sender, EventArgs e)
         {
             var trayIcon = (NotifyIcon)sender!;
-            var me = (MouseEventArgs)e;
             var folder = (FolderConfig)trayIcon.Tag!;
-            if (me.Button == MouseButtons.Right)
+            if (((MouseEventArgs)e).Button == MouseButtons.Right)
             {
+                SystemTheme.SetThemeColors(RightClickMenu, UseDarkMode());
                 RightClickMenu.Tag = folder;
+                RightClickMenu.Renderer = new MenuRenderer();
                 trayIcon.ContextMenuStrip = RightClickMenu;
             }
             else
             {
                 if (MenuItems[folder].NeedsRefresh)
                 {
-                    ReloadMenuItems(folder);
+                    return;
                 }
-                else
-                {
-                    LeftClickMenu.Items.Clear();
-                    LeftClickMenu.Items.AddRange(MenuItems[folder].ToArray());
-                }
+                LeftClickMenu.Items.Clear();
+                LeftClickMenu.Items.AddRange(MenuItems[folder].ToArray());
                 trayIcon.ContextMenuStrip = LeftClickMenu;
+                SystemTheme.SetThemeColors(LeftClickMenu, UseDarkMode());
 
                 if (LeftClickMenu.Items.Count == 0)
                 {
@@ -192,37 +235,52 @@ namespace TrayToolbar
             trayIcon.ShowContextMenu();
         }
 
-        private void ReloadMenuItems(FolderConfig folder)
+        private void ReloadMenuItems(FolderConfig folder, CancellationToken token)
         {
-            var menu = MenuItems[folder];
-            menu.Clear();
-            if (!folder.Name.HasValue() || !Directory.Exists(folder.Name.ToLocalPath())) return;
-            
-            foreach (var file in EnumerateFiles(folder.Name.ToLocalPath(), folder.Recursive))
+            lock (MenuItems[folder])
             {
-                //If path is not in the root folder, create a submenu to add it into
-                ToolStripMenuItem? submenu = null;
-                var parentPath = Path.GetDirectoryName(file);
-                if (parentPath.HasValue() && !parentPath.Is(folder.Name))
+                var menu = MenuItems[folder];
+                menu.Clear();
+                if (!folder.Name.HasValue() || !Directory.Exists(folder.Name.ToLocalPath())) return;
+
+                foreach (var file in EnumerateFiles(folder.Name.ToLocalPath(), folder.Recursive))
                 {
-                    if (parentPath.Contains(@"\.")) continue; //it's in a dot folder like .git or it's a dot file
-                    submenu = menu.CreateFolder(Path.GetRelativePath(folder.Name, parentPath), LeftClickMenu_ItemClicked);
+                    if (token.IsCancellationRequested == true) { return; }
+                    //If path is not in the root folder, create a submenu to add it into
+                    ToolStripMenuItem? submenu = null;
+                    var parentPath = Path.GetDirectoryName(file);
+                    if (parentPath.HasValue() && !parentPath.Is(folder.Name))
+                    {
+                        if (parentPath.Contains(@"\.")) continue; //it's in a dot folder like .git or it's a dot file
+                        submenu = menu.CreateFolder(Path.GetRelativePath(folder.Name, parentPath), LeftClickMenu_ItemClicked);
+                    }
+                    var entry = new ToolStripMenuItem
+                    {
+                        Text = Path.GetFileNameWithoutExtension(file),
+                        CommandParameter = file,
+                        Image = file.GetImage()
+                    };
+                    if (submenu != null)
+                    {
+                        submenu.DropDownItems.Add(entry);
+                    }
+                    else
+                    {
+                        menu.Add(entry);
+                    }
                 }
-                var entry = new ToolStripMenuItem
-                {
-                    Text = Path.GetFileNameWithoutExtension(file),
-                    CommandParameter = file,
-                    Image = file.GetImage()
-                };
-                if (submenu != null)
-                {
-                    submenu.DropDownItems.Add(entry);
-                }
-                else
-                {
-                    menu.Add(entry);
-                }
+                SetupLeftClickMenu(menu);
             }
+        }
+
+        private void SetupLeftClickMenu(MenuItemCollection menu)
+        {
+            if (LeftClickMenu.InvokeRequired)
+            {
+                LeftClickMenu.Invoke(SetupLeftClickMenu, menu);
+                return;
+            }
+            LeftClickMenu.Renderer = new MenuRenderer();
             LeftClickMenu.Items.Clear();
             LeftClickMenu.Items.AddRange(menu.ToArray());
             menu.NeedsRefresh = false;
@@ -234,10 +292,11 @@ namespace TrayToolbar
             {
                 RecurseSubdirectories = recursive,
                 ReturnSpecialDirectories = false,
-                MaxRecursionDepth = 3
+                MaxRecursionDepth = Configuration.MaxRecursionDepth > 0 ? Configuration.MaxRecursionDepth : int.MaxValue,
             };
             return Directory.EnumerateFiles(path, "*.*", options)
-                .Where(f => !Configuration.IgnoreFiles.Any(i => i.Is(f.FileExtension())));
+                .Where(f => !Configuration.IgnoreFiles.Any(i => i.Is(f.FileExtension())))
+                .OrderBy(f => f.ToUpper());
         }
 
         private void TrayIcon_DoubleClick(object? sender, EventArgs e)
@@ -256,6 +315,7 @@ namespace TrayToolbar
         private void Quit()
         {
             quitting = true;
+            foreach (var c in refreshCancellation.Values) { c.Cancel(); }
             Close();
         }
 
@@ -314,6 +374,8 @@ namespace TrayToolbar
             if (e.ClickedItem?.CommandParameter != null)
             {
                 Program.Launch($"{e.ClickedItem.CommandParameter}");
+                Visible = false;
+                ShowInTaskbar = false;
             }
         }
 
@@ -333,25 +395,38 @@ namespace TrayToolbar
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (!FolderControls().All(c => c.Config.Name.HasValue()))
+            var error = false;
+            foreach (var c in FolderControls()) c.Error = false;
+
+            foreach (var c in FolderControls().Where(c => !c.Config.Name.HasValue()))
+            {
+                c.Error = error = true;
+            }
+            if (error) 
             {
                 MessageBox.Show(R.The_folder_value_must_be_set, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
-            else if (!FolderControls().All(c => Directory.Exists(c.Config.Name!.ToLocalPath())))
+            
+            foreach (var c in FolderControls().Where(c => !Directory.Exists(c.Config.Name!.ToLocalPath())))
+            {
+                c.Error = error = true;
+            }
+            if (error)
             {
                 MessageBox.Show(R.The_folder_does_not_exist, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
-            else
+
+            Configuration.Folders = FolderControls().Select(c => c.Config).ToList();
+            Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.Split(";,".ToCharArray(), StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            Configuration.Theme = (int)ThemeToggleButton.Theme;
+            LoadConfiguration();
+            if (ConfigHelper.WriteConfiguration(Configuration))
             {
-                Configuration.Folders = FolderControls().Select(c => c.Config).ToList();
-                Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.Split(";,".ToCharArray(), StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
-                LoadConfiguration();
-                if (ConfigHelper.WriteConfiguration(Configuration))
-                {
-                    Close();
-                }
-                ConfigHelper.SetStartupKey(RunOnLoginCheckbox.Checked);
+                Close();
             }
+            ConfigHelper.SetStartupKey(RunOnLoginCheckbox.Checked);
         }
 
         private void CancelBtn_Click(object sender, EventArgs e)
@@ -393,12 +468,18 @@ namespace TrayToolbar
             var folderControl = new FolderControl
             {
                 Config = folderConfig,
-                Width = 420,
+                Width = 412,
                 Margin = new Padding { All = 0 },
             };
             folderControl.BrowseFolder += FolderControl_BrowseClicked;
             folderControl.DeleteFolder += FolderControl_DeleteClicked;
             FoldersLayout.Controls.Add(folderControl);
+            FoldersLayout.AutoScroll = FoldersLayout.Controls.Count > 5;
+            if (FoldersLayout.AutoScroll)
+            {
+                FoldersLayout.ScrollControlIntoView(folderControl);
+            }
+            SystemTheme.SetThemeColors(folderControl, UseDarkMode());
         }
 
         private void FoldersUpdated()
@@ -408,6 +489,27 @@ namespace TrayToolbar
             foreach (var c in list)
             {
                 c.HideDeleteButton = count == 1;
+            }
+        }
+
+        private void ThemeToggleButton_ThemeChanged(object sender, EventArgs e)
+        {
+            var darkmode = UseDarkMode();
+            SystemTheme.UseImmersiveDarkMode(this.Handle, darkmode);
+        }
+
+        private bool UseDarkMode()
+        {
+            return (ThemeToggleButton.Theme == ThemeToggleEnum.SYSTEM_THEME && SystemTheme.IsDarkModeEnabled())
+                || ThemeToggleButton.Theme == ThemeToggleEnum.DARK_THEME;
+        }
+
+        private void SettingsForm_SystemThemeChanged(object? sender, EventArgs e)
+        {
+            if (ThemeToggleButton.Theme == ThemeToggleEnum.SYSTEM_THEME)
+            {
+                var darkmode = SystemTheme.IsDarkModeEnabled();
+                SystemTheme.UseImmersiveDarkMode(this.Handle, darkmode);
             }
         }
     }

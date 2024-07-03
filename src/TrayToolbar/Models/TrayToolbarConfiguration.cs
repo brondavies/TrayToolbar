@@ -1,10 +1,15 @@
 ﻿using System.Text.Json.Serialization;
+using TrayToolbar.Extensions;
 
 namespace TrayToolbar
 {
     public class TrayToolbarConfiguration
     {
         public string[] IgnoreFiles { get; set; } = [".bak", ".config", ".dll", ".ico", ".ini"];
+
+        public int MaxRecursionDepth { get; set; } = 3;
+
+        public int Theme { get; set; } = 0;
 
         [Obsolete]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

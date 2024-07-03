@@ -1,6 +1,5 @@
 ﻿using Microsoft.Win32;
 using System.Net.Http.Json;
-using System.Reflection;
 using System.Text.Json;
 using R = TrayToolbar.Resources.Resources;
 
@@ -13,7 +12,7 @@ namespace TrayToolbar
         const string UPDATE_URL = "https://github.com/brondavies/TrayToolbar/releases/latest";
         const string STARTUP_VALUE = "TrayToolbar";
 
-        internal static string ApplicationExe => Path.ChangeExtension(Assembly.GetExecutingAssembly().Location, "exe")!;
+        internal static string ApplicationExe => Environment.ProcessPath!;
         internal static readonly string ApplicationRoot = new FileInfo(ApplicationExe!).DirectoryName!;
         internal static readonly string ApplicationVersion = Application.ProductVersion.Split('+')[0];
         internal static string LocalAppData => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);

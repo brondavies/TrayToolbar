@@ -129,6 +129,9 @@
   <data name="Cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
@@ -143,6 +146,9 @@
   </data>
   <data name="Include Subfolders" xml:space="preserve">
     <value>Include Subfolders</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Light</value>
   </data>
   <data name="Open Folder" xml:space="preserve">
     <value>Open Folder</value>
@@ -162,11 +168,17 @@
   <data name="Save" xml:space="preserve">
     <value>Save</value>
   </data>
+  <data name="System" xml:space="preserve">
+    <value>System</value>
+  </data>
   <data name="The folder does not exist" xml:space="preserve">
     <value>The folder does not exist.</value>
   </data>
   <data name="The folder value must be set" xml:space="preserve">
     <value>The folder value must be set.</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
   </data>
   <data name="TrayToolbar" xml:space="preserve">
     <value>TrayToolbar</value>

@@ -1,0 +1,8 @@
+﻿DwmSetWindowAttribute
+DWMWINDOWATTRIBUTE
+RegCloseKey
+RegNotifyChangeKeyValue
+RegOpenKeyEx
+WM_MOUSE*
+WM_PAINT
+WINDOW_EX_STYLE

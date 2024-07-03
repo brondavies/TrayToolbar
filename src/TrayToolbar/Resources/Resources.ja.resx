@@ -174,4 +174,16 @@
   <data name="Remove Folder" xml:space="preserve">
     <value>フォルダを削除</value>
   </data>
+  <data name="Dark" xml:space="preserve">
+    <value>暗い</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>ライト</value>
+  </data>
+  <data name="System" xml:space="preserve">
+    <value>システム</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>テーマ</value>
+  </data>
 </root>
