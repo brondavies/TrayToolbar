@@ -373,9 +373,13 @@ namespace TrayToolbar
         {
             if (e.ClickedItem?.CommandParameter != null)
             {
-                Program.Launch($"{e.ClickedItem.CommandParameter}");
                 Visible = false;
                 ShowInTaskbar = false;
+                try
+                {
+                    Program.Launch($"{e.ClickedItem.CommandParameter}");
+                }
+                catch { }
             }
         }
 
@@ -402,12 +406,12 @@ namespace TrayToolbar
             {
                 c.Error = error = true;
             }
-            if (error) 
+            if (error)
             {
                 MessageBox.Show(R.The_folder_value_must_be_set, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            
+
             foreach (var c in FolderControls().Where(c => !Directory.Exists(c.Config.Name!.ToLocalPath())))
             {
                 c.Error = error = true;
