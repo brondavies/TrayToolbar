@@ -39,14 +39,14 @@ namespace TrayToolbar
         {
             get => ErrorIcon.Visible;
             set {
-                ErrorIcon.BackColor = FolderComboBox.BackColor;
+                ErrorIcon.BackColor = FolderTextBox.BackColor;
                 ErrorIcon.Visible = value; 
             }
         }
 
         public void OnThemeChanged(bool darkMode)
         {
-            ErrorIcon.BackColor = FolderComboBox.BackColor;
+            ErrorIcon.BackColor = FolderTextBox.BackColor;
         }
 
         public void UpdateConfig()
@@ -58,7 +58,7 @@ namespace TrayToolbar
             }
             if (config != null)
             {
-                if (FolderComboBox != null) FolderComboBox.Text = config.Name;
+                if (FolderTextBox != null) FolderTextBox.Text = config.Name;
                 if (RecursiveCheckbox != null) RecursiveCheckbox.Checked = config.Recursive;
             }
         }
@@ -73,9 +73,9 @@ namespace TrayToolbar
             DeleteFolder?.Invoke(this, EventArgs.Empty);
         }
 
-        private void FolderComboBox_TextUpdate(object sender, EventArgs e)
+        private void FolderTextBox_TextUpdate(object sender, EventArgs e)
         {
-            Config.Name = FolderComboBox.Text;
+            Config.Name = FolderTextBox.Text;
         }
 
         private void RecursiveCheckbox_CheckedChanged(object sender, EventArgs e)

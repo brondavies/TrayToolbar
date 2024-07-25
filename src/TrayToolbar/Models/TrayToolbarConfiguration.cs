@@ -5,7 +5,10 @@ namespace TrayToolbar
 {
     public class TrayToolbarConfiguration
     {
-        public string[] IgnoreFiles { get; set; } = [".bak", ".config", ".dll", ".ico", ".ini"];
+        public string[] IgnoreFileTypes { get; set; } = [".bak", ".config", ".dll", ".ico", ".ini"];
+
+        // mtanner
+        public string[] IgnoreFolders { get; set; } = [".git", ".github"];
 
         public int MaxRecursionDepth { get; set; } = 3;
 

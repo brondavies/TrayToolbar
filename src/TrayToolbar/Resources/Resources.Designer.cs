@@ -115,11 +115,20 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Exclude files.
+        ///   Looks up a localized string similar to Exclude file types.
         /// </summary>
-        internal static string Exclude_files {
+        internal static string Exclude_file_types {
             get {
-                return ResourceManager.GetString("Exclude files", resourceCulture);
+                return ResourceManager.GetString("Exclude file types", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exclude folders.
+        /// </summary>
+        internal static string Exclude_folders {
+            get {
+                return ResourceManager.GetString("Exclude folders", resourceCulture);
             }
         }
         
