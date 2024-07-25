@@ -77,6 +77,9 @@ namespace TrayToolbar
         private bool initVisible = false;
         protected override void SetVisibleCore(bool value)
         {
+            // mtanner
+            if ( value && !IsHandleCreated )
+                CreateHandle();
             if (!initVisible && File.Exists(ConfigHelper.ConfigurationFile))
             {
                 initVisible = true;
@@ -256,7 +259,9 @@ namespace TrayToolbar
                     }
                     var entry = new ToolStripMenuItem
                     {
-                        Text = Path.GetFileNameWithoutExtension(file),
+                        //Text = Path.GetFileNameWithoutExtension(file),
+                        // mtanner
+                        Text = Path.GetFileName(file).Replace(".lnk", ""),
                         CommandParameter = file,
                         Image = file.GetImage()
                     };
