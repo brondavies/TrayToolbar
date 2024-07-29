@@ -139,10 +139,10 @@
     <value>Обновить</value>
   </data>
   <data name="Run on log in" xml:space="preserve">
-    <value>Запустить при входе в систему</value>
+    <value>Запускать при входе в систему</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Сохранять</value>
+    <value>Сохранить</value>
   </data>
   <data name="The folder does not exist" xml:space="preserve">
     <value>Папка не существует.</value>
@@ -151,10 +151,10 @@
     <value>Значение папки должно быть установлено.</value>
   </data>
   <data name="TrayToolbar" xml:space="preserve">
-    <value>Панель инструментов в трее</value>
+    <value>TrayToolbar</value>
   </data>
   <data name="TrayToolbar Settings" xml:space="preserve">
-    <value>Настройки панели инструментов трея</value>
+    <value>Настройки TrayToolbar</value>
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>Доступна новая версия!</value>
@@ -175,10 +175,10 @@
     <value>Удалить папку</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Темный</value>
+    <value>Темная</value>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Свет</value>
+    <value>Светлая</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>Система</value>
