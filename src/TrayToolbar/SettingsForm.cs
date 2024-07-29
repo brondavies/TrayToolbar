@@ -35,8 +35,10 @@ namespace TrayToolbar
         private void LoadResources()
         {
             label1.Text = R.Folders;
-            label2.Text = R.Exclude_files;
+            label2.Text = R.Exclude_file_types;
             label3.Text = R.Theme;
+            // mtanner
+            label4.Text = R.Exclude_folders;
             RunOnLoginCheckbox.Text = R.Run_on_log_in;
             SaveButton.Text = R.Save;
             CancelBtn.Text = R.Cancel;
@@ -77,6 +79,9 @@ namespace TrayToolbar
         private bool initVisible = false;
         protected override void SetVisibleCore(bool value)
         {
+            // mtanner
+            if ( value && !IsHandleCreated )
+                CreateHandle();
             if (!initVisible && File.Exists(ConfigHelper.ConfigurationFile))
             {
                 initVisible = true;
@@ -182,7 +187,9 @@ namespace TrayToolbar
             }
             Configuration.Folders.ForEach(f => AddFolder(f, i++));
             FoldersUpdated();
-            IgnoreFilesTextBox.Text = Configuration.IgnoreFiles.Join("; ");
+            IgnoreFileTypesTextBox.Text = Configuration.IgnoreFileTypes.Join("; ");
+            // mtanner
+            IgnoreDirsTextBox.Text = Configuration.IgnoreFolders.Join("; ");
             RunOnLoginCheckbox.Checked = ConfigHelper.GetStartupKey();
             if (SystemTheme.IsDarkModeSupported())
             {
@@ -251,12 +258,20 @@ namespace TrayToolbar
                     var parentPath = Path.GetDirectoryName(file);
                     if (parentPath.HasValue() && !parentPath.Is(folder.Name))
                     {
-                        if (parentPath.Contains(@"\.")) continue; //it's in a dot folder like .git or it's a dot file
+                        //if (parentPath.Contains(@"\.")) continue; //it's in a dot folder like .git or it's a dot file
+                        // mtanner
+                        // Hack to ignore only subdirectories matching patterns in IgnoreFolders
+                        // Get name of parent directory and check if in IgnoreFolders.
+                        if (Configuration.IgnoreFolders.Contains(Path.GetFileName(parentPath)))
+                            continue;
+
                         submenu = menu.CreateFolder(Path.GetRelativePath(folder.Name, parentPath), LeftClickMenu_ItemClicked);
                     }
                     var entry = new ToolStripMenuItem
                     {
-                        Text = Path.GetFileNameWithoutExtension(file),
+                        //Text = Path.GetFileNameWithoutExtension(file),
+                        // mtanner
+                        Text = Path.GetFileName(file).Replace(".lnk", ""),
                         CommandParameter = file,
                         Image = file.GetImage()
                     };
@@ -295,7 +310,7 @@ namespace TrayToolbar
                 MaxRecursionDepth = Configuration.MaxRecursionDepth > 0 ? Configuration.MaxRecursionDepth : int.MaxValue,
             };
             return Directory.EnumerateFiles(path, "*.*", options)
-                .Where(f => !Configuration.IgnoreFiles.Any(i => i.Is(f.FileExtension())))
+                .Where(f => !Configuration.IgnoreFileTypes.Any(i => i.Is(f.FileExtension())))
                 .OrderBy(f => f.ToUpper());
         }
 
@@ -419,7 +434,9 @@ namespace TrayToolbar
             }
 
             Configuration.Folders = FolderControls().Select(c => c.Config).ToList();
-            Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.Split(";,".ToCharArray(), StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            Configuration.IgnoreFileTypes = IgnoreFileTypesTextBox.Text.Split(";,".ToCharArray(), StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            // mtanner
+            Configuration.IgnoreFolders = IgnoreDirsTextBox.Text.Split(";,".ToCharArray(), StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
             Configuration.Theme = (int)ThemeToggleButton.Theme;
             LoadConfiguration();
             if (ConfigHelper.WriteConfiguration(Configuration))

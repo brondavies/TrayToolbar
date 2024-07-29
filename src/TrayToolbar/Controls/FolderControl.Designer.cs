@@ -32,31 +32,16 @@ namespace TrayToolbar
         {
             components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FolderControl));
-            FolderComboBox = new CustomComboBox();
             BrowseFolderButton = new PictureBox();
             DeleteFolderButton = new PictureBox();
             RecursiveCheckbox = new CheckBox();
             toolTips = new ToolTip(components);
             ErrorIcon = new PictureBox();
+            FolderTextBox = new TextBox();
             ((System.ComponentModel.ISupportInitialize)BrowseFolderButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DeleteFolderButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ErrorIcon).BeginInit();
             SuspendLayout();
-            // 
-            // FolderComboBox
-            // 
-            FolderComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            FolderComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
-            FolderComboBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
-            FolderComboBox.DropDownStyle = ComboBoxStyle.Simple;
-            FolderComboBox.FormattingEnabled = true;
-            FolderComboBox.Location = new Point(3, 3);
-            FolderComboBox.MaxDropDownItems = 15;
-            FolderComboBox.Name = "FolderComboBox";
-            FolderComboBox.Size = new Size(330, 23);
-            FolderComboBox.Sorted = true;
-            FolderComboBox.TabIndex = 6;
-            FolderComboBox.TextUpdate += FolderComboBox_TextUpdate;
             // 
             // BrowseFolderButton
             // 
@@ -98,7 +83,7 @@ namespace TrayToolbar
             ErrorIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             ErrorIcon.BackColor = Color.Transparent;
             ErrorIcon.Image = (Image)resources.GetObject("ErrorIcon.Image");
-            ErrorIcon.Location = new Point(313, 6);
+            ErrorIcon.Location = new Point(313, 3);
             ErrorIcon.Margin = new Padding(0);
             ErrorIcon.Name = "ErrorIcon";
             ErrorIcon.Size = new Size(16, 16);
@@ -107,16 +92,25 @@ namespace TrayToolbar
             ErrorIcon.TabStop = false;
             ErrorIcon.Visible = false;
             // 
+            // FolderTextBox
+            // 
+            FolderTextBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            FolderTextBox.Location = new Point(3, 3);
+            FolderTextBox.Name = "FolderTextBox";
+            FolderTextBox.Size = new Size(307, 23);
+            FolderTextBox.TabIndex = 11;
+            FolderTextBox.TextChanged += FolderTextBox_TextUpdate;
+            // 
             // FolderControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
+            Controls.Add(FolderTextBox);
             Controls.Add(ErrorIcon);
             Controls.Add(RecursiveCheckbox);
             Controls.Add(DeleteFolderButton);
             Controls.Add(BrowseFolderButton);
-            Controls.Add(FolderComboBox);
             Name = "FolderControl";
             Size = new Size(400, 60);
             ((System.ComponentModel.ISupportInitialize)BrowseFolderButton).EndInit();
@@ -127,12 +121,11 @@ namespace TrayToolbar
         }
 
         #endregion
-
-        private CustomComboBox FolderComboBox;
         private PictureBox BrowseFolderButton;
         private PictureBox DeleteFolderButton;
         private CheckBox RecursiveCheckbox;
         private ToolTip toolTips;
         private PictureBox ErrorIcon;
+        private TextBox FolderTextBox;
     }
 }
