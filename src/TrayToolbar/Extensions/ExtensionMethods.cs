@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace TrayToolbar.Extensions
 {
@@ -12,7 +13,7 @@ namespace TrayToolbar.Extensions
 
         public static Icon GetIcon(this string path)
         {
-            return ShellIcons.FetchIcon(path, true);
+            return ShellIcons.FetchIcon(path, false);
         }
 
         public static Bitmap GetImage(this string file)
@@ -47,6 +48,12 @@ namespace TrayToolbar.Extensions
             return value.HasValue() && value.StartsWith("https://");
         }
 
+        public static bool IsMatch(this string? value, string pattern)
+        {
+            if (value == null) return false;
+            return Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+        }
+
         public static string Join(this string[] value, string separator = ", ")
         {
             return string.Join(separator, value);
@@ -66,6 +73,16 @@ namespace TrayToolbar.Extensions
         {
             MethodInfo? mi = typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
             mi?.Invoke(notifyIcon, null);
+        }
+
+        public static string[] SplitPaths(this string value, char[]? splitchars = null)
+        {
+            return value.Split(splitchars ?? [';', ','], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        public static string ToMenuName(this string? value)
+        {
+            return value?.Replace("&", "&&") ?? "";
         }
     }
 }

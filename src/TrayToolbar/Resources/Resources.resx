@@ -136,7 +136,10 @@
     <value>Error</value>
   </data>
   <data name="Exclude files" xml:space="preserve">
-    <value>Exclude files</value>
+    <value>Exclude file types</value>
+  </data>
+  <data name="Exclude folders" xml:space="preserve">
+    <value>Exclude folders</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Exit</value>

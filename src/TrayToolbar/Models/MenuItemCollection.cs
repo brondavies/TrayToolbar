@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using TrayToolbar.Extensions;
 
 namespace TrayToolbar
 {
@@ -13,7 +14,7 @@ namespace TrayToolbar
             ToolStripMenuItem? parent = null;
             foreach (var part in parts)
             {
-                var added = AddFolder(parent, part, handler, out ToolStripMenuItem? menu);
+                var added = AddFolder(parent, part.ToMenuName(), handler, out ToolStripMenuItem? menu);
                 parent = menu;
                 if (!added && menu != null)
                 {

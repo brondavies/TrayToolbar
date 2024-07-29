@@ -48,6 +48,7 @@ namespace TrayToolbar
             FolderComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             FolderComboBox.AutoCompleteMode = AutoCompleteMode.SuggestAppend;
             FolderComboBox.AutoCompleteSource = AutoCompleteSource.FileSystemDirectories;
+            FolderComboBox.BorderColor = SystemColors.WindowFrame;
             FolderComboBox.DropDownStyle = ComboBoxStyle.Simple;
             FolderComboBox.FormattingEnabled = true;
             FolderComboBox.Location = new Point(3, 3);
@@ -55,11 +56,14 @@ namespace TrayToolbar
             FolderComboBox.Name = "FolderComboBox";
             FolderComboBox.Size = new Size(330, 23);
             FolderComboBox.Sorted = true;
-            FolderComboBox.TabIndex = 6;
+            FolderComboBox.TabIndex = 0;
             FolderComboBox.TextUpdate += FolderComboBox_TextUpdate;
             // 
             // BrowseFolderButton
             // 
+            BrowseFolderButton.AccessibleDescription = "Browse for folder";
+            BrowseFolderButton.AccessibleName = "Browse";
+            BrowseFolderButton.AccessibleRole = AccessibleRole.PushButton;
             BrowseFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             BrowseFolderButton.BackgroundImage = (Image)resources.GetObject("BrowseFolderButton.BackgroundImage");
             BrowseFolderButton.BackgroundImageLayout = ImageLayout.Center;
@@ -72,6 +76,9 @@ namespace TrayToolbar
             // 
             // DeleteFolderButton
             // 
+            DeleteFolderButton.AccessibleDescription = "Remove folder";
+            DeleteFolderButton.AccessibleName = "Remove";
+            DeleteFolderButton.AccessibleRole = AccessibleRole.PushButton;
             DeleteFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             DeleteFolderButton.BackgroundImage = (Image)resources.GetObject("DeleteFolderButton.BackgroundImage");
             DeleteFolderButton.BackgroundImageLayout = ImageLayout.Center;
@@ -88,7 +95,7 @@ namespace TrayToolbar
             RecursiveCheckbox.Location = new Point(3, 32);
             RecursiveCheckbox.Name = "RecursiveCheckbox";
             RecursiveCheckbox.Size = new Size(124, 19);
-            RecursiveCheckbox.TabIndex = 9;
+            RecursiveCheckbox.TabIndex = 1;
             RecursiveCheckbox.Text = "Include Subfolders";
             RecursiveCheckbox.UseVisualStyleBackColor = true;
             RecursiveCheckbox.CheckedChanged += RecursiveCheckbox_CheckedChanged;

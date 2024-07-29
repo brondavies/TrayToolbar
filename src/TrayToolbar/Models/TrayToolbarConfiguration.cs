@@ -5,17 +5,35 @@ namespace TrayToolbar
 {
     public class TrayToolbarConfiguration
     {
+        public bool HideFileExtensions { get; set; }
+
+        public bool IgnoreAllDotFiles { get; set; }
+
         public string[] IgnoreFiles { get; set; } = [".bak", ".config", ".dll", ".ico", ".ini"];
+
+        [Obsolete("IgnoreFileTypes is obsolete", true)]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string[]? IgnoreFileTypes
+        {
+            get => null;
+            set
+            {
+                if (value != null)
+                    IgnoreFiles = value;
+            }
+        }
+
+        public string[] IgnoreFolders { get; set; } = [".git", ".github"];
 
         public int MaxRecursionDepth { get; set; } = 3;
 
         public int Theme { get; set; } = 0;
 
-        [Obsolete]
+        [Obsolete("Folder is obsolete", true)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? Folder 
-        { 
-            get => null; 
+        public string? Folder
+        {
+            get => null;
             set
             {
                 if (value.HasValue())
@@ -31,7 +49,7 @@ namespace TrayToolbar
     public class FolderConfig
     {
         public FolderConfig() { }
-        public FolderConfig(string name) 
+        public FolderConfig(string name)
         {
             Name = name;
         }

@@ -15,7 +15,12 @@ namespace TrayToolbar
             ThemeChangeMessageFilter.Enable(true);
             try
             {
-                Application.Run(new SettingsForm());
+                var form = new SettingsForm();
+                if (Environment.GetCommandLineArgs().Contains("--show")) 
+                {
+                    form.Show();
+                }
+                Application.Run(form);
             } catch (ObjectDisposedException) { }
         }
 

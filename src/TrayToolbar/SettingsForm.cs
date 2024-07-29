@@ -20,23 +20,29 @@ namespace TrayToolbar
             LoadResources();
             SetupMenu();
             PopulateConfig();
+            SystemTheme.UseImmersiveDarkMode(0, UseDarkMode());
             this.HandleCreated += SettingsForm_HandleCreated;
+            ThemeChangeMessageFilter.ThemeChanged += SettingsForm_SystemThemeChanged;
         }
 
         private void SettingsForm_HandleCreated(object? sender, EventArgs e)
         {
             var darkmode = UseDarkMode();
             SystemTheme.UseImmersiveDarkMode(this.Handle, darkmode);
-            ThemeChangeMessageFilter.ThemeChanged += SettingsForm_SystemThemeChanged;
         }
 
         #region LoadResources
+
+        const string Command_Options = "Options";
+        const string Command_Open = "Open";
+        const string Command_Exit = "Exit";
 
         private void LoadResources()
         {
             label1.Text = R.Folders;
             label2.Text = R.Exclude_files;
             label3.Text = R.Theme;
+            label4.Text = R.Exclude_folders;
             RunOnLoginCheckbox.Text = R.Run_on_log_in;
             SaveButton.Text = R.Save;
             CancelBtn.Text = R.Cancel;
@@ -55,9 +61,9 @@ namespace TrayToolbar
             });
 
             RightClickMenu.Items.AddRange(new[] {
-                new ToolStripMenuItem { Text = R.Options, CommandParameter = "Options" },
-                new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = "Open" },
-                new ToolStripMenuItem { Text = R.Exit, CommandParameter = "Exit" }
+                new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
+                new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = Command_Open },
+                new ToolStripMenuItem { Text = R.Exit, CommandParameter = Command_Exit }
             });
         }
 
@@ -183,6 +189,7 @@ namespace TrayToolbar
             Configuration.Folders.ForEach(f => AddFolder(f, i++));
             FoldersUpdated();
             IgnoreFilesTextBox.Text = Configuration.IgnoreFiles.Join("; ");
+            IgnoreFoldersTextBox.Text = Configuration.IgnoreFolders.Join("; ");
             RunOnLoginCheckbox.Checked = ConfigHelper.GetStartupKey();
             if (SystemTheme.IsDarkModeSupported())
             {
@@ -208,12 +215,13 @@ namespace TrayToolbar
         {
             var trayIcon = (NotifyIcon)sender!;
             var folder = (FolderConfig)trayIcon.Tag!;
+            SettingsForm_SystemThemeChanged(null, EventArgs.Empty);
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
             {
-                SystemTheme.SetThemeColors(RightClickMenu, UseDarkMode());
                 RightClickMenu.Tag = folder;
                 RightClickMenu.Renderer = new MenuRenderer();
                 trayIcon.ContextMenuStrip = RightClickMenu;
+                SystemTheme.SetThemeColors(RightClickMenu, UseDarkMode());
             }
             else
             {
@@ -223,6 +231,7 @@ namespace TrayToolbar
                 }
                 LeftClickMenu.Items.Clear();
                 LeftClickMenu.Items.AddRange(MenuItems[folder].ToArray());
+                LeftClickMenu.Renderer = new MenuRenderer();
                 trayIcon.ContextMenuStrip = LeftClickMenu;
                 SystemTheme.SetThemeColors(LeftClickMenu, UseDarkMode());
 
@@ -251,12 +260,20 @@ namespace TrayToolbar
                     var parentPath = Path.GetDirectoryName(file);
                     if (parentPath.HasValue() && !parentPath.Is(folder.Name))
                     {
-                        if (parentPath.Contains(@"\.")) continue; //it's in a dot folder like .git or it's a dot file
+                        if (Configuration.IgnoreAllDotFiles && parentPath.Contains(@"\."))
+                            continue; //it's in a dot folder like .git or it's a dot file
+                        if (Configuration.IgnoreFolders.Contains(Path.GetFileName(parentPath)))
+                            continue; //it's in an ignored folder name
                         submenu = menu.CreateFolder(Path.GetRelativePath(folder.Name, parentPath), LeftClickMenu_ItemClicked);
+                    }
+                    var menuText = Path.GetFileName(file);
+                    if (Configuration.HideFileExtensions || file.FileExtension().Is(".lnk"))
+                    {
+                        menuText = Path.GetFileNameWithoutExtension(file);
                     }
                     var entry = new ToolStripMenuItem
                     {
-                        Text = Path.GetFileNameWithoutExtension(file),
+                        Text = menuText.ToMenuName(),
                         CommandParameter = file,
                         Image = file.GetImage()
                     };
@@ -295,7 +312,7 @@ namespace TrayToolbar
                 MaxRecursionDepth = Configuration.MaxRecursionDepth > 0 ? Configuration.MaxRecursionDepth : int.MaxValue,
             };
             return Directory.EnumerateFiles(path, "*.*", options)
-                .Where(f => !Configuration.IgnoreFiles.Any(i => i.Is(f.FileExtension())))
+                .Where(f => !Configuration.IgnoreFiles.Any(i => f.IsMatch("." + i)))
                 .OrderBy(f => f.ToUpper());
         }
 
@@ -306,6 +323,12 @@ namespace TrayToolbar
 
         private void ShowNormal()
         {
+            if (InvokeRequired)
+            {
+                Invoke(ShowNormal, []);
+                return;
+            }
+            SettingsForm_SystemThemeChanged(null, EventArgs.Empty);
             Visible = true;
             ShowInTaskbar = true;
             WindowState = FormWindowState.Normal;
@@ -350,19 +373,15 @@ namespace TrayToolbar
 
             switch (e.ClickedItem.CommandParameter.ToString())
             {
-                case "Options":
+                case Command_Options:
                     ShowNormal();
                     break;
-                case "Open":
+                case Command_Open:
                     var folder = (FolderConfig?)RightClickMenu.Tag;
                     if (folder?.Name != null)
                         Program.Launch(folder.Name);
                     break;
-                case "Refresh":
-                    LoadConfiguration();
-                    Configuration.Folders.ForEach(RefreshMenu);
-                    break;
-                case "Exit":
+                case Command_Exit:
                     Quit();
                     Application.Exit();
                     break;
@@ -423,7 +442,8 @@ namespace TrayToolbar
             }
 
             Configuration.Folders = FolderControls().Select(c => c.Config).ToList();
-            Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.Split(";,".ToCharArray(), StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+            Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.SplitPaths();
+            Configuration.IgnoreFolders = IgnoreFoldersTextBox.Text.SplitPaths();
             Configuration.Theme = (int)ThemeToggleButton.Theme;
             LoadConfiguration();
             if (ConfigHelper.WriteConfiguration(Configuration))

@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-namespace TrayToolbar.Extensions
+﻿namespace TrayToolbar.Extensions
 {
     internal class ThemeChangeMessageFilter : IMessageFilter
     {
@@ -16,13 +14,10 @@ namespace TrayToolbar.Extensions
                     Application.AddMessageFilter(Instance);
                 }
             }
-            else
+            else if (Instance != null)
             {
-                if (Instance != null)
-                {
-                    Application.RemoveMessageFilter(Instance);
-                    Instance = null;
-                }
+                Application.RemoveMessageFilter(Instance);
+                Instance = null;
             }
         }
 
@@ -32,8 +27,9 @@ namespace TrayToolbar.Extensions
         public bool PreFilterMessage(ref Message m)
         {
             //Debug.WriteLine($"{m.HWnd}: {m.WParam}, {m.LParam}, {m.Msg}");
-            if (m.WParam == 0 && m.LParam == 0 && m.Msg == 49832 //not in the WM_* enum
-                && (DateTime.Now - eventTrigger).TotalMilliseconds > 100)
+            //TODO: I was expecting to be able to check for WM_SETTINGCHANGE but this doesn't actually consistently happen between Win 10/11
+            //      Look for updated documentation on how to get a message when the theme changes
+            if ((DateTime.Now - eventTrigger).TotalMilliseconds > 100)
             {
                 ThemeChanged?.Invoke(null, EventArgs.Empty);
                 eventTrigger = DateTime.Now;

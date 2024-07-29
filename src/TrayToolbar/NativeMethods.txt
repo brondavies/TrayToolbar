@@ -5,4 +5,5 @@ RegNotifyChangeKeyValue
 RegOpenKeyEx
 WM_MOUSE*
 WM_PAINT
+WM_SETTINGCHANGE
 WINDOW_EX_STYLE
