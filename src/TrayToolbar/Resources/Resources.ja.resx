@@ -186,4 +186,7 @@
   <data name="Theme" xml:space="preserve">
     <value>テーマ</value>
   </data>
+  <data name="Exclude folders" xml:space="preserve">
+    <value>フォルダを除外する</value>
+  </data>
 </root>

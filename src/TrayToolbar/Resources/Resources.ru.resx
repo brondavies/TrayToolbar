@@ -186,4 +186,7 @@
   <data name="Theme" xml:space="preserve">
     <value>Тема</value>
   </data>
+  <data name="Exclude folders" xml:space="preserve">
+    <value>Исключить папки</value>
+  </data>
 </root>
