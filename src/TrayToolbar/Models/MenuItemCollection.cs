@@ -8,13 +8,13 @@ namespace TrayToolbar
         public MenuItemCollection() { }
         public bool NeedsRefresh { get; set; } = true;
 
-        public ToolStripMenuItem? CreateFolder(string path, ToolStripItemClickedEventHandler handler)
+        public ToolStripMenuItem? CreateFolder(string path, ToolStripItemClickedEventHandler handler, MouseEventHandler mouseDownHandler)
         {
             var parts = path.Split(Path.DirectorySeparatorChar);
             ToolStripMenuItem? parent = null;
             foreach (var part in parts)
             {
-                var added = AddFolder(parent, part.ToMenuName(), handler, out ToolStripMenuItem? menu);
+                var added = AddFolder(parent, part.ToMenuName(), handler, mouseDownHandler, out ToolStripMenuItem? menu);
                 parent = menu;
                 if (!added && menu != null)
                 {
@@ -45,7 +45,7 @@ namespace TrayToolbar
             return i is ToolStripMenuItem { HasDropDown: true } && (string.Compare(i.Name, name, true) > 0);
         }
 
-        private bool AddFolder(ToolStripMenuItem? parent, string name, ToolStripItemClickedEventHandler handler, out ToolStripMenuItem? menu)
+        private bool AddFolder(ToolStripMenuItem? parent, string name, ToolStripItemClickedEventHandler handler, MouseEventHandler mouseDownHandler, out ToolStripMenuItem? menu)
         {
             var result = false;//true if it was already added
             if (parent != null)
@@ -62,6 +62,7 @@ namespace TrayToolbar
             {
                 menu = new ToolStripMenuItem(name) { Name = name };
                 menu.DropDownItemClicked += handler;
+                menu.MouseDown += mouseDownHandler;
                 result = parent != null;
                 if (result)
                 {

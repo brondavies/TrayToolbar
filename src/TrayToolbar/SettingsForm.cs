@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Diagnostics;
 using TrayToolbar.Controls;
 using TrayToolbar.Extensions;
 using TrayToolbar.Models;
@@ -13,6 +14,8 @@ namespace TrayToolbar
         public Dictionary<FolderConfig, MenuItemCollection> MenuItems = [];
 
         internal List<NotifyIcon> TrayIcons = [];
+
+        internal bool RightMouseClicked;
 
         public SettingsForm()
         {
@@ -264,7 +267,7 @@ namespace TrayToolbar
                             continue; //it's in a dot folder like .git or it's a dot file
                         if (Configuration.IgnoreFolders.Contains(Path.GetFileName(parentPath)))
                             continue; //it's in an ignored folder name
-                        submenu = menu.CreateFolder(Path.GetRelativePath(folder.Name, parentPath), LeftClickMenu_ItemClicked);
+                        submenu = menu.CreateFolder(Path.GetRelativePath(folder.Name, parentPath), LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
                     }
                     var menuText = Path.GetFileName(file);
                     if (Configuration.HideFileExtensions || file.FileExtension().Is(".lnk"))
@@ -284,10 +287,16 @@ namespace TrayToolbar
                     else
                     {
                         menu.Add(entry);
+                        entry.MouseDown += LeftClickMenuEntry_MouseDown;
                     }
                 }
                 SetupLeftClickMenu(menu);
             }
+        }
+
+        private void LeftClickMenuEntry_MouseDown(object? sender, MouseEventArgs e)
+        {
+            RightMouseClicked = e.Button == MouseButtons.Right;
         }
 
         private void SetupLeftClickMenu(MenuItemCollection menu)
@@ -394,12 +403,30 @@ namespace TrayToolbar
             {
                 Visible = false;
                 ShowInTaskbar = false;
-                try
+                var filename = $"{e.ClickedItem.CommandParameter}";
+                if (RightMouseClicked)
                 {
-                    Program.Launch($"{e.ClickedItem.CommandParameter}");
+                    ShowContextMenu(filename);
                 }
-                catch { }
+                else
+                {
+                    try
+                    {
+                        Program.Launch(filename);
+                    }
+                    catch { }
+                }
             }
+        }
+
+        private void ShowContextMenu(string filename)
+        {
+            try
+            {
+                var menu = new ShellContextMenu();
+                menu.ShowContextMenu([new FileInfo(filename)], Cursor.Position);
+            }
+            catch { }
         }
 
         private void FolderControl_BrowseClicked(object? sender, EventArgs e)
