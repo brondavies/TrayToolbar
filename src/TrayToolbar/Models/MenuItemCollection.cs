@@ -61,8 +61,8 @@ namespace TrayToolbar
             if (menu == null)
             {
                 menu = new ToolStripMenuItem(name) { Name = name };
-                menu.DropDownItemClicked += handler;
                 menu.MouseDown += mouseDownHandler;
+                menu.DropDownItemClicked += handler;
                 result = parent != null;
                 if (result)
                 {

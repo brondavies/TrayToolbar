@@ -280,6 +280,7 @@ namespace TrayToolbar
                         CommandParameter = file,
                         Image = file.GetImage()
                     };
+                    entry.MouseDown += LeftClickMenuEntry_MouseDown;
                     if (submenu != null)
                     {
                         submenu.DropDownItems.Add(entry);
@@ -287,7 +288,6 @@ namespace TrayToolbar
                     else
                     {
                         menu.Add(entry);
-                        entry.MouseDown += LeftClickMenuEntry_MouseDown;
                     }
                 }
                 SetupLeftClickMenu(menu);
@@ -321,7 +321,7 @@ namespace TrayToolbar
                 MaxRecursionDepth = Configuration.MaxRecursionDepth > 0 ? Configuration.MaxRecursionDepth : int.MaxValue,
             };
             return Directory.EnumerateFiles(path, "*.*", options)
-                .Where(f => !Configuration.IgnoreFiles.Any(i => f.IsMatch("." + i)))
+                .Where(f => !Configuration.IgnoreFiles.Any(i => f.IsMatch("." + i.Replace(".", "\\."))))
                 .OrderBy(f => f.ToUpper());
         }
 
