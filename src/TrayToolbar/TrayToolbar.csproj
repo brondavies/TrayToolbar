@@ -14,6 +14,7 @@
     <PackageProjectUrl>https://github.com/brondavies/TrayToolbar</PackageProjectUrl>
     <PackageIcon>Resources\TrayIcon.png</PackageIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
   </PropertyGroup>
 
   <ItemGroup>

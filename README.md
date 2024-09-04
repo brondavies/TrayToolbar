@@ -1,7 +1,7 @@
 # TrayToolbar
  Creates a menu with all your favorite shortcuts within easy reach just by putting them in a local folder.
 
-[![CodeQL](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml/badge.svg?branch=master&event=push)](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml) [![Download](https://badge.fury.io/gh/brondavies%2FTrayToolbar.svg)](https://github.com/brondavies/TrayToolbar/releases)
+[![CodeQL](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml/badge.svg?branch=master&event=push)](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml) [![Download](https://img.shields.io/github/v/release/brondavies/TrayToolbar?label=Version&color=%234b2)](https://github.com/brondavies/TrayToolbar/releases)
 
 - Replaces the Windows 7-10 feature that no longer exists in Windows 11 for custom toolbars on the taskbar
 - Choose the folder(s) and customize the file filter
