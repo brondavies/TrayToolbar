@@ -189,4 +189,16 @@
   <data name="TrayToolbar Settings" xml:space="preserve">
     <value>TrayToolbar Settings</value>
   </data>
+  <data name="Menu Font Size" xml:space="preserve">
+    <value>Menu Font Size</value>
+  </data>
+  <data name="Icon Size" xml:space="preserve">
+    <value>Icon Size</value>
+  </data>
+  <data name="Small" xml:space="preserve">
+    <value>Small</value>
+  </data>
+  <data name="Large" xml:space="preserve">
+    <value>Large</value>
+  </data>
 </root>

@@ -189,4 +189,16 @@
   <data name="Exclude folders" xml:space="preserve">
     <value>폴더 제외</value>
   </data>
+  <data name="Menu Font Size" xml:space="preserve">
+    <value>메뉴 글꼴 크기</value>
+  </data>
+  <data name="Icon Size" xml:space="preserve">
+    <value>아이콘 크기</value>
+  </data>
+  <data name="Small" xml:space="preserve">
+    <value>작은</value>
+  </data>
+  <data name="Large" xml:space="preserve">
+    <value>크기가 큰</value>
+  </data>
 </root>

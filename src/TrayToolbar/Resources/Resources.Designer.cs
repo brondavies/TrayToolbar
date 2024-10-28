@@ -151,6 +151,15 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Icon Size.
+        /// </summary>
+        internal static string Icon_Size {
+            get {
+                return ResourceManager.GetString("Icon Size", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include Subfolders.
         /// </summary>
         internal static string Include_Subfolders {
@@ -160,11 +169,29 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Large.
+        /// </summary>
+        internal static string Large {
+            get {
+                return ResourceManager.GetString("Large", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Light.
         /// </summary>
         internal static string Light {
             get {
                 return ResourceManager.GetString("Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Menu Font Size.
+        /// </summary>
+        internal static string Menu_Font_Size {
+            get {
+                return ResourceManager.GetString("Menu Font Size", resourceCulture);
             }
         }
         
@@ -219,6 +246,15 @@ namespace TrayToolbar.Resources {
         internal static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Small.
+        /// </summary>
+        internal static string Small {
+            get {
+                return ResourceManager.GetString("Small", resourceCulture);
             }
         }
         

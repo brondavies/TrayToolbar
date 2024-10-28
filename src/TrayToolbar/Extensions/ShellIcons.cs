@@ -10,16 +10,22 @@ namespace TrayToolbar.Extensions
             return icon;
         }
 
+        static uint SizeOfSHGetFileInfo = (uint)Marshal.SizeOf(new SHFILEINFO());
         private static Icon ExtractFromPath(string path, bool large = false)
         {
-            SHFILEINFO shinfo = new SHFILEINFO();
-            SHGetFileInfo(
+            var shinfo = new SHFILEINFO();
+            var himl = SHGetFileInfo(
                 path,
-                0, ref shinfo, (uint)Marshal.SizeOf(shinfo),
-                SHGFI_ICON | (large ? SHGFI_LARGEICON : SHGFI_SMALLICON));
-            var icon = Icon.FromHandle(shinfo.hIcon);
-            //DestroyIcon(shinfo.hIcon); //makes icon invisible?
-            return icon;
+                0, ref shinfo, SizeOfSHGetFileInfo,
+                SHGFI_SYSICONINDEX | (large ? SHGFI_LARGEICON : SHGFI_SMALLICON));
+
+            Icon? icon = null;
+            var iconHandle = ImageList_GetIcon(himl, shinfo.iIcon, ILD_NORMAL);
+            if (iconHandle != 0)
+            {
+                icon = Icon.FromHandle(iconHandle);
+            }
+            return icon ?? SystemIcons.Application;
         }
 
         /// <summary>
@@ -40,11 +46,12 @@ namespace TrayToolbar.Extensions
         [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
         private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
 
-        [DllImport("user32.dll")]
-        private static extern bool DestroyIcon(IntPtr handle);
+        [DllImport("Comctl32.dll")]
+        private static extern IntPtr ImageList_GetIcon(IntPtr himl, int i, int flags);
 
-        private const uint SHGFI_ICON = 0x100;
+        private const int ILD_NORMAL = 0x00000000;
         private const uint SHGFI_LARGEICON = 0x0;
         private const uint SHGFI_SMALLICON = 0x000000001;
+        private const uint SHGFI_SYSICONINDEX = 0x4000;
     }
 }

@@ -29,6 +29,10 @@ namespace TrayToolbar
 
         public int Theme { get; set; } = 0;
 
+        public float FontSize { get; set; } = 9;
+
+        public bool LargeIcons { get; set; }
+
         [Obsolete("Folder is obsolete", true)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Folder

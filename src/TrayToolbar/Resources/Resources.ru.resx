@@ -189,4 +189,16 @@
   <data name="Exclude folders" xml:space="preserve">
     <value>Исключить папки</value>
   </data>
+  <data name="Menu Font Size" xml:space="preserve">
+    <value>Размер шрифта меню</value>
+  </data>
+  <data name="Icon Size" xml:space="preserve">
+    <value>Размер значка</value>
+  </data>
+  <data name="Small" xml:space="preserve">
+    <value>Маленький</value>
+  </data>
+  <data name="Large" xml:space="preserve">
+    <value>Большой</value>
+  </data>
 </root>

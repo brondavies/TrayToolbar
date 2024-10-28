@@ -189,4 +189,16 @@
   <data name="Exclude folders" xml:space="preserve">
     <value>排除文件夹</value>
   </data>
+  <data name="Menu Font Size" xml:space="preserve">
+    <value>菜单字体大小</value>
+  </data>
+  <data name="Icon Size" xml:space="preserve">
+    <value>图标大小</value>
+  </data>
+  <data name="Small" xml:space="preserve">
+    <value>小的</value>
+  </data>
+  <data name="Large" xml:space="preserve">
+    <value>大的</value>
+  </data>
 </root>

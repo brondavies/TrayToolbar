@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Net.Http.Json;
 using System.Text.Json;
+using TrayToolbar.Extensions;
 using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar
@@ -37,9 +38,9 @@ namespace TrayToolbar
             {
                 key.SetValue(STARTUP_VALUE, ApplicationExe, RegistryValueKind.String);
             }
-            else
+            else if (key.GetValueNames().Contains(STARTUP_VALUE))
             {
-                if (key.GetValueNames().Contains(STARTUP_VALUE))
+                if ($"{key.GetValue(STARTUP_VALUE)}".Is(ApplicationExe))
                 {
                     key.DeleteValue(STARTUP_VALUE);
                 }

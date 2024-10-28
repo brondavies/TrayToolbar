@@ -1,5 +1,4 @@
 using System.Collections.Concurrent;
-using System.Diagnostics;
 using TrayToolbar.Controls;
 using TrayToolbar.Extensions;
 using TrayToolbar.Models;
@@ -46,6 +45,10 @@ namespace TrayToolbar
             label2.Text = R.Exclude_files;
             label3.Text = R.Theme;
             label4.Text = R.Exclude_folders;
+            label5.Text = R.Menu_Font_Size;
+            label6.Text = R.Icon_Size;
+            IconSizeSmallCheckbox.Text = R.Small;
+            IconSizeLargeCheckbox.Text = R.Large;
             RunOnLoginCheckbox.Text = R.Run_on_log_in;
             SaveButton.Text = R.Save;
             CancelBtn.Text = R.Cancel;
@@ -193,6 +196,9 @@ namespace TrayToolbar
             FoldersUpdated();
             IgnoreFilesTextBox.Text = Configuration.IgnoreFiles.Join("; ");
             IgnoreFoldersTextBox.Text = Configuration.IgnoreFolders.Join("; ");
+            FontSizeInput.Text = Configuration.FontSize.ToString();
+            IconSizeLargeCheckbox.Checked = Configuration.LargeIcons;
+            IconSizeSmallCheckbox.Checked = !Configuration.LargeIcons;
             RunOnLoginCheckbox.Checked = ConfigHelper.GetStartupKey();
             if (SystemTheme.IsDarkModeSupported())
             {
@@ -221,6 +227,8 @@ namespace TrayToolbar
             SettingsForm_SystemThemeChanged(null, EventArgs.Empty);
             if (((MouseEventArgs)e).Button == MouseButtons.Right)
             {
+                var font = RightClickMenu.Font;
+                RightClickMenu.Font = new Font(font.FontFamily, Configuration.FontSize, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
                 RightClickMenu.Tag = folder;
                 RightClickMenu.Renderer = new MenuRenderer();
                 trayIcon.ContextMenuStrip = RightClickMenu;
@@ -232,6 +240,8 @@ namespace TrayToolbar
                 {
                     return;
                 }
+                var font = LeftClickMenu.Font;
+                LeftClickMenu.Font = new Font(font.FontFamily, Configuration.FontSize, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
                 LeftClickMenu.Items.Clear();
                 LeftClickMenu.Items.AddRange(MenuItems[folder].ToArray());
                 LeftClickMenu.Renderer = new MenuRenderer();
@@ -278,7 +288,8 @@ namespace TrayToolbar
                     {
                         Text = menuText.ToMenuName(),
                         CommandParameter = file,
-                        Image = file.GetImage()
+                        Image = file.GetImage(Configuration.LargeIcons),
+                        ImageScaling = ToolStripItemImageScaling.None
                     };
                     entry.MouseDown += LeftClickMenuEntry_MouseDown;
                     if (submenu != null)
@@ -472,6 +483,11 @@ namespace TrayToolbar
             Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.SplitPaths();
             Configuration.IgnoreFolders = IgnoreFoldersTextBox.Text.SplitPaths();
             Configuration.Theme = (int)ThemeToggleButton.Theme;
+            Configuration.LargeIcons = IconSizeLargeCheckbox.Checked;
+            if (FontSizeInput.Validate())
+            {
+                Configuration.FontSize = (float)FontSizeInput.Value;
+            }
             LoadConfiguration();
             if (ConfigHelper.WriteConfiguration(Configuration))
             {
@@ -562,6 +578,16 @@ namespace TrayToolbar
                 var darkmode = SystemTheme.IsDarkModeEnabled();
                 SystemTheme.UseImmersiveDarkMode(this.Handle, darkmode);
             }
+        }
+
+        private void IconSizeSmallCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            IconSizeLargeCheckbox.Checked = !IconSizeSmallCheckbox.Checked;
+        }
+
+        private void IconSizeLargeCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            IconSizeSmallCheckbox.Checked = !IconSizeLargeCheckbox.Checked;
         }
     }
 }

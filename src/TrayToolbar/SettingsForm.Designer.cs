@@ -35,22 +35,30 @@
             SaveButton = new Button();
             NewVersionLabel = new LinkLabel();
             tableLayout = new TableLayoutPanel();
-            IgnoreFoldersTextBox = new TextBox();
-            label4 = new Label();
-            label3 = new Label();
             label1 = new Label();
             label2 = new Label();
-            IgnoreFilesTextBox = new TextBox();
-            RunOnLoginCheckbox = new CheckBox();
-            AddFolderButton = new Button();
+            label4 = new Label();
+            IgnoreFoldersTextBox = new TextBox();
+            label3 = new Label();
+            label5 = new Label();
             FoldersLayout = new FlowLayoutPanel();
+            AddFolderButton = new Button();
+            IgnoreFilesTextBox = new TextBox();
             ThemeToggleButton = new Controls.ThemeToggle();
+            RunOnLoginCheckbox = new CheckBox();
+            fontImageSizeTableLayout = new TableLayoutPanel();
+            IconSizeLargeCheckbox = new RadioButton();
+            label6 = new Label();
+            FontSizeInput = new NumericUpDown();
+            IconSizeSmallCheckbox = new RadioButton();
             RightClickMenu = new ContextMenuStrip(components);
             LeftClickMenu = new ContextMenuStrip(components);
             FolderDialog = new FolderBrowserDialog();
             flowLayoutPanel1 = new FlowLayoutPanel();
             flowLayoutPanel1.SuspendLayout();
             tableLayout.SuspendLayout();
+            fontImageSizeTableLayout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)FontSizeInput).BeginInit();
             SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -62,7 +70,7 @@
             flowLayoutPanel1.Controls.Add(NewVersionLabel);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
-            flowLayoutPanel1.Location = new Point(10, 278);
+            flowLayoutPanel1.Location = new Point(10, 328);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(3);
             flowLayoutPanel1.Size = new Size(520, 39);
@@ -106,7 +114,7 @@
             NewVersionLabel.Name = "NewVersionLabel";
             NewVersionLabel.Padding = new Padding(24, 0, 0, 0);
             NewVersionLabel.Size = new Size(168, 33);
-            NewVersionLabel.TabIndex = 0;
+            NewVersionLabel.TabIndex = 10;
             NewVersionLabel.TabStop = true;
             NewVersionLabel.Text = "A new version is available!";
             NewVersionLabel.TextAlign = ContentAlignment.MiddleLeft;
@@ -121,63 +129,32 @@
             tableLayout.ColumnCount = 2;
             tableLayout.ColumnStyles.Add(new ColumnStyle());
             tableLayout.ColumnStyles.Add(new ColumnStyle());
-            tableLayout.Controls.Add(IgnoreFoldersTextBox, 0, 3);
-            tableLayout.Controls.Add(label4, 0, 3);
-            tableLayout.Controls.Add(label3, 0, 4);
             tableLayout.Controls.Add(label1, 0, 0);
             tableLayout.Controls.Add(label2, 0, 2);
-            tableLayout.Controls.Add(IgnoreFilesTextBox, 1, 2);
-            tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 5);
-            tableLayout.Controls.Add(AddFolderButton, 1, 1);
+            tableLayout.Controls.Add(label4, 0, 3);
+            tableLayout.Controls.Add(IgnoreFoldersTextBox, 1, 3);
+            tableLayout.Controls.Add(label3, 0, 4);
+            tableLayout.Controls.Add(label5, 0, 5);
             tableLayout.Controls.Add(FoldersLayout, 1, 0);
+            tableLayout.Controls.Add(AddFolderButton, 1, 1);
+            tableLayout.Controls.Add(IgnoreFilesTextBox, 1, 2);
             tableLayout.Controls.Add(ThemeToggleButton, 1, 4);
+            tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 6);
+            tableLayout.Controls.Add(fontImageSizeTableLayout, 1, 5);
             tableLayout.Dock = DockStyle.Fill;
             tableLayout.Location = new Point(10, 10);
             tableLayout.Margin = new Padding(10);
             tableLayout.Name = "tableLayout";
-            tableLayout.RowCount = 6;
+            tableLayout.RowCount = 7;
             tableLayout.RowStyles.Add(new RowStyle());
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayout.Size = new Size(520, 268);
+            tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            tableLayout.Size = new Size(520, 318);
             tableLayout.TabIndex = 3;
-            // 
-            // IgnoreFoldersTextBox
-            // 
-            IgnoreFoldersTextBox.BorderStyle = BorderStyle.FixedSingle;
-            IgnoreFoldersTextBox.Dock = DockStyle.Top;
-            IgnoreFoldersTextBox.Location = new Point(117, 128);
-            IgnoreFoldersTextBox.Name = "IgnoreFoldersTextBox";
-            IgnoreFoldersTextBox.PlaceholderText = ".git; .github";
-            IgnoreFoldersTextBox.Size = new Size(414, 23);
-            IgnoreFoldersTextBox.TabIndex = 2;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Dock = DockStyle.Top;
-            label4.Location = new Point(3, 125);
-            label4.Name = "label4";
-            label4.Padding = new Padding(5);
-            label4.Size = new Size(108, 25);
-            label4.TabIndex = 14;
-            label4.Text = "Exclude folders";
-            label4.TextAlign = ContentAlignment.MiddleRight;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Top;
-            label3.Location = new Point(3, 175);
-            label3.Name = "label3";
-            label3.Padding = new Padding(5);
-            label3.Size = new Size(108, 25);
-            label3.TabIndex = 12;
-            label3.Text = "Theme";
-            label3.TextAlign = ContentAlignment.MiddleRight;
             // 
             // label1
             // 
@@ -203,39 +180,51 @@
             label2.Text = "Exclude file types";
             label2.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // IgnoreFilesTextBox
+            // label4
             // 
-            IgnoreFilesTextBox.BorderStyle = BorderStyle.FixedSingle;
-            IgnoreFilesTextBox.Dock = DockStyle.Top;
-            IgnoreFilesTextBox.Location = new Point(117, 78);
-            IgnoreFilesTextBox.Name = "IgnoreFilesTextBox";
-            IgnoreFilesTextBox.PlaceholderText = ".bak; .config; .dll; .ico; .ini";
-            IgnoreFilesTextBox.Size = new Size(414, 23);
-            IgnoreFilesTextBox.TabIndex = 1;
+            label4.AutoSize = true;
+            label4.Dock = DockStyle.Top;
+            label4.Location = new Point(3, 125);
+            label4.Name = "label4";
+            label4.Padding = new Padding(5);
+            label4.Size = new Size(108, 25);
+            label4.TabIndex = 14;
+            label4.Text = "Exclude folders";
+            label4.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // RunOnLoginCheckbox
+            // IgnoreFoldersTextBox
             // 
-            RunOnLoginCheckbox.AutoSize = true;
-            RunOnLoginCheckbox.Location = new Point(117, 228);
-            RunOnLoginCheckbox.Name = "RunOnLoginCheckbox";
-            RunOnLoginCheckbox.Size = new Size(97, 19);
-            RunOnLoginCheckbox.TabIndex = 4;
-            RunOnLoginCheckbox.Text = "Run on log in";
-            RunOnLoginCheckbox.UseVisualStyleBackColor = true;
+            IgnoreFoldersTextBox.BorderStyle = BorderStyle.FixedSingle;
+            IgnoreFoldersTextBox.Dock = DockStyle.Top;
+            IgnoreFoldersTextBox.Location = new Point(117, 128);
+            IgnoreFoldersTextBox.Name = "IgnoreFoldersTextBox";
+            IgnoreFoldersTextBox.PlaceholderText = ".git; .github";
+            IgnoreFoldersTextBox.Size = new Size(414, 23);
+            IgnoreFoldersTextBox.TabIndex = 4;
             // 
-            // AddFolderButton
+            // label3
             // 
-            AddFolderButton.AutoSize = true;
-            AddFolderButton.Image = (Image)resources.GetObject("AddFolderButton.Image");
-            AddFolderButton.ImageAlign = ContentAlignment.MiddleLeft;
-            AddFolderButton.Location = new Point(117, 28);
-            AddFolderButton.Name = "AddFolderButton";
-            AddFolderButton.Padding = new Padding(32, 0, 0, 0);
-            AddFolderButton.Size = new Size(158, 29);
-            AddFolderButton.TabIndex = 0;
-            AddFolderButton.Text = "Add Folder";
-            AddFolderButton.UseVisualStyleBackColor = true;
-            AddFolderButton.Click += AddFolderButton_Click;
+            label3.AutoSize = true;
+            label3.Dock = DockStyle.Top;
+            label3.Location = new Point(3, 175);
+            label3.Name = "label3";
+            label3.Padding = new Padding(5);
+            label3.Size = new Size(108, 25);
+            label3.TabIndex = 12;
+            label3.Text = "Theme";
+            label3.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Dock = DockStyle.Top;
+            label5.Location = new Point(3, 225);
+            label5.Name = "label5";
+            label5.Padding = new Padding(5);
+            label5.Size = new Size(108, 25);
+            label5.TabIndex = 13;
+            label5.Text = "Menu Font Size";
+            label5.TextAlign = ContentAlignment.MiddleRight;
             // 
             // FoldersLayout
             // 
@@ -252,6 +241,30 @@
             FoldersLayout.TabIndex = 11;
             FoldersLayout.WrapContents = false;
             // 
+            // AddFolderButton
+            // 
+            AddFolderButton.AutoSize = true;
+            AddFolderButton.Image = (Image)resources.GetObject("AddFolderButton.Image");
+            AddFolderButton.ImageAlign = ContentAlignment.MiddleLeft;
+            AddFolderButton.Location = new Point(117, 28);
+            AddFolderButton.Name = "AddFolderButton";
+            AddFolderButton.Padding = new Padding(32, 0, 0, 0);
+            AddFolderButton.Size = new Size(158, 29);
+            AddFolderButton.TabIndex = 0;
+            AddFolderButton.Text = "Add Folder";
+            AddFolderButton.UseVisualStyleBackColor = true;
+            AddFolderButton.Click += AddFolderButton_Click;
+            // 
+            // IgnoreFilesTextBox
+            // 
+            IgnoreFilesTextBox.BorderStyle = BorderStyle.FixedSingle;
+            IgnoreFilesTextBox.Dock = DockStyle.Top;
+            IgnoreFilesTextBox.Location = new Point(117, 78);
+            IgnoreFilesTextBox.Name = "IgnoreFilesTextBox";
+            IgnoreFilesTextBox.PlaceholderText = ".bak; .config; .dll; .ico; .ini";
+            IgnoreFilesTextBox.Size = new Size(414, 23);
+            IgnoreFilesTextBox.TabIndex = 3;
+            // 
             // ThemeToggleButton
             // 
             ThemeToggleButton.AutoSize = true;
@@ -259,9 +272,85 @@
             ThemeToggleButton.Location = new Point(117, 178);
             ThemeToggleButton.Name = "ThemeToggleButton";
             ThemeToggleButton.Size = new Size(182, 25);
-            ThemeToggleButton.TabIndex = 3;
+            ThemeToggleButton.TabIndex = 5;
             ThemeToggleButton.Theme = Models.ThemeToggleEnum.SYSTEM_THEME;
             ThemeToggleButton.ThemeChanged += ThemeToggleButton_ThemeChanged;
+            // 
+            // RunOnLoginCheckbox
+            // 
+            RunOnLoginCheckbox.AutoSize = true;
+            RunOnLoginCheckbox.Location = new Point(117, 278);
+            RunOnLoginCheckbox.Name = "RunOnLoginCheckbox";
+            RunOnLoginCheckbox.Size = new Size(97, 19);
+            RunOnLoginCheckbox.TabIndex = 9;
+            RunOnLoginCheckbox.Text = "Run on log in";
+            RunOnLoginCheckbox.UseVisualStyleBackColor = true;
+            // 
+            // fontImageSizeTableLayout
+            // 
+            fontImageSizeTableLayout.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            fontImageSizeTableLayout.ColumnCount = 4;
+            fontImageSizeTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            fontImageSizeTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            fontImageSizeTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            fontImageSizeTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
+            fontImageSizeTableLayout.Controls.Add(IconSizeLargeCheckbox, 3, 0);
+            fontImageSizeTableLayout.Controls.Add(label6, 1, 0);
+            fontImageSizeTableLayout.Controls.Add(FontSizeInput, 0, 0);
+            fontImageSizeTableLayout.Controls.Add(IconSizeSmallCheckbox, 2, 0);
+            fontImageSizeTableLayout.Dock = DockStyle.Fill;
+            fontImageSizeTableLayout.Location = new Point(117, 228);
+            fontImageSizeTableLayout.Name = "fontImageSizeTableLayout";
+            fontImageSizeTableLayout.RowCount = 1;
+            fontImageSizeTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            fontImageSizeTableLayout.Size = new Size(414, 44);
+            fontImageSizeTableLayout.TabIndex = 4;
+            // 
+            // IconSizeLargeCheckbox
+            // 
+            IconSizeLargeCheckbox.AutoSize = true;
+            IconSizeLargeCheckbox.Location = new Point(312, 3);
+            IconSizeLargeCheckbox.Name = "IconSizeLargeCheckbox";
+            IconSizeLargeCheckbox.Size = new Size(54, 19);
+            IconSizeLargeCheckbox.TabIndex = 8;
+            IconSizeLargeCheckbox.Text = "Large";
+            IconSizeLargeCheckbox.UseVisualStyleBackColor = true;
+            IconSizeLargeCheckbox.CheckedChanged += IconSizeLargeCheckbox_CheckedChanged;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Dock = DockStyle.Top;
+            label6.Location = new Point(106, 0);
+            label6.Name = "label6";
+            label6.Padding = new Padding(5);
+            label6.Size = new Size(97, 25);
+            label6.TabIndex = 14;
+            label6.Text = "Icon Size";
+            label6.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // FontSizeInput
+            // 
+            FontSizeInput.Location = new Point(3, 3);
+            FontSizeInput.Maximum = new decimal(new int[] { 72, 0, 0, 0 });
+            FontSizeInput.Minimum = new decimal(new int[] { 9, 0, 0, 0 });
+            FontSizeInput.Name = "FontSizeInput";
+            FontSizeInput.Size = new Size(50, 23);
+            FontSizeInput.TabIndex = 6;
+            FontSizeInput.Value = new decimal(new int[] { 9, 0, 0, 0 });
+            // 
+            // IconSizeSmallCheckbox
+            // 
+            IconSizeSmallCheckbox.AutoSize = true;
+            IconSizeSmallCheckbox.Checked = true;
+            IconSizeSmallCheckbox.Location = new Point(209, 3);
+            IconSizeSmallCheckbox.Name = "IconSizeSmallCheckbox";
+            IconSizeSmallCheckbox.Size = new Size(54, 19);
+            IconSizeSmallCheckbox.TabIndex = 7;
+            IconSizeSmallCheckbox.TabStop = true;
+            IconSizeSmallCheckbox.Text = "Small";
+            IconSizeSmallCheckbox.UseVisualStyleBackColor = true;
+            IconSizeSmallCheckbox.CheckedChanged += IconSizeSmallCheckbox_CheckedChanged;
             // 
             // RightClickMenu
             // 
@@ -282,7 +371,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(540, 327);
+            ClientSize = new Size(540, 377);
             Controls.Add(tableLayout);
             Controls.Add(flowLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -299,6 +388,9 @@
             flowLayoutPanel1.PerformLayout();
             tableLayout.ResumeLayout(false);
             tableLayout.PerformLayout();
+            fontImageSizeTableLayout.ResumeLayout(false);
+            fontImageSizeTableLayout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)FontSizeInput).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -319,7 +411,13 @@
         private Label label3;
         private Controls.ThemeToggle ThemeToggleButton;
         private Label label4;
+        private Label label5;
         private TextBox IgnoreFoldersTextBox;
         private CheckBox RunOnLoginCheckbox;
+        private TableLayoutPanel fontImageSizeTableLayout;
+        private NumericUpDown FontSizeInput;
+        private Label label6;
+        private RadioButton IconSizeLargeCheckbox;
+        private RadioButton IconSizeSmallCheckbox;
     }
 }

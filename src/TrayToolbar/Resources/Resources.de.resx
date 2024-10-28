@@ -189,4 +189,16 @@
   <data name="Exclude folders" xml:space="preserve">
     <value>Ordner ausschließen</value>
   </data>
+  <data name="Menu Font Size" xml:space="preserve">
+    <value>Menü Schriftgröße</value>
+  </data>
+  <data name="Icon Size" xml:space="preserve">
+    <value>Symbolgröße</value>
+  </data>
+  <data name="Small" xml:space="preserve">
+    <value>Klein</value>
+  </data>
+  <data name="Large" xml:space="preserve">
+    <value>Groß</value>
+  </data>
 </root>
