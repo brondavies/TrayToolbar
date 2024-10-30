@@ -589,5 +589,15 @@ namespace TrayToolbar
         {
             IconSizeSmallCheckbox.Checked = !IconSizeLargeCheckbox.Checked;
         }
+
+        private void SettingsForm_Shown(object sender, EventArgs e)
+        {
+            SettingsForm_SystemThemeChanged(sender, e);
+        }
+
+        private void SettingsForm_SystemColorsChanged(object sender, EventArgs e)
+        {
+            SettingsForm_SystemThemeChanged(sender, e);
+        }
     }
 }

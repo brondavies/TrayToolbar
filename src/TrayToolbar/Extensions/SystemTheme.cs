@@ -11,15 +11,17 @@ namespace TrayToolbar.Extensions
         static bool? DarkModeEnabled = null;
         public unsafe static bool UseImmersiveDarkMode(IntPtr handle, bool enabled)
         {
+            var form = Control.FromHandle(handle);
+            if (form == null) return false;
+            var attribute = DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE;
+            int useImmersiveDarkMode = enabled ? 1 : 0;
+            var result = DwmSetWindowAttribute((HWND)handle, attribute, &useImmersiveDarkMode, sizeof(int)) == 0;
             if (IsDarkModeSupported() && DarkModeEnabled != enabled)
             {
                 DarkModeEnabled = enabled;
-                var form = Control.FromHandle(handle);
                 ThemeColors.Current = enabled ? ThemeColors.Dark : ThemeColors.Light;
                 SetThemeColors(form, enabled);
-                var attribute = DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE;
-                int useImmersiveDarkMode = enabled ? 1 : 0;
-                return DwmSetWindowAttribute((HWND)handle, attribute, &useImmersiveDarkMode, sizeof(int)) == 0;
+                return result;
             }
 
             return false;

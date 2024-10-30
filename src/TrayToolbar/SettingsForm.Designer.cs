@@ -383,7 +383,9 @@
             Text = "TrayToolbar Settings";
             Deactivate += SettingsForm_Deactivate;
             FormClosing += SettingsForm_FormClosing;
+            Shown += SettingsForm_Shown;
             Resize += SettingsForm_Resize;
+            SystemColorsChanged += SettingsForm_SystemColorsChanged;
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
             tableLayout.ResumeLayout(false);
