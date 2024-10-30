@@ -11,7 +11,7 @@ namespace TrayToolbar.Extensions
             if (imageList != null)
             {
                 var hIcon = IntPtr.Zero;
-                imageList.GetIcon(shfi.iIcon, (int)ILD_NORMAL, ref hIcon);
+                imageList.GetIcon(shfi.iIcon, ILD_NORMAL, ref hIcon);
                 //Marshal.FinalReleaseComObject(imageList);
                 if (hIcon != IntPtr.Zero)
                 {
@@ -77,6 +77,7 @@ namespace TrayToolbar.Extensions
         private static extern bool DestroyIcon(IntPtr handle);
 
         private const int ILD_NORMAL = 0x00000000;
+        private const int ILD_TRANSPARENT = 0x00000001;
         private const uint SHGFI_LARGEICON = 0x0;
         private const uint SHGFI_SMALLICON = 0x000000001;
         private const uint SHGFI_SYSICONINDEX = 0x4000;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using TrayToolbar.Extensions;
 
-namespace TrayToolbar
+namespace TrayToolbar.Models
 {
     public class MenuItemCollection : ObservableCollection<ToolStripMenuItem>
     {
@@ -42,7 +42,7 @@ namespace TrayToolbar
 
         private bool NextMenu(ToolStripItem i, string? name)
         {
-            return i is ToolStripMenuItem { HasDropDown: true } && (string.Compare(i.Name, name, true) > 0);
+            return i is ToolStripMenuItem { HasDropDown: true } && string.Compare(i.Name, name, true) > 0;
         }
 
         private bool AddFolder(ToolStripMenuItem? parent, string name, ToolStripItemClickedEventHandler handler, MouseEventHandler mouseDownHandler, out ToolStripMenuItem? menu)

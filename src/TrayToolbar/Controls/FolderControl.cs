@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Eventing.Reader;
+using TrayToolbar.Models;
 using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar

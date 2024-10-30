@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using TrayToolbar.Extensions;
 
-namespace TrayToolbar
+namespace TrayToolbar.Models
 {
     public class TrayToolbarConfiguration
     {

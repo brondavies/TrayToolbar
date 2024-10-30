@@ -18,7 +18,8 @@ namespace TrayToolbar.Extensions
 
         public static Bitmap GetImage(this string file, bool large = false)
         {
-            return ShellIcons.FetchIconAsBitmap(file, large);
+            //return ShellIcons.FetchIconAsBitmap(file, large);
+            return Bitmap.FromHicon(ShellIcons.FetchIcon(file, large).Handle);
         }
 
         public static bool HasValue([NotNullWhen(true)] this string? value)

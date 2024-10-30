@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using TrayToolbar.Extensions;
+using TrayToolbar.Models;
 using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar

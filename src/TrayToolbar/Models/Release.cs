@@ -2,7 +2,7 @@
 
 using System.Text.Json.Serialization;
 
-namespace TrayToolbar
+namespace TrayToolbar.Models
 {
     internal class Release
     {
