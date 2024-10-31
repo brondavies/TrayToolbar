@@ -21,7 +21,12 @@ namespace TrayToolbar
                     form.Show();
                 }
                 Application.Run(form);
-            } catch (ObjectDisposedException) { }
+            }
+            catch (ObjectDisposedException) { }
+            catch (Exception e)
+            {
+                File.WriteAllText(Path.Combine(ConfigHelper.ApplicationRoot, $"Error-{DateTime.Now:yyyyMMddHHmmss}.txt"), $"{e}");
+            }
         }
 
         internal static void Launch(string fileName)

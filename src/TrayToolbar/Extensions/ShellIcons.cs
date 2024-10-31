@@ -2,9 +2,9 @@
 
 namespace TrayToolbar.Extensions
 {
-    public static class ShellIcons
+    public static partial class ShellIcons
     {
-        public static Bitmap FetchIconAsBitmap(string path, bool large)
+        public static unsafe Bitmap FetchIconAsBitmap(string path, bool large)
         {
             var icon = FetchIcon(path, large);
             var bmp = new Bitmap(icon.Width, icon.Height);
@@ -17,7 +17,7 @@ namespace TrayToolbar.Extensions
             return bmp;
         }
 
-        public static Icon FetchIcon(string path, bool large = false)
+        public static unsafe Icon FetchIcon(string path, bool large = false)
         {
             var icon = ExtractFromPath(path, large);
             return icon;
@@ -50,7 +50,7 @@ namespace TrayToolbar.Extensions
             public IntPtr hIcon;
             public int iIcon;
             public uint dwAttributes;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
             public string szDisplayName;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
             public string szTypeName;
