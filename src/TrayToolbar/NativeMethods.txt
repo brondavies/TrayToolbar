@@ -1,8 +1,13 @@
-﻿DwmSetWindowAttribute
+﻿DestroyIcon
+DwmSetWindowAttribute
 DWMWINDOWATTRIBUTE
+ImageList_GetIcon
+IMAGE_LIST_DRAW_STYLE
 RegCloseKey
 RegNotifyChangeKeyValue
 RegOpenKeyEx
+SHGetFileInfo
+SHGFI_FLAGS
 WM_MOUSE*
 WM_PAINT
 WM_SETTINGCHANGE

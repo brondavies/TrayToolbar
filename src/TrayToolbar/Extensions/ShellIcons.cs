@@ -1,8 +1,12 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.Runtime.CompilerServices;
+using Windows.Win32;
+using Windows.Win32.UI.Controls;
+using Windows.Win32.UI.Shell;
+using Windows.Win32.UI.WindowsAndMessaging;
 
 namespace TrayToolbar.Extensions
 {
-    public static partial class ShellIcons
+    public static class ShellIcons
     {
         public static unsafe Bitmap FetchIconAsBitmap(string path, bool large)
         {
@@ -13,7 +17,7 @@ namespace TrayToolbar.Extensions
                 gp.Clear(Color.Transparent);
                 gp.DrawIcon(icon, new Rectangle(0, 0, icon.Width, icon.Height));
             }
-            DestroyIcon(icon.Handle);
+            PInvoke.DestroyIcon((HICON)icon.Handle);
             return bmp;
         }
 
@@ -23,51 +27,22 @@ namespace TrayToolbar.Extensions
             return icon;
         }
 
-        static uint SizeOfSHGetFileInfo = (uint)Marshal.SizeOf(new SHFILEINFO());
-        private static Icon ExtractFromPath(string path, bool large = false)
+        static uint SizeOfSHGetFileInfo = (uint)Unsafe.SizeOf<SHFILEINFOW>();
+        private static unsafe Icon ExtractFromPath(string path, bool large = false)
         {
-            var shinfo = new SHFILEINFO();
-            var himl = SHGetFileInfo(
+            var shinfo = new SHFILEINFOW();
+            var himl = PInvoke.SHGetFileInfo(
                 path,
-                0, ref shinfo, SizeOfSHGetFileInfo,
-                SHGFI_SYSICONINDEX | (large ? SHGFI_LARGEICON : SHGFI_SMALLICON));
+                0, &shinfo, SizeOfSHGetFileInfo,
+                SHGFI_FLAGS.SHGFI_SYSICONINDEX | (large ? SHGFI_FLAGS.SHGFI_LARGEICON : SHGFI_FLAGS.SHGFI_SMALLICON));
 
             Icon? icon = null;
-            var iconHandle = ImageList_GetIcon(himl, shinfo.iIcon, ILD_NORMAL);
+            var iconHandle = PInvoke.ImageList_GetIcon(new HIMAGELIST((nint)himl), shinfo.iIcon, IMAGE_LIST_DRAW_STYLE.ILD_NORMAL);
             if (iconHandle != 0)
             {
                 icon = Icon.FromHandle(iconHandle);
             }
             return icon ?? SystemIcons.Application;
         }
-
-        /// <summary>
-        /// Struct used by SHGetFileInfo function
-        /// </summary>
-        [StructLayout(LayoutKind.Sequential)]
-        private struct SHFILEINFO
-        {
-            public IntPtr hIcon;
-            public int iIcon;
-            public uint dwAttributes;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-            public string szDisplayName;
-            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
-            public string szTypeName;
-        };
-
-        [DllImport("shell32.dll", CharSet = CharSet.Unicode)]
-        private static extern IntPtr SHGetFileInfo(string pszPath, uint dwFileAttributes, ref SHFILEINFO psfi, uint cbSizeFileInfo, uint uFlags);
-
-        [DllImport("Comctl32.dll")]
-        private static extern IntPtr ImageList_GetIcon(IntPtr himl, int i, int flags);
-
-        [DllImport("user32.dll")]
-        private static extern bool DestroyIcon(IntPtr handle);
-
-        private const int ILD_NORMAL = 0x00000000;
-        private const uint SHGFI_LARGEICON = 0x0;
-        private const uint SHGFI_SMALLICON = 0x000000001;
-        private const uint SHGFI_SYSICONINDEX = 0x4000;
     }
 }
