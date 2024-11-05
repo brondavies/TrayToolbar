@@ -15,6 +15,7 @@
     <PackageIcon>Resources\TrayIcon.png</PackageIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
+	<Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
