@@ -78,9 +78,9 @@ jobs:
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
     - if: matrix.build-mode == 'manual'
       run: |
-        set "PATH=%PATH%;C:\Program Files\Microsoft Visual Studio\2022\Enterprise\MSBuild\Current\Bin"
+        set ^"PATH=%PATH%;C:\Program^ Files\Microsoft^ Visual^ Studio\2022\Enterprise\MSBuild\Current\Bin^"
         cd src\TrayToolbar
-        msbuild TrayToolbar.sln /p:Configuration=Release /p:Platform=x64
+        msbuild TrayToolbar.sln /p:Configuration=Debug /p:Platform=x64
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
