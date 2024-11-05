@@ -42,9 +42,9 @@ jobs:
       matrix:
         include:
         - language: csharp
-          build-mode: manual
+          build-mode: autobuild
           ArchList: x64
-          Architecture: x64
+          Platform: x64
         # CodeQL supports the following values keywords for 'language': 'c-cpp', 'csharp', 'go', 'java-kotlin', 'javascript-typescript', 'python', 'ruby', 'swift'
         # Use `c-cpp` to analyze code written in C, C++ or both
         # Use 'java-kotlin' to analyze code written in Java, Kotlin or both
