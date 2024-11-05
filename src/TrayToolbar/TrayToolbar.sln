@@ -9,6 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{
 	ProjectSection(SolutionItems) = preProject
 		..\..\.gitignore = ..\..\.gitignore
 		..\..\.github\workflows\codeql.yml = ..\..\.github\workflows\codeql.yml
+		..\..\.github\workflows\dotnet-desktop.yml = ..\..\.github\workflows\dotnet-desktop.yml
 		..\..\README.md = ..\..\README.md
 	EndProjectSection
 EndProject
