@@ -7,6 +7,7 @@ RegCloseKey
 RegNotifyChangeKeyValue
 RegOpenKeyEx
 SHGetFileInfo
+SHGetStockIconInfo
 SHGFI_FLAGS
 WM_MOUSE*
 WM_PAINT

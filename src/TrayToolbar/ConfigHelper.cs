@@ -21,6 +21,7 @@ namespace TrayToolbar
         internal static string ProfileFolder => Path.Combine(LocalAppData, "TrayToolbar");
         internal static string ConfigurationFile = Path.Combine(ProfileFolder, "TrayToolbarConfig.json");
         internal static string LegacyConfigurationFile = Path.Combine(ApplicationRoot, "TrayToolbar.json");
+        internal static int WindowsMajorVersion = Environment.OSVersion.Version.Build >= 22000 ? 11 : 10;
 
         internal static bool GetStartupKey()
         {

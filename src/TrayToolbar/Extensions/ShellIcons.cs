@@ -23,11 +23,59 @@ namespace TrayToolbar.Extensions
 
         public static unsafe Icon FetchIcon(string path, bool large = false)
         {
-            var icon = ExtractFromPath(path, large);
-            return icon;
+            if (Path.GetExtension(path).Is(".url"))
+            {
+                return GetIconFromUrlFile(path, large);
+            }
+            return ExtractFromPath(path, large);
         }
 
-        static uint SizeOfSHGetFileInfo = (uint)Unsafe.SizeOf<SHFILEINFOW>();
+        private static Icon GetIconFromUrlFile(string path, bool large)
+        {
+            var fi = new FileInfo(path);
+            if (fi.Exists && fi.Length < 1_000_000) // limit to files under 1MB to guard against potential memory overuse
+            {
+                var dict = new Dictionary<string, string>();
+                foreach (var line in File.ReadAllLines(path))
+                {
+                    var parts = line.Split('=', 2);
+                    if (parts.Length == 2)
+                    {
+                        dict.Add(parts[0].ToLowerInvariant(), parts[1]);
+                    }
+                }
+                dict.TryGetValue("url", out var url);
+                dict.TryGetValue("iconfile", out var iconFile);
+                dict.TryGetValue("iconindex", out var iconIndex);
+                if (iconFile.HasValue() && File.Exists(iconFile.ToLocalPath()))
+                {
+                    _ = int.TryParse(iconIndex, out int id); // will be 0 if parse fails
+                    var icon = Icon.ExtractIcon(iconFile, id, !large);
+                    if (icon != null) return icon;
+                }
+                //no iconfile was set or it didn't contain an icon, check the url
+                if (url.HasValue())
+                {
+                    //special case urls
+                    if (url.StartsWith("ms-settings:"))
+                    {
+                        //TODO: https://github.com/dotnet/winforms/issues/12447
+                        //return SystemIcons.GetStockIcon(StockIconId.Settings, large ? StockIconOptions.Default : StockIconOptions.SmallIcon);
+                        return Icon.ExtractIcon(Shell32Dll, SETTINGS_ICON_INDEX, !large) ?? SystemIcons.Application;
+                    }
+                    //try getting an icon from the target if it's a local path
+                    if (File.Exists(url.ToLocalPath()))
+                    {
+                        return ExtractFromPath(url, large);
+                    }
+                }
+            }
+            return ExtractFromPath(path, large);
+        }
+
+        static readonly int SETTINGS_ICON_INDEX = ConfigHelper.WindowsMajorVersion == 11 ? 314 : 316;
+        static readonly string Shell32Dll = Path.Combine(Environment.SystemDirectory, "SHELL32.dll");
+        static readonly uint SizeOfSHGetFileInfo = (uint)Unsafe.SizeOf<SHFILEINFOW>();
         private static unsafe Icon ExtractFromPath(string path, bool large = false)
         {
             var shinfo = new SHFILEINFOW();

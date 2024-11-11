@@ -53,16 +53,13 @@ namespace TrayToolbar
             SaveButton.Text = R.Save;
             CancelBtn.Text = R.Cancel;
             AddFolderButton.Text = R.Add_Folder;
-            Text = R.TrayToolbar_Settings + " (" + ConfigHelper.ApplicationVersion + ")";
+            Text = $"{R.TrayToolbar_Settings} ({ConfigHelper.ApplicationVersion})";
             NewVersionLabel.Text = R.A_new_version_is_available;
             ConfigHelper.CheckForUpdate().ContinueWith(r =>
             {
-                if (r.Result?.Name != null)
+                if (r.Result?.Name != null && r.Result.Name != "v" + ConfigHelper.ApplicationVersion)
                 {
-                    if (r.Result.Name != "v" + ConfigHelper.ApplicationVersion)
-                    {
-                        ShowUpdateAvailable(r.Result.UpdateUrl);
-                    }
+                    ShowUpdateAvailable(r.Result.UpdateUrl);
                 }
             });
 
@@ -280,7 +277,7 @@ namespace TrayToolbar
                         submenu = menu.CreateFolder(Path.GetRelativePath(folder.Name, parentPath), LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
                     }
                     var menuText = Path.GetFileName(file);
-                    if (Configuration.HideFileExtensions || file.FileExtension().Is(".lnk"))
+                    if (Configuration.HideFileExtensions || file.FileExtension().IsOneOf(".lnk", ".url"))
                     {
                         menuText = Path.GetFileNameWithoutExtension(file);
                     }

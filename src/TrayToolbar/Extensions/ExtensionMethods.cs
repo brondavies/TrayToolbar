@@ -48,6 +48,15 @@ namespace TrayToolbar.Extensions
             return Regex.IsMatch(value, pattern, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
         }
 
+        public static bool IsOneOf(this string? value, params string?[] compare)
+        {
+            foreach(var item in compare)
+            {
+                if (value.Is(item)) return true;
+            }
+            return false;
+        }
+
         public static string Join(this string[] value, string separator = ", ")
         {
             return string.Join(separator, value);
@@ -60,7 +69,12 @@ namespace TrayToolbar.Extensions
 
         public static string ToLocalPath(this string value)
         {
-            return Environment.ExpandEnvironmentVariables(value);
+            var path = Environment.ExpandEnvironmentVariables(value);
+            if (path.StartsWith("file://"))
+            {
+                path = new Uri(path).LocalPath;
+            }
+            return path;
         }
 
         public static void ShowContextMenu(this NotifyIcon notifyIcon)
