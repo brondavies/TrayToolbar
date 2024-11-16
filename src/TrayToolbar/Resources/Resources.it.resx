@@ -193,12 +193,12 @@
     <value>Dimensione caratteri del menu</value>
   </data>
   <data name="Icon Size" xml:space="preserve">
-    <value>Dimensione icone</value>
+    <value>Icone</value>
   </data>
   <data name="Small" xml:space="preserve">
-    <value>Piccolo</value>
+    <value>Piccole</value>
   </data>
   <data name="Large" xml:space="preserve">
-    <value>Grande</value>
+    <value>Grandi</value>
   </data>
 </root>
