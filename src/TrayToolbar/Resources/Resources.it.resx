@@ -127,7 +127,7 @@
     <value>Escludi file</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Uscita</value>
+    <value>Esci</value>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Cartelle</value>
@@ -154,7 +154,7 @@
     <value>Impostazioni della barra degli strumenti</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>ricaricare</value>
+    <value>Aggiorna</value>
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
     <value>Una nuova versione è disponibile!</value>
@@ -166,10 +166,10 @@
     <value>Sfoglia cartella</value>
   </data>
   <data name="Include Subfolders" xml:space="preserve">
-    <value>Includere sottocartelle</value>
+    <value>Includi sottocartelle</value>
   </data>
   <data name="Open Folder" xml:space="preserve">
-    <value>Cartella aperta</value>
+    <value>Apri cartella</value>
   </data>
   <data name="Remove Folder" xml:space="preserve">
     <value>Rimuovi cartella</value>
@@ -178,7 +178,7 @@
     <value>Scuro</value>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Leggero</value>
+    <value>Chiaro</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>Sistema</value>
@@ -190,15 +190,15 @@
     <value>Escludi cartelle</value>
   </data>
   <data name="Menu Font Size" xml:space="preserve">
-    <value>Dimensione carattere del menu</value>
+    <value>Dimensione caratteri del menu</value>
   </data>
   <data name="Icon Size" xml:space="preserve">
-    <value>Dimensione dell'icona</value>
+    <value>Icone</value>
   </data>
   <data name="Small" xml:space="preserve">
-    <value>Piccolo</value>
+    <value>Piccole</value>
   </data>
   <data name="Large" xml:space="preserve">
-    <value>Grande</value>
+    <value>Grandi</value>
   </data>
 </root>
