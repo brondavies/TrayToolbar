@@ -55,7 +55,8 @@ namespace TrayToolbar.Models
             }
             if (menu == null)
             {
-                menu = new ToolStripMenuItem(name) {
+                menu = new ToolStripMenuItem(name)
+                {
                     Name = name,
                     Tag = target
                 };
@@ -72,7 +73,8 @@ namespace TrayToolbar.Models
             return result;
         }
 
-        internal void CreateMenu(
+        internal void CreateMenuItem(
+            bool sequential,
             string file,
             FolderConfig folder,
             TrayToolbarConfiguration configuration,
@@ -105,12 +107,40 @@ namespace TrayToolbar.Models
             entry.MouseDown += mouseDownHandler;
             if (submenu != null)
             {
-                submenu.DropDownItems.Add(entry);
+                if (sequential)
+                    submenu.DropDownItems.Add(entry);
+                else
+                    submenu.DropDownItems.Insert(IndexOfItem(submenu.DropDownItems, entry.Text), entry);
             }
             else
             {
-                Add(entry);
+                if (sequential) 
+                    Add(entry);
+                else
+                    Insert(IndexOfItem(entry.Text), entry);
             }
+        }
+
+        private static int IndexOfItem(ToolStripItemCollection list, string text)
+        {
+            var i = 0;
+            foreach (ToolStripMenuItem entry in list)
+            {
+                if (entry.CommandParameter != null && StringComparer.OrdinalIgnoreCase.Compare(entry.Text, text) > 0) break;
+                i++;
+            }
+            return i;
+        }
+
+        private int IndexOfItem(string text)
+        {
+            var i = 0;
+            foreach (var entry in this)
+            {
+                if (entry.CommandParameter != null && StringComparer.OrdinalIgnoreCase.Compare(entry.Text, text) > 0) break;
+                i++;
+            }
+            return i;
         }
 
         internal bool DeleteMenu(string fullPath)

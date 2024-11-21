@@ -133,6 +133,7 @@ namespace TrayToolbar
                                  | NotifyFilters.Size
                                  | NotifyFilters.DirectoryName,
                 };
+                watcher.Changed += MenuItemChanged(folder);
                 watcher.Created += MenuItemCreated(folder);
                 watcher.Deleted += MenuItemDeleted(folder);
                 watcher.Renamed += MenuItemRenamed(folder);
@@ -140,6 +141,16 @@ namespace TrayToolbar
                 MenuItems[folder] = [];
                 TrayIcons.Add(CreateTrayIcon(folder));
             }
+        }
+
+        private FileSystemEventHandler MenuItemChanged(FolderConfig folder)
+        {
+            return (_, changed) => {
+                Invoke(() => {
+                    MenuItems[folder].DeleteMenu(changed.FullPath);
+                    CreateMenuItem(changed.FullPath, folder);
+                });
+            };
         }
 
         private FileSystemEventHandler MenuItemCreated(FolderConfig folder)
@@ -180,12 +191,12 @@ namespace TrayToolbar
             {
                 foreach (var file in EnumerateFiles(fullPath, folder.Recursive))
                 {
-                    MenuItems[folder].CreateMenu(file, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
+                    MenuItems[folder].CreateMenuItem(false, file, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
                 }
             }
             else if (File.Exists(fullPath) && Configuration.IncludesFile(fullPath))
             {
-                MenuItems[folder].CreateMenu(fullPath, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
+                MenuItems[folder].CreateMenuItem(false, fullPath, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
             }
         }
 
@@ -312,7 +323,7 @@ namespace TrayToolbar
                 {
                     if (token.IsCancellationRequested == true) { return; }
                     //If path is not in the root folder, create a submenu to add it into
-                    menu.CreateMenu(file, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
+                    menu.CreateMenuItem(true, file, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
                 }
                 SetupLeftClickMenu(menu);
             }
