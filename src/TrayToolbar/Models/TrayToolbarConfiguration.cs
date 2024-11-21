@@ -25,7 +25,9 @@ namespace TrayToolbar.Models
 
         public string[] IgnoreFolders { get; set; } = [".git", ".github"];
 
-        public int MaxRecursionDepth { get; set; } = 3;
+        [Obsolete("MaxRecursionDepth is Obsolete", true)]
+        [JsonIgnore]
+        public int MaxRecursionDepth { get; set; }
 
         public int Theme { get; set; } = 0;
 
@@ -48,6 +50,8 @@ namespace TrayToolbar.Models
         }
 
         public List<FolderConfig> Folders { get; set; } = [];
+
+        internal bool IncludesFile(string f) => !IgnoreFiles.Any(i => f.IsMatch("." + i.Replace(".", "\\.")));
     }
 
     public class FolderConfig

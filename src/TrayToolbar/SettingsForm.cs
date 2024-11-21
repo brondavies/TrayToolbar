@@ -63,11 +63,11 @@ namespace TrayToolbar
                 }
             });
 
-            RightClickMenu.Items.AddRange(new[] {
+            RightClickMenu.Items.AddRange([
                 new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
                 new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = Command_Open },
                 new ToolStripMenuItem { Text = R.Exit, CommandParameter = Command_Exit }
-            });
+            ]);
         }
 
         private void ShowUpdateAvailable(string updateUri)
@@ -133,13 +133,59 @@ namespace TrayToolbar
                                  | NotifyFilters.Size
                                  | NotifyFilters.DirectoryName,
                 };
-                //TODO: Handle each event atomically
-                watcher.Created += (_, _) => RefreshMenu(folder);
-                watcher.Deleted += (_, _) => RefreshMenu(folder);
-                watcher.Renamed += (_, _) => RefreshMenu(folder);
+                watcher.Created += MenuItemCreated(folder);
+                watcher.Deleted += MenuItemDeleted(folder);
+                watcher.Renamed += MenuItemRenamed(folder);
                 Watchers[folder.Name] = watcher;
                 MenuItems[folder] = [];
                 TrayIcons.Add(CreateTrayIcon(folder));
+            }
+        }
+
+        private FileSystemEventHandler MenuItemCreated(FolderConfig folder)
+        {
+            return (_, created) => {
+                Invoke(() => {
+                    CreateMenuItem(created.FullPath, folder);
+                });
+            };
+        }
+
+        private FileSystemEventHandler MenuItemDeleted(FolderConfig folder)
+        {
+            return (_, deleted) => {
+                Invoke(() => {
+                    MenuItems[folder].DeleteMenu(deleted.FullPath);
+                });
+            };
+        }
+
+        private RenamedEventHandler MenuItemRenamed(FolderConfig folder)
+        {
+            return (_, renamed) => {
+                Invoke(() => {
+                    MenuItems[folder].DeleteMenu(renamed.OldFullPath);
+                    CreateMenuItem(renamed.FullPath, folder);
+                });
+            };
+        }
+
+        /// <summary>
+        /// This is only used for real-time changes to the file system and is more efficient for those events
+        /// ReloadMenuItems should be used for reloading entire menus
+        /// </summary>
+        private void CreateMenuItem(string fullPath, FolderConfig folder)
+        {
+            if (Directory.Exists(fullPath))
+            {
+                foreach (var file in EnumerateFiles(fullPath, folder.Recursive))
+                {
+                    MenuItems[folder].CreateMenu(file, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
+                }
+            }
+            else if (File.Exists(fullPath) && Configuration.IncludesFile(fullPath))
+            {
+                MenuItems[folder].CreateMenu(fullPath, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
             }
         }
 
@@ -240,7 +286,7 @@ namespace TrayToolbar
                 var font = LeftClickMenu.Font;
                 LeftClickMenu.Font = new Font(font.FontFamily, Configuration.FontSize, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
                 LeftClickMenu.Items.Clear();
-                LeftClickMenu.Items.AddRange(MenuItems[folder].ToArray());
+                LeftClickMenu.Items.AddRange([.. MenuItems[folder]]);
                 LeftClickMenu.Renderer = new MenuRenderer();
                 trayIcon.ContextMenuStrip = LeftClickMenu;
                 SystemTheme.SetThemeColors(LeftClickMenu, UseDarkMode());
@@ -266,37 +312,7 @@ namespace TrayToolbar
                 {
                     if (token.IsCancellationRequested == true) { return; }
                     //If path is not in the root folder, create a submenu to add it into
-                    ToolStripMenuItem? submenu = null;
-                    var parentPath = Path.GetDirectoryName(file);
-                    if (parentPath.HasValue() && !parentPath.Is(folder.Name))
-                    {
-                        if (Configuration.IgnoreAllDotFiles && parentPath.Contains(@"\."))
-                            continue; //it's in a dot folder like .git or it's a dot file
-                        if (Configuration.IgnoreFolders.Contains(Path.GetFileName(parentPath)))
-                            continue; //it's in an ignored folder name
-                        submenu = menu.CreateFolder(Path.GetRelativePath(folder.Name, parentPath), LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
-                    }
-                    var menuText = Path.GetFileName(file);
-                    if (Configuration.HideFileExtensions || file.FileExtension().IsOneOf(".lnk", ".url"))
-                    {
-                        menuText = Path.GetFileNameWithoutExtension(file);
-                    }
-                    var entry = new ToolStripMenuItem
-                    {
-                        Text = menuText.ToMenuName(),
-                        CommandParameter = file,
-                        Image = file.GetImage(Configuration.LargeIcons),
-                        ImageScaling = ToolStripItemImageScaling.None
-                    };
-                    entry.MouseDown += LeftClickMenuEntry_MouseDown;
-                    if (submenu != null)
-                    {
-                        submenu.DropDownItems.Add(entry);
-                    }
-                    else
-                    {
-                        menu.Add(entry);
-                    }
+                    menu.CreateMenu(file, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
                 }
                 SetupLeftClickMenu(menu);
             }
@@ -316,7 +332,7 @@ namespace TrayToolbar
             }
             LeftClickMenu.Renderer = new MenuRenderer();
             LeftClickMenu.Items.Clear();
-            LeftClickMenu.Items.AddRange(menu.ToArray());
+            LeftClickMenu.Items.AddRange([.. menu]);
             menu.NeedsRefresh = false;
         }
 
@@ -326,10 +342,9 @@ namespace TrayToolbar
             {
                 RecurseSubdirectories = recursive,
                 ReturnSpecialDirectories = false,
-                MaxRecursionDepth = Configuration.MaxRecursionDepth > 0 ? Configuration.MaxRecursionDepth : int.MaxValue,
             };
             return Directory.EnumerateFiles(path, "*.*", options)
-                .Where(f => !Configuration.IgnoreFiles.Any(i => f.IsMatch("." + i.Replace(".", "\\."))))
+                .Where(Configuration.IncludesFile)
                 .OrderBy(f => f.ToUpper());
         }
 
@@ -427,7 +442,7 @@ namespace TrayToolbar
             }
         }
 
-        private void ShowContextMenu(string filename)
+        private static void ShowContextMenu(string filename)
         {
             try
             {

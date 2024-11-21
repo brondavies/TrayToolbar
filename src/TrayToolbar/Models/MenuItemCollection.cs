@@ -8,13 +8,13 @@ namespace TrayToolbar.Models
         public MenuItemCollection() { }
         public bool NeedsRefresh { get; set; } = true;
 
-        public ToolStripMenuItem? CreateFolder(string path, ToolStripItemClickedEventHandler handler, MouseEventHandler mouseDownHandler)
+        public ToolStripMenuItem? CreateFolder(string path, string target, ToolStripItemClickedEventHandler clickHandler, MouseEventHandler mouseDownHandler)
         {
             var parts = path.Split(Path.DirectorySeparatorChar);
             ToolStripMenuItem? parent = null;
             foreach (var part in parts)
             {
-                var added = AddFolder(parent, part.ToMenuName(), handler, mouseDownHandler, out ToolStripMenuItem? menu);
+                var added = AddFolder(parent, part.ToMenuName(), target, clickHandler, mouseDownHandler, out ToolStripMenuItem? menu);
                 parent = menu;
                 if (!added && menu != null)
                 {
@@ -35,17 +35,12 @@ namespace TrayToolbar.Models
             int i = 0;
             foreach (ToolStripMenuItem item in list)
             {
-                if (item.HasDropDown) i++;
+                if (item.Tag != null) i++;
             }
             return i;
         }
 
-        private bool NextMenu(ToolStripItem i, string? name)
-        {
-            return i is ToolStripMenuItem { HasDropDown: true } && string.Compare(i.Name, name, true) > 0;
-        }
-
-        private bool AddFolder(ToolStripMenuItem? parent, string name, ToolStripItemClickedEventHandler handler, MouseEventHandler mouseDownHandler, out ToolStripMenuItem? menu)
+        private bool AddFolder(ToolStripMenuItem? parent, string name, string target, ToolStripItemClickedEventHandler handler, MouseEventHandler mouseDownHandler, out ToolStripMenuItem? menu)
         {
             var result = false;//true if it was already added
             if (parent != null)
@@ -60,21 +55,90 @@ namespace TrayToolbar.Models
             }
             if (menu == null)
             {
-                menu = new ToolStripMenuItem(name) { Name = name };
+                menu = new ToolStripMenuItem(name) {
+                    Name = name,
+                    Tag = target
+                };
                 menu.MouseDown += mouseDownHandler;
                 menu.DropDownItemClicked += handler;
                 result = parent != null;
                 if (result)
                 {
                     var items = parent!.DropDownItems;
-                    if (items != null)
-                    {
-                        //Adds to the menu with folders first, alphabetically
-                        items.Insert(LastSubMenuIndex(parent.DropDownItems), menu);
-                    }
+                    //Adds to the menu with folders first, alphabetically
+                    items?.Insert(LastSubMenuIndex(parent.DropDownItems), menu);
                 }
             }
             return result;
+        }
+
+        internal void CreateMenu(
+            string file,
+            FolderConfig folder,
+            TrayToolbarConfiguration configuration,
+            ToolStripItemClickedEventHandler clickHandler,
+            MouseEventHandler mouseDownHandler)
+        {
+            ToolStripMenuItem? submenu = null;
+            var parentPath = Path.GetDirectoryName(file);
+            if (parentPath.HasValue() && !parentPath.Is(folder.Name))
+            {
+                if (configuration.IgnoreAllDotFiles && parentPath.Contains(@"\."))
+                    return; //it's in a dot folder like .git or it's a dot file
+                if (configuration.IgnoreFolders.Contains(Path.GetFileName(parentPath)))
+                    return; //it's in an ignored folder name
+                var relativePath = Path.GetRelativePath(folder.Name!, parentPath);
+                submenu = CreateFolder(relativePath, parentPath, clickHandler, mouseDownHandler);
+            }
+            var menuText = Path.GetFileName(file);
+            if (configuration.HideFileExtensions || file.FileExtension().IsOneOf(".lnk", ".url"))
+            {
+                menuText = Path.GetFileNameWithoutExtension(file);
+            }
+            var entry = new ToolStripMenuItem
+            {
+                Text = menuText.ToMenuName(),
+                CommandParameter = file,
+                Image = file.GetImage(configuration.LargeIcons),
+                ImageScaling = ToolStripItemImageScaling.None
+            };
+            entry.MouseDown += mouseDownHandler;
+            if (submenu != null)
+            {
+                submenu.DropDownItems.Add(entry);
+            }
+            else
+            {
+                Add(entry);
+            }
+        }
+
+        internal bool DeleteMenu(string fullPath)
+        {
+            foreach (var item in this)
+            {
+                if ($"{item.CommandParameter}".Is(fullPath) || $"{item.Tag}".Is(fullPath))
+                {
+                    Remove(item);
+                    return true;
+                }
+                if (DeleteMenu(fullPath, item.DropDownItems)) return true;
+            }
+            return false;
+        }
+
+        private static bool DeleteMenu(string fullPath, ToolStripItemCollection dropDownItems)
+        {
+            foreach (ToolStripMenuItem submenu in dropDownItems)
+            {
+                if ($"{submenu.CommandParameter}".Is(fullPath) || $"{submenu.Tag}".Is(fullPath))
+                {
+                    dropDownItems.Remove(submenu);
+                    return true;
+                }
+                if (DeleteMenu(fullPath, submenu.DropDownItems)) return true;
+            }
+            return false;
         }
     }
 }
