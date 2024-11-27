@@ -14,9 +14,9 @@ namespace TrayToolbar.Models
             ToolStripMenuItem? parent = null;
             foreach (var part in parts)
             {
-                var added = AddFolder(parent, part.ToMenuName(), target, clickHandler, mouseDownHandler, out ToolStripMenuItem? menu);
+                var exists = AddFolder(parent, part.ToMenuName(), target, clickHandler, mouseDownHandler, out ToolStripMenuItem? menu);
                 parent = menu;
-                if (!added && menu != null)
+                if (!exists && menu != null)
                 {
                     //Adds to the menu with folders first, alphabetically
                     Insert(LastSubMenuIndex(this), menu);
@@ -99,6 +99,7 @@ namespace TrayToolbar.Models
             }
             var entry = new ToolStripMenuItem
             {
+                Name = menuText,
                 Text = menuText.ToMenuName(),
                 CommandParameter = file,
                 Image = file.GetImage(configuration.LargeIcons),
@@ -107,14 +108,17 @@ namespace TrayToolbar.Models
             entry.MouseDown += mouseDownHandler;
             if (submenu != null)
             {
-                if (sequential)
-                    submenu.DropDownItems.Add(entry);
-                else
-                    submenu.DropDownItems.Insert(IndexOfItem(submenu.DropDownItems, entry.Text), entry);
+                if (submenu.DropDownItems.Find(entry.Name!, false).Length == 0)
+                {
+                    if (sequential)
+                        submenu.DropDownItems.Add(entry);
+                    else
+                        submenu.DropDownItems.Insert(IndexOfItem(submenu.DropDownItems, entry.Text), entry);
+                }
             }
-            else
+            else if (!this.Any(i => i.Name == entry.Name))
             {
-                if (sequential) 
+                if (sequential)
                     Add(entry);
                 else
                     Insert(IndexOfItem(entry.Text), entry);

@@ -163,7 +163,7 @@
             label1.Location = new Point(3, 0);
             label1.Name = "label1";
             label1.Padding = new Padding(5);
-            label1.Size = new Size(108, 25);
+            label1.Size = new Size(107, 25);
             label1.TabIndex = 0;
             label1.Text = "Folders";
             label1.TextAlign = ContentAlignment.MiddleRight;
@@ -175,7 +175,7 @@
             label2.Location = new Point(3, 75);
             label2.Name = "label2";
             label2.Padding = new Padding(5);
-            label2.Size = new Size(108, 25);
+            label2.Size = new Size(107, 25);
             label2.TabIndex = 1;
             label2.Text = "Exclude file types";
             label2.TextAlign = ContentAlignment.MiddleRight;
@@ -187,7 +187,7 @@
             label4.Location = new Point(3, 125);
             label4.Name = "label4";
             label4.Padding = new Padding(5);
-            label4.Size = new Size(108, 25);
+            label4.Size = new Size(107, 25);
             label4.TabIndex = 14;
             label4.Text = "Exclude folders";
             label4.TextAlign = ContentAlignment.MiddleRight;
@@ -196,7 +196,7 @@
             // 
             IgnoreFoldersTextBox.BorderStyle = BorderStyle.FixedSingle;
             IgnoreFoldersTextBox.Dock = DockStyle.Top;
-            IgnoreFoldersTextBox.Location = new Point(117, 128);
+            IgnoreFoldersTextBox.Location = new Point(116, 128);
             IgnoreFoldersTextBox.Name = "IgnoreFoldersTextBox";
             IgnoreFoldersTextBox.PlaceholderText = ".git; .github";
             IgnoreFoldersTextBox.Size = new Size(414, 23);
@@ -209,7 +209,7 @@
             label3.Location = new Point(3, 175);
             label3.Name = "label3";
             label3.Padding = new Padding(5);
-            label3.Size = new Size(108, 25);
+            label3.Size = new Size(107, 25);
             label3.TabIndex = 12;
             label3.Text = "Theme";
             label3.TextAlign = ContentAlignment.MiddleRight;
@@ -221,7 +221,7 @@
             label5.Location = new Point(3, 225);
             label5.Name = "label5";
             label5.Padding = new Padding(5);
-            label5.Size = new Size(108, 25);
+            label5.Size = new Size(107, 25);
             label5.TabIndex = 13;
             label5.Text = "Menu Font Size";
             label5.TextAlign = ContentAlignment.MiddleRight;
@@ -232,7 +232,7 @@
             FoldersLayout.AutoSize = true;
             FoldersLayout.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             FoldersLayout.FlowDirection = FlowDirection.TopDown;
-            FoldersLayout.Location = new Point(114, 3);
+            FoldersLayout.Location = new Point(113, 3);
             FoldersLayout.Margin = new Padding(0, 3, 0, 0);
             FoldersLayout.MaximumSize = new Size(450, 270);
             FoldersLayout.MinimumSize = new Size(420, 0);
@@ -246,7 +246,7 @@
             AddFolderButton.AutoSize = true;
             AddFolderButton.Image = (Image)resources.GetObject("AddFolderButton.Image");
             AddFolderButton.ImageAlign = ContentAlignment.MiddleLeft;
-            AddFolderButton.Location = new Point(117, 28);
+            AddFolderButton.Location = new Point(116, 28);
             AddFolderButton.Name = "AddFolderButton";
             AddFolderButton.Padding = new Padding(32, 0, 0, 0);
             AddFolderButton.Size = new Size(158, 29);
@@ -259,7 +259,7 @@
             // 
             IgnoreFilesTextBox.BorderStyle = BorderStyle.FixedSingle;
             IgnoreFilesTextBox.Dock = DockStyle.Top;
-            IgnoreFilesTextBox.Location = new Point(117, 78);
+            IgnoreFilesTextBox.Location = new Point(116, 78);
             IgnoreFilesTextBox.Name = "IgnoreFilesTextBox";
             IgnoreFilesTextBox.PlaceholderText = ".bak; .config; .dll; .ico; .ini";
             IgnoreFilesTextBox.Size = new Size(414, 23);
@@ -269,7 +269,7 @@
             // 
             ThemeToggleButton.AutoSize = true;
             ThemeToggleButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ThemeToggleButton.Location = new Point(117, 178);
+            ThemeToggleButton.Location = new Point(116, 178);
             ThemeToggleButton.Name = "ThemeToggleButton";
             ThemeToggleButton.Size = new Size(182, 25);
             ThemeToggleButton.TabIndex = 5;
@@ -279,7 +279,7 @@
             // RunOnLoginCheckbox
             // 
             RunOnLoginCheckbox.AutoSize = true;
-            RunOnLoginCheckbox.Location = new Point(117, 278);
+            RunOnLoginCheckbox.Location = new Point(116, 278);
             RunOnLoginCheckbox.Name = "RunOnLoginCheckbox";
             RunOnLoginCheckbox.Size = new Size(97, 19);
             RunOnLoginCheckbox.TabIndex = 9;
@@ -299,7 +299,7 @@
             fontImageSizeTableLayout.Controls.Add(FontSizeInput, 0, 0);
             fontImageSizeTableLayout.Controls.Add(IconSizeSmallCheckbox, 2, 0);
             fontImageSizeTableLayout.Dock = DockStyle.Fill;
-            fontImageSizeTableLayout.Location = new Point(117, 228);
+            fontImageSizeTableLayout.Location = new Point(116, 228);
             fontImageSizeTableLayout.Name = "fontImageSizeTableLayout";
             fontImageSizeTableLayout.RowCount = 1;
             fontImageSizeTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));

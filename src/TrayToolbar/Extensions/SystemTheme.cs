@@ -61,9 +61,12 @@ namespace TrayToolbar.Extensions
                 {
                     backColor = ThemeColors.Current.MenuStripBackColor;
                 }
-                if (control is not PictureBox)
+                if (control is not PictureBox && control.AccessibleRole != AccessibleRole.Caret)
                 {
-                    control.BackColor = backColor;
+                    if (control.BackColor != Color.Transparent)
+                    {
+                        control.BackColor = backColor;
+                    }
                     control.ForeColor = foreColor;
                 }
                 foreach(Control child in control.Controls)
