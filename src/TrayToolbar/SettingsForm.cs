@@ -343,7 +343,9 @@ namespace TrayToolbar
             }
             LeftClickMenu.Renderer = new MenuRenderer();
             LeftClickMenu.Items.Clear();
-            LeftClickMenu.Items.AddRange([.. menu]);
+#pragma warning disable IDE0305 // Simplify collection initialization
+            LeftClickMenu.Items.AddRange(menu.ToArray());
+#pragma warning restore IDE0305
             menu.NeedsRefresh = false;
         }
 
