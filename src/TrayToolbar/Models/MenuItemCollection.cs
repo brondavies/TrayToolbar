@@ -8,39 +8,46 @@ namespace TrayToolbar.Models
         public MenuItemCollection() { }
         public bool NeedsRefresh { get; set; } = true;
 
-        public ToolStripMenuItem? CreateFolder(string path, string target, ToolStripItemClickedEventHandler clickHandler, MouseEventHandler mouseDownHandler)
+        public ToolStripMenuItem? CreateFolder(string path, string target, TrayToolbarConfiguration configuration, ToolStripItemClickedEventHandler clickHandler, MouseEventHandler mouseDownHandler)
         {
             var parts = path.Split(Path.DirectorySeparatorChar);
             ToolStripMenuItem? parent = null;
             foreach (var part in parts)
             {
-                var exists = AddFolder(parent, part.ToMenuName(), target, clickHandler, mouseDownHandler, out ToolStripMenuItem? menu);
+                var exists = AddFolder(parent, part.ToMenuName(), target, clickHandler, mouseDownHandler, configuration, out ToolStripMenuItem? menu);
                 parent = menu;
                 if (!exists && menu != null)
                 {
                     //Adds to the menu with folders first, alphabetically
-                    Insert(LastSubMenuIndex(this), menu);
+                    Insert(LastSubMenuIndex(this, menu.Name!), menu);
                 }
             }
             return parent;
         }
 
-        private static int LastSubMenuIndex(MenuItemCollection list)
-        {
-            return list.Count(e => e.HasDropDown);
-        }
-
-        private static int LastSubMenuIndex(ToolStripItemCollection list)
+        private static int LastSubMenuIndex(MenuItemCollection list, string name)
         {
             int i = 0;
-            foreach (ToolStripMenuItem item in list)
+            foreach (var item in list)
             {
-                if (item.Tag != null) i++;
+                if (item.HasDropDown && item.Name!.IsLessThan(name)) i++;
+                else break;
             }
             return i;
         }
 
-        private bool AddFolder(ToolStripMenuItem? parent, string name, string target, ToolStripItemClickedEventHandler handler, MouseEventHandler mouseDownHandler, out ToolStripMenuItem? menu)
+        private static int LastSubMenuIndex(ToolStripItemCollection list, string name)
+        {
+            int i = 0;
+            foreach (ToolStripMenuItem item in list)
+            {
+                if (item.Tag != null && item.Name!.IsLessThan(name)) i++;
+                else break;
+            }
+            return i;
+        }
+
+        private bool AddFolder(ToolStripMenuItem? parent, string name, string target, ToolStripItemClickedEventHandler handler, MouseEventHandler mouseDownHandler, TrayToolbarConfiguration configuration, out ToolStripMenuItem? menu)
         {
             var result = false;//true if it was already added
             if (parent != null)
@@ -58,7 +65,9 @@ namespace TrayToolbar.Models
                 menu = new ToolStripMenuItem(name)
                 {
                     Name = name,
-                    Tag = target
+                    Tag = target,
+                    Image = target.GetImage(configuration.LargeIcons),
+                    ImageScaling = ToolStripItemImageScaling.None
                 };
                 menu.MouseDown += mouseDownHandler;
                 menu.DropDownItemClicked += handler;
@@ -67,7 +76,7 @@ namespace TrayToolbar.Models
                 {
                     var items = parent!.DropDownItems;
                     //Adds to the menu with folders first, alphabetically
-                    items?.Insert(LastSubMenuIndex(parent.DropDownItems), menu);
+                    items?.Insert(LastSubMenuIndex(parent.DropDownItems, menu.Name), menu);
                 }
             }
             return result;
@@ -83,14 +92,14 @@ namespace TrayToolbar.Models
         {
             ToolStripMenuItem? submenu = null;
             var parentPath = Path.GetDirectoryName(file);
-            if (parentPath.HasValue() && !parentPath.Is(folder.Name))
+            if (parentPath.HasValue() && !parentPath.Is(folder.Name!.ToLocalPath()))
             {
                 if (configuration.IgnoreAllDotFiles && parentPath.Contains(@"\."))
                     return; //it's in a dot folder like .git or it's a dot file
                 if (configuration.IgnoreFolders.Contains(Path.GetFileName(parentPath)))
                     return; //it's in an ignored folder name
-                var relativePath = Path.GetRelativePath(folder.Name!, parentPath);
-                submenu = CreateFolder(relativePath, parentPath, clickHandler, mouseDownHandler);
+                var relativePath = Path.GetRelativePath(folder.Name!.ToLocalPath(), parentPath);
+                submenu = CreateFolder(relativePath, parentPath, configuration, clickHandler, mouseDownHandler);
             }
             var menuText = Path.GetFileName(file);
             if (configuration.HideFileExtensions || file.FileExtension().IsOneOf(".lnk", ".url"))

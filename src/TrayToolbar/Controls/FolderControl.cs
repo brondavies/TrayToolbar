@@ -20,10 +20,10 @@ namespace TrayToolbar
             toolTips.SetToolTip(DeleteFolderButton, R.Remove_Folder);
         }
 
-        public bool HideDeleteButton
+        public bool ShowRemoveButton
         {
-            get => !DeleteFolderButton.Visible;
-            set => DeleteFolderButton.Visible = !value;
+            get => DeleteFolderButton.Visible;
+            set => DeleteFolderButton.Visible = value;
         }
 
         public FolderConfig Config

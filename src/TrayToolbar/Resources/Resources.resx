@@ -117,88 +117,104 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Add Folder" xml:space="preserve">
-    <value>Add Folder</value>
-  </data>
-  <data name="A_new_version_is_available" xml:space="preserve">
-    <value>A new version is available!</value>
-  </data>
-  <data name="Browse Folder" xml:space="preserve">
-    <value>Browse Folder</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
-  </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="Exclude files" xml:space="preserve">
-    <value>Exclude file types</value>
-  </data>
-  <data name="Exclude folders" xml:space="preserve">
-    <value>Exclude folders</value>
-  </data>
-  <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
-  </data>
-  <data name="Folders" xml:space="preserve">
-    <value>Folders</value>
-  </data>
-  <data name="Include Subfolders" xml:space="preserve">
-    <value>Include Subfolders</value>
-  </data>
-  <data name="Light" xml:space="preserve">
-    <value>Light</value>
+  <data name="System" xml:space="preserve">
+    <value>System</value>
   </data>
   <data name="Open Folder" xml:space="preserve">
     <value>Open Folder</value>
   </data>
-  <data name="Options" xml:space="preserve">
-    <value>Options</value>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="add" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>
-  <data name="Remove Folder" xml:space="preserve">
-    <value>Remove Folder</value>
-  </data>
-  <data name="Run on log in" xml:space="preserve">
-    <value>Run on log in</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="System" xml:space="preserve">
-    <value>System</value>
-  </data>
-  <data name="The folder does not exist" xml:space="preserve">
-    <value>The folder does not exist.</value>
-  </data>
   <data name="The folder value must be set" xml:space="preserve">
     <value>The folder value must be set.</value>
   </data>
-  <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+  <data name="Exclude files" xml:space="preserve">
+    <value>Exclude file types</value>
   </data>
-  <data name="TrayToolbar" xml:space="preserve">
-    <value>TrayToolbar</value>
+  <data name="A_new_version_is_available" xml:space="preserve">
+    <value>A new version is available!</value>
+  </data>
+  <data name="Exclude folders" xml:space="preserve">
+    <value>Exclude folders</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="Include Subfolders" xml:space="preserve">
+    <value>Include Subfolders</value>
   </data>
   <data name="TrayToolbar Settings" xml:space="preserve">
     <value>TrayToolbar Settings</value>
   </data>
-  <data name="Menu Font Size" xml:space="preserve">
-    <value>Menu Font Size</value>
+  <data name="Browse Folder" xml:space="preserve">
+    <value>Browse Folder</value>
   </data>
-  <data name="Icon Size" xml:space="preserve">
-    <value>Icon Size</value>
+  <data name="warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="The folder does not exist" xml:space="preserve">
+    <value>The folder does not exist.</value>
   </data>
   <data name="Small" xml:space="preserve">
     <value>Small</value>
   </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="Run on log in" xml:space="preserve">
+    <value>Run on log in</value>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="TrayToolbar" xml:space="preserve">
+    <value>TrayToolbar</value>
+  </data>
   <data name="Large" xml:space="preserve">
     <value>Large</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Menu Font Size" xml:space="preserve">
+    <value>Menu Font Size</value>
+  </data>
+  <data name="Remove Folder" xml:space="preserve">
+    <value>Remove Folder</value>
+  </data>
+  <data name="Add Folder" xml:space="preserve">
+    <value>Add Folder</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Icon Size" xml:space="preserve">
+    <value>Icon Size</value>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Folders</value>
+  </data>
+  <data name="TrayIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>TrayIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="add-small" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>add-small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

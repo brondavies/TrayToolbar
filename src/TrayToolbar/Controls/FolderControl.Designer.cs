@@ -31,7 +31,6 @@ namespace TrayToolbar
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FolderControl));
             FolderComboBox = new CustomComboBox();
             BrowseFolderButton = new PictureBox();
             DeleteFolderButton = new PictureBox();
@@ -65,8 +64,8 @@ namespace TrayToolbar
             BrowseFolderButton.AccessibleName = "Browse";
             BrowseFolderButton.AccessibleRole = AccessibleRole.PushButton;
             BrowseFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            BrowseFolderButton.BackgroundImage = (Image)resources.GetObject("BrowseFolderButton.BackgroundImage");
-            BrowseFolderButton.BackgroundImageLayout = ImageLayout.Center;
+            BrowseFolderButton.BackgroundImage = Resources.Resources.TrayIcon;
+            BrowseFolderButton.BackgroundImageLayout = ImageLayout.Zoom;
             BrowseFolderButton.Location = new Point(335, 3);
             BrowseFolderButton.Name = "BrowseFolderButton";
             BrowseFolderButton.Size = new Size(30, 23);
@@ -80,8 +79,8 @@ namespace TrayToolbar
             DeleteFolderButton.AccessibleName = "Remove";
             DeleteFolderButton.AccessibleRole = AccessibleRole.PushButton;
             DeleteFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            DeleteFolderButton.BackgroundImage = (Image)resources.GetObject("DeleteFolderButton.BackgroundImage");
-            DeleteFolderButton.BackgroundImageLayout = ImageLayout.Center;
+            DeleteFolderButton.BackgroundImage = Resources.Resources.delete;
+            DeleteFolderButton.BackgroundImageLayout = ImageLayout.Zoom;
             DeleteFolderButton.Location = new Point(367, 3);
             DeleteFolderButton.Name = "DeleteFolderButton";
             DeleteFolderButton.Size = new Size(30, 23);
@@ -104,7 +103,8 @@ namespace TrayToolbar
             // 
             ErrorIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             ErrorIcon.BackColor = Color.Transparent;
-            ErrorIcon.Image = (Image)resources.GetObject("ErrorIcon.Image");
+            ErrorIcon.BackgroundImage = Resources.Resources.warning;
+            ErrorIcon.BackgroundImageLayout = ImageLayout.Zoom;
             ErrorIcon.Location = new Point(313, 6);
             ErrorIcon.Margin = new Padding(0);
             ErrorIcon.Name = "ErrorIcon";

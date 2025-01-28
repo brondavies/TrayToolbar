@@ -244,14 +244,15 @@
             // AddFolderButton
             // 
             AddFolderButton.AutoSize = true;
-            AddFolderButton.Image = (Image)resources.GetObject("AddFolderButton.Image");
+            AddFolderButton.Image = Resources.Resources.add_small;
             AddFolderButton.ImageAlign = ContentAlignment.MiddleLeft;
             AddFolderButton.Location = new Point(116, 28);
             AddFolderButton.Name = "AddFolderButton";
             AddFolderButton.Padding = new Padding(32, 0, 0, 0);
-            AddFolderButton.Size = new Size(158, 29);
+            AddFolderButton.Size = new Size(158, 30);
             AddFolderButton.TabIndex = 0;
             AddFolderButton.Text = "Add Folder";
+            AddFolderButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             AddFolderButton.UseVisualStyleBackColor = true;
             AddFolderButton.Click += AddFolderButton_Click;
             // 

@@ -55,13 +55,6 @@ namespace TrayToolbar
             AddFolderButton.Text = R.Add_Folder;
             Text = $"{R.TrayToolbar_Settings} ({ConfigHelper.ApplicationVersion})";
             NewVersionLabel.Text = R.A_new_version_is_available;
-            ConfigHelper.CheckForUpdate().ContinueWith(r =>
-            {
-                if (r.Result?.Name != null && r.Result.Name != "v" + ConfigHelper.ApplicationVersion)
-                {
-                    ShowUpdateAvailable(r.Result.UpdateUrl);
-                }
-            });
 
             List<ToolStripItem> itemsToAdd = [
                new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
@@ -125,7 +118,7 @@ namespace TrayToolbar
         {
             if (folder.Name.HasValue() && Directory.Exists(folder.Name.ToLocalPath()))
             {
-                var watcher = new FileSystemWatcher(folder.Name)
+                var watcher = new FileSystemWatcher(folder.Name.ToLocalPath())
                 {
                     Filter = "*.*",
                     IncludeSubdirectories = folder.Recursive,
@@ -205,10 +198,10 @@ namespace TrayToolbar
 
         private NotifyIcon CreateTrayIcon(FolderConfig folder)
         {
-            var text = Path.GetFileName(folder.Name).Or(folder.Name!);
+            var text = Path.GetFileName(folder.Name!.ToLocalPath()).Or(folder.Name!.ToLocalPath());
             var icon = new NotifyIcon(components)
             {
-                Icon = folder.Name!.GetIcon() ?? this.Icon,
+                Icon = folder.Name!.ToLocalPath().GetIcon() ?? this.Icon,
                 Text = text,
                 Visible = true
             };
@@ -267,6 +260,16 @@ namespace TrayToolbar
                 ThemeToggleButton.Visible = false;
                 var row = tableLayout.GetRow(ThemeToggleButton);
                 tableLayout.RowStyles[row].Height = 0;
+            }
+            if (Configuration.CheckForUpdates)
+            {
+                ConfigHelper.CheckForUpdate().ContinueWith(r =>
+                {
+                    if (r.Result?.Name != null && r.Result.Name != "v" + ConfigHelper.ApplicationVersion)
+                    {
+                        ShowUpdateAvailable(r.Result.UpdateUrl);
+                    }
+                });
             }
         }
 
@@ -429,7 +432,7 @@ namespace TrayToolbar
                 case Command_Open:
                     var folder = (FolderConfig?)RightClickMenu.Tag;
                     if (folder?.Name != null)
-                        Program.Launch(folder.Name);
+                        Program.Launch(folder.Name.ToLocalPath());
                     break;
                 case Command_Exit:
                     Quit();
@@ -585,7 +588,7 @@ namespace TrayToolbar
             var count = list.Count();
             foreach (var c in list)
             {
-                c.HideDeleteButton = count == 1;
+                c.ShowRemoveButton = count > 1;
             }
         }
 

@@ -37,6 +37,11 @@ namespace TrayToolbar.Extensions
             return value.HasValue() && File.GetAttributes(value).HasFlag(FileAttributes.Directory);
         }
 
+        public static bool IsLessThan(this string self, string value)
+        {
+            return StringComparer.CurrentCultureIgnoreCase.Compare(self, value) < 0;
+        }
+
         public static bool IsHttps(this string value)
         {
             return value.HasValue() && value.StartsWith("https://");

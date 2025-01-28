@@ -35,6 +35,8 @@ namespace TrayToolbar.Models
 
         public bool LargeIcons { get; set; }
 
+        public bool CheckForUpdates { get; set; } = true;
+
         [Obsolete("Folder is obsolete", true)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Folder
