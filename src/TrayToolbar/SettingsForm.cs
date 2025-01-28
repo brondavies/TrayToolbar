@@ -63,11 +63,14 @@ namespace TrayToolbar
                 }
             });
 
-            RightClickMenu.Items.AddRange([
-                new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
-                new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = Command_Open },
-                new ToolStripMenuItem { Text = R.Exit, CommandParameter = Command_Exit }
-            ]);
+            List<ToolStripItem> itemsToAdd = [
+               new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
+               new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = Command_Open },
+               new ToolStripMenuItem { Text = R.Exit, CommandParameter = Command_Exit }
+           ];
+
+
+            RightClickMenu.Items.AddRange(itemsToAdd.ToArray());
         }
 
         private void ShowUpdateAvailable(string updateUri)
@@ -297,7 +300,9 @@ namespace TrayToolbar
                 var font = LeftClickMenu.Font;
                 LeftClickMenu.Font = new Font(font.FontFamily, Configuration.FontSize, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
                 LeftClickMenu.Items.Clear();
-                LeftClickMenu.Items.AddRange([.. MenuItems[folder]]);
+                List<ToolStripItem> itemsToAdd = [.. MenuItems[folder]];
+
+                LeftClickMenu.Items.AddRange(itemsToAdd.ToArray());
                 LeftClickMenu.Renderer = new MenuRenderer();
                 trayIcon.ContextMenuStrip = LeftClickMenu;
                 SystemTheme.SetThemeColors(LeftClickMenu, UseDarkMode());
