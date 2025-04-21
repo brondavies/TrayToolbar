@@ -23,7 +23,7 @@ namespace TrayToolbar
         internal static string LegacyConfigurationFile = Path.Combine(ApplicationRoot, "TrayToolbar.json");
         internal static int WindowsMajorVersion = Environment.OSVersion.Version.Build >= 22000 ? 11 : 10;
 
-        internal static bool GetStartupKey()
+        internal static bool IsAutoStartupConfigured()
         {
             using RegistryKey key = Registry.CurrentUser.CreateSubKey(REGKEY_STARTUP);
             var val = key.GetValue(STARTUP_VALUE);

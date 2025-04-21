@@ -22,6 +22,10 @@ namespace TrayToolbar
             LoadResources();
             SetupMenu();
             PopulateConfig();
+            if (!ValidateFolderConfigurations())
+            {
+                ShowNormal();
+            }
             SystemTheme.UseImmersiveDarkMode(0, UseDarkMode());
             this.HandleCreated += SettingsForm_HandleCreated;
             ThemeChangeMessageFilter.ThemeChanged += SettingsForm_SystemThemeChanged;
@@ -116,7 +120,7 @@ namespace TrayToolbar
         private readonly Dictionary<string, FileSystemWatcher> Watchers = [];
         private void StartWatchingFolder(FolderConfig folder)
         {
-            if (folder.Name.HasValue() && Directory.Exists(folder.Name.ToLocalPath()))
+            if (folder.Name.HasValue() && folder.Name.IsDirectory())
             {
                 var watcher = new FileSystemWatcher(folder.Name.ToLocalPath())
                 {
@@ -183,7 +187,7 @@ namespace TrayToolbar
         /// </summary>
         private void CreateMenuItem(string fullPath, FolderConfig folder)
         {
-            if (Directory.Exists(fullPath))
+            if (fullPath.IsDirectory())
             {
                 foreach (var file in EnumerateFiles(fullPath, folder.Recursive))
                 {
@@ -249,7 +253,7 @@ namespace TrayToolbar
             FontSizeInput.Text = Configuration.FontSize.ToString();
             IconSizeLargeCheckbox.Checked = Configuration.LargeIcons;
             IconSizeSmallCheckbox.Checked = !Configuration.LargeIcons;
-            RunOnLoginCheckbox.Checked = ConfigHelper.GetStartupKey();
+            RunOnLoginCheckbox.Checked = ConfigHelper.IsAutoStartupConfigured();
             if (SystemTheme.IsDarkModeSupported())
             {
                 ThemeToggleButton.Theme = (ThemeToggleEnum)Configuration.Theme;
@@ -325,7 +329,7 @@ namespace TrayToolbar
             {
                 var menu = MenuItems[folder];
                 menu.Clear();
-                if (!folder.Name.HasValue() || !Directory.Exists(folder.Name.ToLocalPath())) return;
+                if (!folder.Name.HasValue() || !folder.Name.IsDirectory()) return;
 
                 foreach (var file in EnumerateFiles(folder.Name.ToLocalPath(), folder.Recursive))
                 {
@@ -489,26 +493,8 @@ namespace TrayToolbar
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            var error = false;
-            foreach (var c in FolderControls()) c.Error = false;
-
-            foreach (var c in FolderControls().Where(c => !c.Config.Name.HasValue()))
+            if (!ValidateFolderConfigurations())
             {
-                c.Error = error = true;
-            }
-            if (error)
-            {
-                MessageBox.Show(R.The_folder_value_must_be_set, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            foreach (var c in FolderControls().Where(c => !Directory.Exists(c.Config.Name!.ToLocalPath())))
-            {
-                c.Error = error = true;
-            }
-            if (error)
-            {
-                MessageBox.Show(R.The_folder_does_not_exist, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -527,6 +513,33 @@ namespace TrayToolbar
                 Close();
             }
             ConfigHelper.SetStartupKey(RunOnLoginCheckbox.Checked);
+        }
+
+        private bool ValidateFolderConfigurations()
+        {
+            var error = false;
+            foreach (var c in FolderControls()) c.Error = false;
+
+            foreach (var c in FolderControls().Where(c => !c.Config.Name.HasValue()))
+            {
+                c.Error = error = true;
+            }
+            if (error)
+            {
+                MessageBox.Show(R.The_folder_value_must_be_set, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            foreach (var c in FolderControls().Where(c => !c.Config.Name!.IsDirectory()))
+            {
+                c.Error = error = true;
+            }
+            if (error)
+            {
+                MessageBox.Show(R.The_folder_does_not_exist, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+            return true;
         }
 
         private void CancelBtn_Click(object sender, EventArgs e)

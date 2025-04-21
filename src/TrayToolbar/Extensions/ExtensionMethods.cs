@@ -34,7 +34,7 @@ namespace TrayToolbar.Extensions
 
         public static bool IsDirectory(this string? value)
         {
-            return value.HasValue() && File.GetAttributes(value).HasFlag(FileAttributes.Directory);
+            return value.HasValue() && Directory.Exists(value.ToLocalPath());
         }
 
         public static bool IsLessThan(this string self, string value)

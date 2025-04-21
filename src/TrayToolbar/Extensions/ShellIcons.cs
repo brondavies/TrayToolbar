@@ -32,43 +32,50 @@ namespace TrayToolbar.Extensions
 
         private static Icon GetIconFromUrlFile(string path, bool large)
         {
-            var fi = new FileInfo(path);
-            if (fi.Exists && fi.Length < 1_000_000) // limit to files under 1MB to guard against potential memory overuse
+            try
             {
-                var dict = new Dictionary<string, string>();
-                foreach (var line in File.ReadAllLines(path))
+                var fi = new FileInfo(path);
+                if (fi.Exists && fi.Length < 1_000_000) // limit to files under 1MB to guard against potential memory overuse
                 {
-                    var parts = line.Split('=', 2);
-                    if (parts.Length == 2)
+                    var dict = new Dictionary<string, string>();
+                    foreach (var line in File.ReadAllLinesAsync(path).Result)
                     {
-                        dict.Add(parts[0].ToLowerInvariant(), parts[1]);
+                        var parts = line.Split('=', 2);
+                        if (parts.Length == 2)
+                        {
+                            dict.Add(parts[0].ToLowerInvariant(), parts[1]);
+                        }
+                    }
+                    dict.TryGetValue("url", out var url);
+                    dict.TryGetValue("iconfile", out var iconFile);
+                    dict.TryGetValue("iconindex", out var iconIndex);
+                    if (iconFile.HasValue() && File.Exists(iconFile.ToLocalPath()))
+                    {
+                        _ = int.TryParse(iconIndex, out int id); // will be 0 if parse fails
+                        var icon = Icon.ExtractIcon(iconFile, id, !large);
+                        if (icon != null) return icon;
+                    }
+                    //no iconfile was set or it didn't contain an icon, check the url
+                    if (url.HasValue())
+                    {
+                        //special case urls
+                        if (url.StartsWith("ms-settings:"))
+                        {
+                            //TODO: https://github.com/dotnet/winforms/issues/12447
+                            //return SystemIcons.GetStockIcon(StockIconId.Settings, large ? StockIconOptions.Default : StockIconOptions.SmallIcon);
+                            return Icon.ExtractIcon(Shell32Dll, SETTINGS_ICON_INDEX, !large) ?? SystemIcons.Application;
+                        }
+                        //try getting an icon from the target if it's a local path
+                        if (File.Exists(url.ToLocalPath()))
+                        {
+                            return ExtractFromPath(url, large);
+                        }
                     }
                 }
-                dict.TryGetValue("url", out var url);
-                dict.TryGetValue("iconfile", out var iconFile);
-                dict.TryGetValue("iconindex", out var iconIndex);
-                if (iconFile.HasValue() && File.Exists(iconFile.ToLocalPath()))
-                {
-                    _ = int.TryParse(iconIndex, out int id); // will be 0 if parse fails
-                    var icon = Icon.ExtractIcon(iconFile, id, !large);
-                    if (icon != null) return icon;
-                }
-                //no iconfile was set or it didn't contain an icon, check the url
-                if (url.HasValue())
-                {
-                    //special case urls
-                    if (url.StartsWith("ms-settings:"))
-                    {
-                        //TODO: https://github.com/dotnet/winforms/issues/12447
-                        //return SystemIcons.GetStockIcon(StockIconId.Settings, large ? StockIconOptions.Default : StockIconOptions.SmallIcon);
-                        return Icon.ExtractIcon(Shell32Dll, SETTINGS_ICON_INDEX, !large) ?? SystemIcons.Application;
-                    }
-                    //try getting an icon from the target if it's a local path
-                    if (File.Exists(url.ToLocalPath()))
-                    {
-                        return ExtractFromPath(url, large);
-                    }
-                }
+            }
+            catch (IOException)
+            {
+                //File was probably locked
             }
             return ExtractFromPath(path, large);
         }
