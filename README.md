@@ -6,6 +6,7 @@
 - Replaces the Windows 7-10 feature that no longer exists in Windows 11 for custom toolbars on the taskbar
 - Choose the folder(s) and customize the file filter
 - Launches links, files and apps from this menu which exist in the chosen folders and subfolders
+- Quick access to this menu with configurable global shortcut keys
 - Automatically updates the menu with changes in the folder
 - Choose your preference for icon and font sizes
 - Includes support for English, Spanish, French, German, Portuguese, Italian, Japanese, Chinese, Russian, and Korean
