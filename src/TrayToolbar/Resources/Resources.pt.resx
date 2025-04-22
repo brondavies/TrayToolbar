@@ -124,10 +124,10 @@
     <value>Erro</value>
   </data>
   <data name="Exclude files" xml:space="preserve">
-    <value>Excluir arquivos</value>
+    <value>Arquivos excluídos</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Saída</value>
+    <value>Sair</value>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Pastas</value>
@@ -136,7 +136,7 @@
     <value>Opções</value>
   </data>
   <data name="Run on log in" xml:space="preserve">
-    <value>Execute no login</value>
+    <value>Executar na inicialização</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Salvar</value>
@@ -145,13 +145,13 @@
     <value>A pasta não existe.</value>
   </data>
   <data name="The folder value must be set" xml:space="preserve">
-    <value>O valor da pasta deve ser definido.</value>
+    <value>O caminho da pasta deve ser definido.</value>
   </data>
   <data name="TrayToolbar" xml:space="preserve">
-    <value>Barra de ferramentas da bandeja</value>
+    <value>TrayToolbar</value>
   </data>
   <data name="TrayToolbar Settings" xml:space="preserve">
-    <value>Configurações da barra de ferramentas da bandeja</value>
+    <value>Configurações do TrayToolbar</value>
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>Atualizar</value>
@@ -160,25 +160,25 @@
     <value>Uma nova versão está disponível!</value>
   </data>
   <data name="Add Folder" xml:space="preserve">
-    <value>Adicionar pasta</value>
+    <value>Adicionar Pasta</value>
   </data>
   <data name="Browse Folder" xml:space="preserve">
-    <value>Navegar na pasta</value>
+    <value>Procurar Pasta</value>
   </data>
   <data name="Include Subfolders" xml:space="preserve">
-    <value>Incluir subpastas</value>
+    <value>Incluir Subpastas</value>
   </data>
   <data name="Open Folder" xml:space="preserve">
-    <value>Pasta aberta</value>
+    <value>Abrir Pasta</value>
   </data>
   <data name="Remove Folder" xml:space="preserve">
-    <value>Remover pasta</value>
+    <value>Remover Pasta</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Escuro</value>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Luz</value>
+    <value>Claro</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>Sistema</value>
@@ -187,13 +187,13 @@
     <value>Tema</value>
   </data>
   <data name="Exclude folders" xml:space="preserve">
-    <value>Excluir pastas</value>
+    <value>Pastas excluídas</value>
   </data>
   <data name="Menu Font Size" xml:space="preserve">
-    <value>Tamanho da fonte do menu</value>
+    <value>Tamanho da Fonte do Menu</value>
   </data>
   <data name="Icon Size" xml:space="preserve">
-    <value>Tamanho do ícone</value>
+    <value>Ícone</value>
   </data>
   <data name="Small" xml:space="preserve">
     <value>Pequeno</value>
