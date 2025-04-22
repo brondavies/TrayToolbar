@@ -217,4 +217,19 @@
   <data name="add-small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>add-small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Press the keys to use as the shortcut key" xml:space="preserve">
+    <value>Press the keys to use as the shortcut key</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Set</value>
+  </data>
+  <data name="Shortcut Key" xml:space="preserve">
+    <value>Shortcut Key</value>
+  </data>
 </root>

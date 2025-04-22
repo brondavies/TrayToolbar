@@ -13,6 +13,7 @@ namespace TrayToolbar
             ConfigHelper.MigrateConfiguration();
             DropDownMenuScrollWheelHandler.Enable(true);
             ThemeChangeMessageFilter.Enable(true);
+            HotKeys.Enable(true);
             try
             {
                 var form = new SettingsForm();

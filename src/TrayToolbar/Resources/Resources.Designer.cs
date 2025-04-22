@@ -117,6 +117,15 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear.
+        /// </summary>
+        internal static string Clear {
+            get {
+                return ResourceManager.GetString("Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dark.
         /// </summary>
         internal static string Dark {
@@ -226,6 +235,15 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        internal static string OK {
+            get {
+                return ResourceManager.GetString("OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Folder.
         /// </summary>
         internal static string Open_Folder {
@@ -240,6 +258,15 @@ namespace TrayToolbar.Resources {
         internal static string Options {
             get {
                 return ResourceManager.GetString("Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Press the keys to use as the shortcut key.
+        /// </summary>
+        internal static string Press_the_keys_to_use_as_the_shortcut_key {
+            get {
+                return ResourceManager.GetString("Press the keys to use as the shortcut key", resourceCulture);
             }
         }
         
@@ -276,6 +303,24 @@ namespace TrayToolbar.Resources {
         internal static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set.
+        /// </summary>
+        internal static string Set {
+            get {
+                return ResourceManager.GetString("Set", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shortcut Key.
+        /// </summary>
+        internal static string Shortcut_Key {
+            get {
+                return ResourceManager.GetString("Shortcut Key", resourceCulture);
             }
         }
         

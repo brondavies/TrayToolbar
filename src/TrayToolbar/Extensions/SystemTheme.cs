@@ -8,7 +8,7 @@ namespace TrayToolbar.Extensions
     internal class SystemTheme
     {
         const string REGKEY_THEMES = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize";
-        static bool? DarkModeEnabled = null;
+        public static bool? DarkModeEnabled = null;
         public unsafe static bool UseImmersiveDarkMode(IntPtr handle, bool enabled)
         {
             var form = Control.FromHandle(handle);

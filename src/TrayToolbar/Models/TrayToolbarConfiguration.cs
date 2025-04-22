@@ -71,5 +71,7 @@ namespace TrayToolbar.Models
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public bool Recursive { get; set; }
+
+        public string? Hotkey { get; set; }
     }
 }

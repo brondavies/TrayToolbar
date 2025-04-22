@@ -37,9 +37,15 @@ namespace TrayToolbar
             RecursiveCheckbox = new CheckBox();
             toolTips = new ToolTip(components);
             ErrorIcon = new PictureBox();
+            flowLayoutPanel1 = new FlowLayoutPanel();
+            HotkeyLabel = new Label();
+            HotkeyValue = new Label();
+            SetHotKey = new Label();
+            BottomLine = new Label();
             ((System.ComponentModel.ISupportInitialize)BrowseFolderButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DeleteFolderButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ErrorIcon).BeginInit();
+            flowLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // FolderComboBox
@@ -114,21 +120,86 @@ namespace TrayToolbar
             ErrorIcon.TabStop = false;
             ErrorIcon.Visible = false;
             // 
+            // flowLayoutPanel1
+            // 
+            flowLayoutPanel1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            flowLayoutPanel1.AutoSize = true;
+            flowLayoutPanel1.Controls.Add(HotkeyLabel);
+            flowLayoutPanel1.Controls.Add(HotkeyValue);
+            flowLayoutPanel1.Controls.Add(SetHotKey);
+            flowLayoutPanel1.Location = new Point(3, 57);
+            flowLayoutPanel1.Margin = new Padding(0, 0, 0, 5);
+            flowLayoutPanel1.Name = "flowLayoutPanel1";
+            flowLayoutPanel1.Size = new Size(394, 19);
+            flowLayoutPanel1.TabIndex = 11;
+            // 
+            // HotkeyLabel
+            // 
+            HotkeyLabel.AutoSize = true;
+            HotkeyLabel.Location = new Point(3, 0);
+            HotkeyLabel.Name = "HotkeyLabel";
+            HotkeyLabel.Padding = new Padding(0, 2, 0, 2);
+            HotkeyLabel.Size = new Size(74, 19);
+            HotkeyLabel.TabIndex = 0;
+            HotkeyLabel.Text = "Shortcut Key";
+            HotkeyLabel.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // HotkeyValue
+            // 
+            HotkeyValue.AutoSize = true;
+            HotkeyValue.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            HotkeyValue.Location = new Point(83, 0);
+            HotkeyValue.Name = "HotkeyValue";
+            HotkeyValue.Padding = new Padding(0, 2, 0, 2);
+            HotkeyValue.Size = new Size(0, 19);
+            HotkeyValue.TabIndex = 1;
+            HotkeyValue.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // SetHotKey
+            // 
+            SetHotKey.AutoSize = true;
+            SetHotKey.BorderStyle = BorderStyle.FixedSingle;
+            SetHotKey.Cursor = Cursors.Hand;
+            SetHotKey.Location = new Point(89, 0);
+            SetHotKey.MinimumSize = new Size(50, 0);
+            SetHotKey.Name = "SetHotKey";
+            SetHotKey.Padding = new Padding(0, 1, 0, 1);
+            SetHotKey.Size = new Size(50, 19);
+            SetHotKey.TabIndex = 2;
+            SetHotKey.Text = "Set";
+            SetHotKey.TextAlign = ContentAlignment.MiddleCenter;
+            SetHotKey.Click += SetHotKey_Click;
+            // 
+            // BottomLine
+            // 
+            BottomLine.AccessibleRole = AccessibleRole.Caret;
+            BottomLine.BackColor = Color.DarkGray;
+            BottomLine.Dock = DockStyle.Bottom;
+            BottomLine.Location = new Point(0, 84);
+            BottomLine.Margin = new Padding(0, 5, 0, 0);
+            BottomLine.Name = "BottomLine";
+            BottomLine.Size = new Size(400, 1);
+            BottomLine.TabIndex = 12;
+            // 
             // FolderControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
+            Controls.Add(BottomLine);
+            Controls.Add(flowLayoutPanel1);
             Controls.Add(ErrorIcon);
             Controls.Add(RecursiveCheckbox);
             Controls.Add(DeleteFolderButton);
             Controls.Add(BrowseFolderButton);
             Controls.Add(FolderComboBox);
             Name = "FolderControl";
-            Size = new Size(400, 60);
+            Size = new Size(400, 85);
             ((System.ComponentModel.ISupportInitialize)BrowseFolderButton).EndInit();
             ((System.ComponentModel.ISupportInitialize)DeleteFolderButton).EndInit();
             ((System.ComponentModel.ISupportInitialize)ErrorIcon).EndInit();
+            flowLayoutPanel1.ResumeLayout(false);
+            flowLayoutPanel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -141,5 +212,10 @@ namespace TrayToolbar
         private CheckBox RecursiveCheckbox;
         private ToolTip toolTips;
         private PictureBox ErrorIcon;
+        private FlowLayoutPanel flowLayoutPanel1;
+        private Label HotkeyLabel;
+        private Label HotkeyValue;
+        private Label SetHotKey;
+        private Label BottomLine;
     }
 }

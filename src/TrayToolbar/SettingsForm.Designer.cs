@@ -35,12 +35,12 @@
             SaveButton = new Button();
             NewVersionLabel = new LinkLabel();
             tableLayout = new TableLayoutPanel();
-            label1 = new Label();
-            label2 = new Label();
-            label4 = new Label();
+            FoldersLabel = new Label();
+            ExcludeFileTypesLabel = new Label();
+            ExcludeFoldersLabel = new Label();
             IgnoreFoldersTextBox = new TextBox();
-            label3 = new Label();
-            label5 = new Label();
+            ThemeLabel = new Label();
+            MenuFontSizeLabel = new Label();
             FoldersLayout = new FlowLayoutPanel();
             AddFolderButton = new Button();
             IgnoreFilesTextBox = new TextBox();
@@ -48,7 +48,7 @@
             RunOnLoginCheckbox = new CheckBox();
             fontImageSizeTableLayout = new TableLayoutPanel();
             IconSizeLargeCheckbox = new RadioButton();
-            label6 = new Label();
+            IconSizeLabel = new Label();
             FontSizeInput = new NumericUpDown();
             IconSizeSmallCheckbox = new RadioButton();
             RightClickMenu = new ContextMenuStrip(components);
@@ -129,12 +129,12 @@
             tableLayout.ColumnCount = 2;
             tableLayout.ColumnStyles.Add(new ColumnStyle());
             tableLayout.ColumnStyles.Add(new ColumnStyle());
-            tableLayout.Controls.Add(label1, 0, 0);
-            tableLayout.Controls.Add(label2, 0, 2);
-            tableLayout.Controls.Add(label4, 0, 3);
+            tableLayout.Controls.Add(FoldersLabel, 0, 0);
+            tableLayout.Controls.Add(ExcludeFileTypesLabel, 0, 2);
+            tableLayout.Controls.Add(ExcludeFoldersLabel, 0, 3);
             tableLayout.Controls.Add(IgnoreFoldersTextBox, 1, 3);
-            tableLayout.Controls.Add(label3, 0, 4);
-            tableLayout.Controls.Add(label5, 0, 5);
+            tableLayout.Controls.Add(ThemeLabel, 0, 4);
+            tableLayout.Controls.Add(MenuFontSizeLabel, 0, 5);
             tableLayout.Controls.Add(FoldersLayout, 1, 0);
             tableLayout.Controls.Add(AddFolderButton, 1, 1);
             tableLayout.Controls.Add(IgnoreFilesTextBox, 1, 2);
@@ -156,41 +156,41 @@
             tableLayout.Size = new Size(520, 318);
             tableLayout.TabIndex = 3;
             // 
-            // label1
+            // FoldersLabel
             // 
-            label1.AutoSize = true;
-            label1.Dock = DockStyle.Top;
-            label1.Location = new Point(3, 0);
-            label1.Name = "label1";
-            label1.Padding = new Padding(5);
-            label1.Size = new Size(107, 25);
-            label1.TabIndex = 0;
-            label1.Text = "Folders";
-            label1.TextAlign = ContentAlignment.MiddleRight;
+            FoldersLabel.AutoSize = true;
+            FoldersLabel.Dock = DockStyle.Top;
+            FoldersLabel.Location = new Point(3, 0);
+            FoldersLabel.Name = "FoldersLabel";
+            FoldersLabel.Padding = new Padding(5);
+            FoldersLabel.Size = new Size(107, 25);
+            FoldersLabel.TabIndex = 0;
+            FoldersLabel.Text = "Folders";
+            FoldersLabel.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // label2
+            // ExcludeFileTypesLabel
             // 
-            label2.AutoSize = true;
-            label2.Dock = DockStyle.Top;
-            label2.Location = new Point(3, 75);
-            label2.Name = "label2";
-            label2.Padding = new Padding(5);
-            label2.Size = new Size(107, 25);
-            label2.TabIndex = 1;
-            label2.Text = "Exclude file types";
-            label2.TextAlign = ContentAlignment.MiddleRight;
+            ExcludeFileTypesLabel.AutoSize = true;
+            ExcludeFileTypesLabel.Dock = DockStyle.Top;
+            ExcludeFileTypesLabel.Location = new Point(3, 75);
+            ExcludeFileTypesLabel.Name = "ExcludeFileTypesLabel";
+            ExcludeFileTypesLabel.Padding = new Padding(5);
+            ExcludeFileTypesLabel.Size = new Size(107, 25);
+            ExcludeFileTypesLabel.TabIndex = 1;
+            ExcludeFileTypesLabel.Text = "Exclude file types";
+            ExcludeFileTypesLabel.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // label4
+            // ExcludeFoldersLabel
             // 
-            label4.AutoSize = true;
-            label4.Dock = DockStyle.Top;
-            label4.Location = new Point(3, 125);
-            label4.Name = "label4";
-            label4.Padding = new Padding(5);
-            label4.Size = new Size(107, 25);
-            label4.TabIndex = 14;
-            label4.Text = "Exclude folders";
-            label4.TextAlign = ContentAlignment.MiddleRight;
+            ExcludeFoldersLabel.AutoSize = true;
+            ExcludeFoldersLabel.Dock = DockStyle.Top;
+            ExcludeFoldersLabel.Location = new Point(3, 125);
+            ExcludeFoldersLabel.Name = "ExcludeFoldersLabel";
+            ExcludeFoldersLabel.Padding = new Padding(5);
+            ExcludeFoldersLabel.Size = new Size(107, 25);
+            ExcludeFoldersLabel.TabIndex = 14;
+            ExcludeFoldersLabel.Text = "Exclude folders";
+            ExcludeFoldersLabel.TextAlign = ContentAlignment.MiddleRight;
             // 
             // IgnoreFoldersTextBox
             // 
@@ -202,29 +202,29 @@
             IgnoreFoldersTextBox.Size = new Size(414, 23);
             IgnoreFoldersTextBox.TabIndex = 4;
             // 
-            // label3
+            // ThemeLabel
             // 
-            label3.AutoSize = true;
-            label3.Dock = DockStyle.Top;
-            label3.Location = new Point(3, 175);
-            label3.Name = "label3";
-            label3.Padding = new Padding(5);
-            label3.Size = new Size(107, 25);
-            label3.TabIndex = 12;
-            label3.Text = "Theme";
-            label3.TextAlign = ContentAlignment.MiddleRight;
+            ThemeLabel.AutoSize = true;
+            ThemeLabel.Dock = DockStyle.Top;
+            ThemeLabel.Location = new Point(3, 175);
+            ThemeLabel.Name = "ThemeLabel";
+            ThemeLabel.Padding = new Padding(5);
+            ThemeLabel.Size = new Size(107, 25);
+            ThemeLabel.TabIndex = 12;
+            ThemeLabel.Text = "Theme";
+            ThemeLabel.TextAlign = ContentAlignment.MiddleRight;
             // 
-            // label5
+            // MenuFontSizeLabel
             // 
-            label5.AutoSize = true;
-            label5.Dock = DockStyle.Top;
-            label5.Location = new Point(3, 225);
-            label5.Name = "label5";
-            label5.Padding = new Padding(5);
-            label5.Size = new Size(107, 25);
-            label5.TabIndex = 13;
-            label5.Text = "Menu Font Size";
-            label5.TextAlign = ContentAlignment.MiddleRight;
+            MenuFontSizeLabel.AutoSize = true;
+            MenuFontSizeLabel.Dock = DockStyle.Top;
+            MenuFontSizeLabel.Location = new Point(3, 225);
+            MenuFontSizeLabel.Name = "MenuFontSizeLabel";
+            MenuFontSizeLabel.Padding = new Padding(5);
+            MenuFontSizeLabel.Size = new Size(107, 25);
+            MenuFontSizeLabel.TabIndex = 13;
+            MenuFontSizeLabel.Text = "Menu Font Size";
+            MenuFontSizeLabel.TextAlign = ContentAlignment.MiddleRight;
             // 
             // FoldersLayout
             // 
@@ -296,7 +296,7 @@
             fontImageSizeTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             fontImageSizeTableLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             fontImageSizeTableLayout.Controls.Add(IconSizeLargeCheckbox, 3, 0);
-            fontImageSizeTableLayout.Controls.Add(label6, 1, 0);
+            fontImageSizeTableLayout.Controls.Add(IconSizeLabel, 1, 0);
             fontImageSizeTableLayout.Controls.Add(FontSizeInput, 0, 0);
             fontImageSizeTableLayout.Controls.Add(IconSizeSmallCheckbox, 2, 0);
             fontImageSizeTableLayout.Dock = DockStyle.Fill;
@@ -318,17 +318,17 @@
             IconSizeLargeCheckbox.UseVisualStyleBackColor = true;
             IconSizeLargeCheckbox.CheckedChanged += IconSizeLargeCheckbox_CheckedChanged;
             // 
-            // label6
+            // IconSizeLabel
             // 
-            label6.AutoSize = true;
-            label6.Dock = DockStyle.Top;
-            label6.Location = new Point(106, 0);
-            label6.Name = "label6";
-            label6.Padding = new Padding(5);
-            label6.Size = new Size(97, 25);
-            label6.TabIndex = 14;
-            label6.Text = "Icon Size";
-            label6.TextAlign = ContentAlignment.MiddleRight;
+            IconSizeLabel.AutoSize = true;
+            IconSizeLabel.Dock = DockStyle.Top;
+            IconSizeLabel.Location = new Point(106, 0);
+            IconSizeLabel.Name = "IconSizeLabel";
+            IconSizeLabel.Padding = new Padding(5);
+            IconSizeLabel.Size = new Size(97, 25);
+            IconSizeLabel.TabIndex = 14;
+            IconSizeLabel.Text = "Icon Size";
+            IconSizeLabel.TextAlign = ContentAlignment.MiddleRight;
             // 
             // FontSizeInput
             // 
@@ -401,8 +401,8 @@
         #endregion
         private ContextMenuStrip RightClickMenu;
         private ContextMenuStrip LeftClickMenu;
-        private Label label1;
-        private Label label2;
+        private Label FoldersLabel;
+        private Label ExcludeFileTypesLabel;
         private TextBox IgnoreFilesTextBox;
         private Button CancelBtn;
         private Button SaveButton;
@@ -411,15 +411,15 @@
         private TableLayoutPanel tableLayout;
         private Button AddFolderButton;
         private FlowLayoutPanel FoldersLayout;
-        private Label label3;
+        private Label ThemeLabel;
         private Controls.ThemeToggle ThemeToggleButton;
-        private Label label4;
-        private Label label5;
+        private Label ExcludeFoldersLabel;
+        private Label MenuFontSizeLabel;
         private TextBox IgnoreFoldersTextBox;
         private CheckBox RunOnLoginCheckbox;
         private TableLayoutPanel fontImageSizeTableLayout;
         private NumericUpDown FontSizeInput;
-        private Label label6;
+        private Label IconSizeLabel;
         private RadioButton IconSizeLargeCheckbox;
         private RadioButton IconSizeSmallCheckbox;
     }
