@@ -11,8 +11,8 @@ public partial class ShortcutKeyForm : Form
         InitializeComponent();
         Text = R.Shortcut_Key;
         MessageLabel.Text = R.Press_the_keys_to_use_as_the_shortcut_key;
-        OKButton.Text = R.OK;
-        CancelButton.Text = R.Cancel;
+        ButtonOK.Text = R.OK;
+        ButtonCancel.Text = R.Cancel;
         HandleCreated += SetTheme;
         if (Handle != 0)
         {
@@ -83,8 +83,8 @@ public partial class ShortcutKeyForm : Form
             text += $" {keyCode}";
             keyOK = true;
         }
-        OKButton.Enabled = keyOK;
-        if (keyOK) OKButton.Focus();
+        ButtonOK.Enabled = keyOK;
+        if (keyOK) ButtonOK.Focus();
 
         Hotkey = string.Join(" + ", text.Trim().Split(' '));
     }

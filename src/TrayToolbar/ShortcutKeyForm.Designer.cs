@@ -28,33 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            CancelButton = new Button();
-            OKButton = new Button();
+            ButtonCancel = new Button();
+            ButtonOK = new Button();
             MessageLabel = new Label();
             HotkeyValue = new Label();
             SuspendLayout();
             // 
-            // CancelButton
+            // ButtonCancel
             // 
-            CancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            CancelButton.DialogResult = DialogResult.Cancel;
-            CancelButton.Location = new Point(128, 162);
-            CancelButton.Name = "CancelButton";
-            CancelButton.Size = new Size(100, 27);
-            CancelButton.TabIndex = 1;
-            CancelButton.Text = "Cancel";
-            CancelButton.UseVisualStyleBackColor = true;
+            ButtonCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            ButtonCancel.DialogResult = DialogResult.Cancel;
+            ButtonCancel.Location = new Point(128, 162);
+            ButtonCancel.Name = "ButtonCancel";
+            ButtonCancel.Size = new Size(100, 27);
+            ButtonCancel.TabIndex = 1;
+            ButtonCancel.Text = "Cancel";
+            ButtonCancel.UseVisualStyleBackColor = true;
             // 
-            // OKButton
+            // ButtonOK
             // 
-            OKButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            OKButton.DialogResult = DialogResult.OK;
-            OKButton.Location = new Point(12, 162);
-            OKButton.Name = "OKButton";
-            OKButton.Size = new Size(100, 27);
-            OKButton.TabIndex = 0;
-            OKButton.Text = "OK";
-            OKButton.UseVisualStyleBackColor = true;
+            ButtonOK.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            ButtonOK.DialogResult = DialogResult.OK;
+            ButtonOK.Location = new Point(12, 162);
+            ButtonOK.Name = "ButtonOK";
+            ButtonOK.Size = new Size(100, 27);
+            ButtonOK.TabIndex = 0;
+            ButtonOK.Text = "OK";
+            ButtonOK.UseVisualStyleBackColor = true;
             // 
             // MessageLabel
             // 
@@ -82,15 +82,15 @@
             // 
             // ShortcutKeyForm
             // 
-            AcceptButton = OKButton;
+            AcceptButton = ButtonOK;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            CancelButton = CancelButton;
+            CancelButton = ButtonCancel;
             ClientSize = new Size(240, 201);
             Controls.Add(HotkeyValue);
             Controls.Add(MessageLabel);
-            Controls.Add(OKButton);
-            Controls.Add(CancelButton);
+            Controls.Add(ButtonOK);
+            Controls.Add(ButtonCancel);
             KeyPreview = true;
             MaximizeBox = false;
             MinimizeBox = false;
@@ -106,8 +106,8 @@
 
         #endregion
 
-        private Button CancelButton;
-        private Button OKButton;
+        private Button ButtonCancel;
+        private Button ButtonOK;
         private Label MessageLabel;
         private Label HotkeyValue;
     }
