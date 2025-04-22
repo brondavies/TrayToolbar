@@ -11,6 +11,8 @@ namespace TrayToolbar.Models
 
         public string[] IgnoreFiles { get; set; } = [".bak", ".config", ".dll", ".ico", ".ini"];
 
+        public string[] IncludeFiles { get; set; } = [".*"];
+
         [Obsolete("IgnoreFileTypes is obsolete", true)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string[]? IgnoreFileTypes
@@ -53,7 +55,8 @@ namespace TrayToolbar.Models
 
         public List<FolderConfig> Folders { get; set; } = [];
 
-        internal bool IncludesFile(string f) => !IgnoreFiles.Any(i => f.IsMatch("." + i.Replace(".", "\\.")));
+        internal bool IncludesFile(string f) => !IgnoreFiles.Any(i => f.IsMatch("." + i.Replace(".", "\\.")))
+            && IncludeFiles.DefaultIfEmpty(".*").Any(i => f.IsMatch("." + i.Replace(".", "\\.")));
     }
 
     public class FolderConfig

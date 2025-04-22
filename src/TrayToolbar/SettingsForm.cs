@@ -56,6 +56,7 @@ public partial class SettingsForm : Form
     private void LoadResources()
     {
         FoldersLabel.Text = R.Folders;
+        IncludeFileTypesLabel.Text = R.Include_files;
         ExcludeFileTypesLabel.Text = R.Exclude_files;
         ThemeLabel.Text = R.Theme;
         ExcludeFoldersLabel.Text = R.Exclude_folders;
@@ -264,6 +265,7 @@ public partial class SettingsForm : Form
         }
         Configuration.Folders.ForEach(f => AddFolder(f, i++));
         FoldersUpdated();
+        IncludeFilesTextBox.Text = Configuration.IncludeFiles.Join("; ");
         IgnoreFilesTextBox.Text = Configuration.IgnoreFiles.Join("; ");
         IgnoreFoldersTextBox.Text = Configuration.IgnoreFolders.Join("; ");
         FontSizeInput.Text = Configuration.FontSize.ToString();
@@ -515,6 +517,7 @@ public partial class SettingsForm : Form
         }
 
         Configuration.Folders = FolderControls().Select(c => c.Config).ToList();
+        Configuration.IncludeFiles = IncludeFilesTextBox.Text.SplitPaths();
         Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.SplitPaths();
         Configuration.IgnoreFolders = IgnoreFoldersTextBox.Text.SplitPaths();
         Configuration.Theme = (int)ThemeToggleButton.Theme;

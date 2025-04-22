@@ -201,4 +201,22 @@
   <data name="Large" xml:space="preserve">
     <value>大的</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>好的</value>
+  </data>
+  <data name="Press the keys to use as the shortcut key" xml:space="preserve">
+    <value>按下可用作快捷键的键</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>放</value>
+  </data>
+  <data name="Shortcut Key" xml:space="preserve">
+    <value>快捷键</value>
+  </data>
+  <data name="Include files" xml:space="preserve">
+    <value>包括文件类型</value>
+  </data>
 </root>

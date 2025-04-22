@@ -35,6 +35,8 @@
             SaveButton = new Button();
             NewVersionLabel = new LinkLabel();
             tableLayout = new TableLayoutPanel();
+            IncludeFilesTextBox = new TextBox();
+            IncludeFileTypesLabel = new Label();
             FoldersLabel = new Label();
             ExcludeFileTypesLabel = new Label();
             ExcludeFoldersLabel = new Label();
@@ -44,13 +46,14 @@
             FoldersLayout = new FlowLayoutPanel();
             AddFolderButton = new Button();
             IgnoreFilesTextBox = new TextBox();
-            ThemeToggleButton = new Controls.ThemeToggle();
+            ThemeToggleButton = new TrayToolbar.Controls.ThemeToggle();
             RunOnLoginCheckbox = new CheckBox();
             fontImageSizeTableLayout = new TableLayoutPanel();
             IconSizeLargeCheckbox = new RadioButton();
             IconSizeLabel = new Label();
             FontSizeInput = new NumericUpDown();
             IconSizeSmallCheckbox = new RadioButton();
+            row2col1placeholder = new Label();
             RightClickMenu = new ContextMenuStrip(components);
             LeftClickMenu = new ContextMenuStrip(components);
             FolderDialog = new FolderBrowserDialog();
@@ -84,7 +87,7 @@
             CancelBtn.MinimumSize = new Size(100, 25);
             CancelBtn.Name = "CancelBtn";
             CancelBtn.Size = new Size(100, 27);
-            CancelBtn.TabIndex = 2;
+            CancelBtn.TabIndex = 1;
             CancelBtn.Text = "Cancel";
             CancelBtn.UseVisualStyleBackColor = true;
             CancelBtn.Click += CancelBtn_Click;
@@ -97,7 +100,7 @@
             SaveButton.MinimumSize = new Size(100, 25);
             SaveButton.Name = "SaveButton";
             SaveButton.Size = new Size(100, 27);
-            SaveButton.TabIndex = 1;
+            SaveButton.TabIndex = 0;
             SaveButton.Text = "Save";
             SaveButton.UseVisualStyleBackColor = true;
             SaveButton.Click += SaveButton_Click;
@@ -114,7 +117,7 @@
             NewVersionLabel.Name = "NewVersionLabel";
             NewVersionLabel.Padding = new Padding(24, 0, 0, 0);
             NewVersionLabel.Size = new Size(168, 33);
-            NewVersionLabel.TabIndex = 10;
+            NewVersionLabel.TabIndex = 0;
             NewVersionLabel.TabStop = true;
             NewVersionLabel.Text = "A new version is available!";
             NewVersionLabel.TextAlign = ContentAlignment.MiddleLeft;
@@ -129,24 +132,28 @@
             tableLayout.ColumnCount = 2;
             tableLayout.ColumnStyles.Add(new ColumnStyle());
             tableLayout.ColumnStyles.Add(new ColumnStyle());
+            tableLayout.Controls.Add(IncludeFilesTextBox, 1, 2);
+            tableLayout.Controls.Add(IncludeFileTypesLabel, 0, 2);
             tableLayout.Controls.Add(FoldersLabel, 0, 0);
-            tableLayout.Controls.Add(ExcludeFileTypesLabel, 0, 2);
-            tableLayout.Controls.Add(ExcludeFoldersLabel, 0, 3);
-            tableLayout.Controls.Add(IgnoreFoldersTextBox, 1, 3);
-            tableLayout.Controls.Add(ThemeLabel, 0, 4);
-            tableLayout.Controls.Add(MenuFontSizeLabel, 0, 5);
+            tableLayout.Controls.Add(ExcludeFileTypesLabel, 0, 3);
+            tableLayout.Controls.Add(ExcludeFoldersLabel, 0, 4);
+            tableLayout.Controls.Add(IgnoreFoldersTextBox, 1, 4);
+            tableLayout.Controls.Add(ThemeLabel, 0, 5);
+            tableLayout.Controls.Add(MenuFontSizeLabel, 0, 6);
             tableLayout.Controls.Add(FoldersLayout, 1, 0);
             tableLayout.Controls.Add(AddFolderButton, 1, 1);
-            tableLayout.Controls.Add(IgnoreFilesTextBox, 1, 2);
-            tableLayout.Controls.Add(ThemeToggleButton, 1, 4);
-            tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 6);
-            tableLayout.Controls.Add(fontImageSizeTableLayout, 1, 5);
+            tableLayout.Controls.Add(IgnoreFilesTextBox, 1, 3);
+            tableLayout.Controls.Add(ThemeToggleButton, 1, 5);
+            tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 7);
+            tableLayout.Controls.Add(fontImageSizeTableLayout, 1, 6);
+            tableLayout.Controls.Add(row2col1placeholder, 0, 1);
             tableLayout.Dock = DockStyle.Fill;
             tableLayout.Location = new Point(10, 10);
             tableLayout.Margin = new Padding(10);
             tableLayout.Name = "tableLayout";
-            tableLayout.RowCount = 7;
+            tableLayout.RowCount = 8;
             tableLayout.RowStyles.Add(new RowStyle());
+            tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
@@ -155,6 +162,28 @@
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.Size = new Size(520, 318);
             tableLayout.TabIndex = 3;
+            // 
+            // IncludeFilesTextBox
+            // 
+            IncludeFilesTextBox.BorderStyle = BorderStyle.FixedSingle;
+            IncludeFilesTextBox.Dock = DockStyle.Top;
+            IncludeFilesTextBox.Location = new Point(116, 78);
+            IncludeFilesTextBox.Name = "IncludeFilesTextBox";
+            IncludeFilesTextBox.PlaceholderText = ".*";
+            IncludeFilesTextBox.Size = new Size(414, 23);
+            IncludeFilesTextBox.TabIndex = 2;
+            // 
+            // IncludeFileTypesLabel
+            // 
+            IncludeFileTypesLabel.AutoSize = true;
+            IncludeFileTypesLabel.Dock = DockStyle.Top;
+            IncludeFileTypesLabel.Location = new Point(3, 75);
+            IncludeFileTypesLabel.Name = "IncludeFileTypesLabel";
+            IncludeFileTypesLabel.Padding = new Padding(5);
+            IncludeFileTypesLabel.Size = new Size(107, 25);
+            IncludeFileTypesLabel.TabIndex = 16;
+            IncludeFileTypesLabel.Text = "Include file types";
+            IncludeFileTypesLabel.TextAlign = ContentAlignment.MiddleRight;
             // 
             // FoldersLabel
             // 
@@ -172,7 +201,7 @@
             // 
             ExcludeFileTypesLabel.AutoSize = true;
             ExcludeFileTypesLabel.Dock = DockStyle.Top;
-            ExcludeFileTypesLabel.Location = new Point(3, 75);
+            ExcludeFileTypesLabel.Location = new Point(3, 125);
             ExcludeFileTypesLabel.Name = "ExcludeFileTypesLabel";
             ExcludeFileTypesLabel.Padding = new Padding(5);
             ExcludeFileTypesLabel.Size = new Size(107, 25);
@@ -184,7 +213,7 @@
             // 
             ExcludeFoldersLabel.AutoSize = true;
             ExcludeFoldersLabel.Dock = DockStyle.Top;
-            ExcludeFoldersLabel.Location = new Point(3, 125);
+            ExcludeFoldersLabel.Location = new Point(3, 175);
             ExcludeFoldersLabel.Name = "ExcludeFoldersLabel";
             ExcludeFoldersLabel.Padding = new Padding(5);
             ExcludeFoldersLabel.Size = new Size(107, 25);
@@ -196,7 +225,7 @@
             // 
             IgnoreFoldersTextBox.BorderStyle = BorderStyle.FixedSingle;
             IgnoreFoldersTextBox.Dock = DockStyle.Top;
-            IgnoreFoldersTextBox.Location = new Point(116, 128);
+            IgnoreFoldersTextBox.Location = new Point(116, 178);
             IgnoreFoldersTextBox.Name = "IgnoreFoldersTextBox";
             IgnoreFoldersTextBox.PlaceholderText = ".git; .github";
             IgnoreFoldersTextBox.Size = new Size(414, 23);
@@ -206,7 +235,7 @@
             // 
             ThemeLabel.AutoSize = true;
             ThemeLabel.Dock = DockStyle.Top;
-            ThemeLabel.Location = new Point(3, 175);
+            ThemeLabel.Location = new Point(3, 225);
             ThemeLabel.Name = "ThemeLabel";
             ThemeLabel.Padding = new Padding(5);
             ThemeLabel.Size = new Size(107, 25);
@@ -218,7 +247,7 @@
             // 
             MenuFontSizeLabel.AutoSize = true;
             MenuFontSizeLabel.Dock = DockStyle.Top;
-            MenuFontSizeLabel.Location = new Point(3, 225);
+            MenuFontSizeLabel.Location = new Point(3, 275);
             MenuFontSizeLabel.Name = "MenuFontSizeLabel";
             MenuFontSizeLabel.Padding = new Padding(5);
             MenuFontSizeLabel.Size = new Size(107, 25);
@@ -238,7 +267,7 @@
             FoldersLayout.MinimumSize = new Size(420, 0);
             FoldersLayout.Name = "FoldersLayout";
             FoldersLayout.Size = new Size(420, 0);
-            FoldersLayout.TabIndex = 11;
+            FoldersLayout.TabIndex = 0;
             FoldersLayout.WrapContents = false;
             // 
             // AddFolderButton
@@ -250,7 +279,7 @@
             AddFolderButton.Name = "AddFolderButton";
             AddFolderButton.Padding = new Padding(32, 0, 0, 0);
             AddFolderButton.Size = new Size(158, 30);
-            AddFolderButton.TabIndex = 0;
+            AddFolderButton.TabIndex = 1;
             AddFolderButton.Text = "Add Folder";
             AddFolderButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             AddFolderButton.UseVisualStyleBackColor = true;
@@ -260,7 +289,7 @@
             // 
             IgnoreFilesTextBox.BorderStyle = BorderStyle.FixedSingle;
             IgnoreFilesTextBox.Dock = DockStyle.Top;
-            IgnoreFilesTextBox.Location = new Point(116, 78);
+            IgnoreFilesTextBox.Location = new Point(116, 128);
             IgnoreFilesTextBox.Name = "IgnoreFilesTextBox";
             IgnoreFilesTextBox.PlaceholderText = ".bak; .config; .dll; .ico; .ini";
             IgnoreFilesTextBox.Size = new Size(414, 23);
@@ -270,7 +299,7 @@
             // 
             ThemeToggleButton.AutoSize = true;
             ThemeToggleButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ThemeToggleButton.Location = new Point(116, 178);
+            ThemeToggleButton.Location = new Point(116, 228);
             ThemeToggleButton.Name = "ThemeToggleButton";
             ThemeToggleButton.Size = new Size(182, 25);
             ThemeToggleButton.TabIndex = 5;
@@ -280,7 +309,7 @@
             // RunOnLoginCheckbox
             // 
             RunOnLoginCheckbox.AutoSize = true;
-            RunOnLoginCheckbox.Location = new Point(116, 278);
+            RunOnLoginCheckbox.Location = new Point(116, 328);
             RunOnLoginCheckbox.Name = "RunOnLoginCheckbox";
             RunOnLoginCheckbox.Size = new Size(97, 19);
             RunOnLoginCheckbox.TabIndex = 9;
@@ -300,7 +329,7 @@
             fontImageSizeTableLayout.Controls.Add(FontSizeInput, 0, 0);
             fontImageSizeTableLayout.Controls.Add(IconSizeSmallCheckbox, 2, 0);
             fontImageSizeTableLayout.Dock = DockStyle.Fill;
-            fontImageSizeTableLayout.Location = new Point(116, 228);
+            fontImageSizeTableLayout.Location = new Point(116, 278);
             fontImageSizeTableLayout.Name = "fontImageSizeTableLayout";
             fontImageSizeTableLayout.RowCount = 1;
             fontImageSizeTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
@@ -313,7 +342,7 @@
             IconSizeLargeCheckbox.Location = new Point(312, 3);
             IconSizeLargeCheckbox.Name = "IconSizeLargeCheckbox";
             IconSizeLargeCheckbox.Size = new Size(54, 19);
-            IconSizeLargeCheckbox.TabIndex = 8;
+            IconSizeLargeCheckbox.TabIndex = 3;
             IconSizeLargeCheckbox.Text = "Large";
             IconSizeLargeCheckbox.UseVisualStyleBackColor = true;
             IconSizeLargeCheckbox.CheckedChanged += IconSizeLargeCheckbox_CheckedChanged;
@@ -326,7 +355,7 @@
             IconSizeLabel.Name = "IconSizeLabel";
             IconSizeLabel.Padding = new Padding(5);
             IconSizeLabel.Size = new Size(97, 25);
-            IconSizeLabel.TabIndex = 14;
+            IconSizeLabel.TabIndex = 1;
             IconSizeLabel.Text = "Icon Size";
             IconSizeLabel.TextAlign = ContentAlignment.MiddleRight;
             // 
@@ -337,7 +366,7 @@
             FontSizeInput.Minimum = new decimal(new int[] { 9, 0, 0, 0 });
             FontSizeInput.Name = "FontSizeInput";
             FontSizeInput.Size = new Size(50, 23);
-            FontSizeInput.TabIndex = 6;
+            FontSizeInput.TabIndex = 0;
             FontSizeInput.Value = new decimal(new int[] { 9, 0, 0, 0 });
             // 
             // IconSizeSmallCheckbox
@@ -347,11 +376,19 @@
             IconSizeSmallCheckbox.Location = new Point(209, 3);
             IconSizeSmallCheckbox.Name = "IconSizeSmallCheckbox";
             IconSizeSmallCheckbox.Size = new Size(54, 19);
-            IconSizeSmallCheckbox.TabIndex = 7;
+            IconSizeSmallCheckbox.TabIndex = 2;
             IconSizeSmallCheckbox.TabStop = true;
             IconSizeSmallCheckbox.Text = "Small";
             IconSizeSmallCheckbox.UseVisualStyleBackColor = true;
             IconSizeSmallCheckbox.CheckedChanged += IconSizeSmallCheckbox_CheckedChanged;
+            // 
+            // row2col1placeholder
+            // 
+            row2col1placeholder.AutoSize = true;
+            row2col1placeholder.Location = new Point(3, 25);
+            row2col1placeholder.Name = "row2col1placeholder";
+            row2col1placeholder.Size = new Size(0, 15);
+            row2col1placeholder.TabIndex = 15;
             // 
             // RightClickMenu
             // 
@@ -422,5 +459,8 @@
         private Label IconSizeLabel;
         private RadioButton IconSizeLargeCheckbox;
         private RadioButton IconSizeSmallCheckbox;
+        private Label row2col1placeholder;
+        private TextBox IncludeFilesTextBox;
+        private Label IncludeFileTypesLabel;
     }
 }

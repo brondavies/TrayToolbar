@@ -201,4 +201,22 @@
   <data name="Large" xml:space="preserve">
     <value>크기가 큰</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>분명한</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>좋아요</value>
+  </data>
+  <data name="Press the keys to use as the shortcut key" xml:space="preserve">
+    <value>단축키로 사용할 키를 누르세요</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>세트</value>
+  </data>
+  <data name="Shortcut Key" xml:space="preserve">
+    <value>단축키</value>
+  </data>
+  <data name="Include files" xml:space="preserve">
+    <value>파일 유형 포함</value>
+  </data>
 </root>

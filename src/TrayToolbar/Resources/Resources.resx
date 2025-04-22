@@ -232,4 +232,7 @@
   <data name="Shortcut Key" xml:space="preserve">
     <value>Shortcut Key</value>
   </data>
+  <data name="Include files" xml:space="preserve">
+    <value>Include file types</value>
+  </data>
 </root>

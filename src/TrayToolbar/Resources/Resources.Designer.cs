@@ -199,6 +199,15 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include file types.
+        /// </summary>
+        internal static string Include_files {
+            get {
+                return ResourceManager.GetString("Include files", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include Subfolders.
         /// </summary>
         internal static string Include_Subfolders {

@@ -201,4 +201,22 @@
   <data name="Large" xml:space="preserve">
     <value>Большой</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Прозрачный</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>ХОРОШО</value>
+  </data>
+  <data name="Press the keys to use as the shortcut key" xml:space="preserve">
+    <value>Нажмите клавиши, которые будут использоваться в качестве сочетания клавиш</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Набор</value>
+  </data>
+  <data name="Shortcut Key" xml:space="preserve">
+    <value>Сочетание клавиш</value>
+  </data>
+  <data name="Include files" xml:space="preserve">
+    <value>включенные файлы</value>
+  </data>
 </root>

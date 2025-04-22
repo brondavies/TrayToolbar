@@ -201,4 +201,22 @@
   <data name="Large" xml:space="preserve">
     <value>Grandi</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Chiaro</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Press the keys to use as the shortcut key" xml:space="preserve">
+    <value>Premere i tasti da utilizzare come tasto di scelta rapida</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Impostato</value>
+  </data>
+  <data name="Shortcut Key" xml:space="preserve">
+    <value>Tasto di scelta rapida</value>
+  </data>
+  <data name="Include files" xml:space="preserve">
+    <value>Inclusi file</value>
+  </data>
 </root>

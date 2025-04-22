@@ -201,4 +201,22 @@
   <data name="Large" xml:space="preserve">
     <value>Grand</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clair</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>D'ACCORD</value>
+  </data>
+  <data name="Press the keys to use as the shortcut key" xml:space="preserve">
+    <value>Appuyez sur les touches à utiliser comme raccourci clavier</value>
+  </data>
+  <data name="Set" xml:space="preserve">
+    <value>Définir</value>
+  </data>
+  <data name="Shortcut Key" xml:space="preserve">
+    <value>Touche de raccourci</value>
+  </data>
+  <data name="Include files" xml:space="preserve">
+    <value>Inclure des fichiers</value>
+  </data>
 </root>

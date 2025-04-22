@@ -28,6 +28,7 @@ namespace TrayToolbar
             {
                 File.WriteAllText(Path.Combine(ConfigHelper.ApplicationRoot, $"Error-{DateTime.Now:yyyyMMddHHmmss}.txt"), $"{e}");
             }
+            HotKeys.UnregisterAll();
         }
 
         internal static void Launch(string fileName)
