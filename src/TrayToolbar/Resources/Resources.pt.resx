@@ -202,19 +202,19 @@
     <value>Grande</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Claro</value>
+    <value>Limpar</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>
   <data name="Press the keys to use as the shortcut key" xml:space="preserve">
-    <value>Pressione as teclas para usar como tecla de atalho</value>
+    <value>Pressione as teclas para usar como a tecla de atalho</value>
   </data>
   <data name="Set" xml:space="preserve">
     <value>Definir</value>
   </data>
   <data name="Shortcut Key" xml:space="preserve">
-    <value>Tecla de atalho</value>
+    <value>Tecla de Atalho</value>
   </data>
   <data name="Include files" xml:space="preserve">
     <value>Arquivos incluídos</value>
