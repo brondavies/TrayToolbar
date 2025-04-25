@@ -38,7 +38,7 @@ public static class ShellIcons
             if (fi.Exists && fi.Length < 1_000_000) // limit to files under 1MB to guard against potential memory overuse
             {
                 var dict = new Dictionary<string, string>();
-                foreach (var line in File.ReadAllLinesAsync(path).Result)
+                foreach (var line in File.ReadAllLines(path))
                 {
                     var parts = line.Split('=', 2);
                     if (parts.Length == 2)
