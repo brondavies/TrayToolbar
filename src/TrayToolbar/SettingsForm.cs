@@ -37,7 +37,7 @@ public partial class SettingsForm : Form
         InitializeComponent();
         SetupMenu();
         PopulateConfig();
-        LoadResources();
+        LoadResources(Configuration.Language);
         if (!ValidateFolderConfigurations())
         {
             ShowNormal();
@@ -69,7 +69,7 @@ public partial class SettingsForm : Form
     const string Command_Open = "Open";
     const string Command_Exit = "Exit";
 
-    private void LoadResources(string language = "")
+    private void LoadResources(string? language)
     {
         if (language.HasValue())
         {
