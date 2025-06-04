@@ -124,7 +124,7 @@
     <value>Erreur</value>
   </data>
   <data name="Exclude files" xml:space="preserve">
-    <value>Exclure des fichiers</value>
+    <value>Fichiers à exclure</value>
   </data>
   <data name="Exit" xml:space="preserve">
     <value>Quitter</value>
@@ -136,7 +136,7 @@
     <value>Options</value>
   </data>
   <data name="Run on log in" xml:space="preserve">
-    <value>Exécuter lors de la connexion</value>
+    <value>Lancer à l'ouverture de session</value>
   </data>
   <data name="Save" xml:space="preserve">
     <value>Enregistrer</value>
@@ -160,16 +160,16 @@
     <value>Une nouvelle version est disponible!</value>
   </data>
   <data name="Add Folder" xml:space="preserve">
-    <value>Ajouter le dossier</value>
+    <value>Ajouter un dossier</value>
   </data>
   <data name="Browse Folder" xml:space="preserve">
-    <value>Parcourir le dossier</value>
+    <value>Choisir un dossier</value>
   </data>
   <data name="Include Subfolders" xml:space="preserve">
     <value>Inclure les sous-dossiers</value>
   </data>
   <data name="Open Folder" xml:space="preserve">
-    <value>Dossier ouvert</value>
+    <value>Ouvrir le dossier</value>
   </data>
   <data name="Remove Folder" xml:space="preserve">
     <value>Supprimer le dossier</value>
@@ -178,7 +178,7 @@
     <value>Sombre</value>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Léger</value>
+    <value>Clair</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>Système</value>
@@ -187,7 +187,7 @@
     <value>Thème</value>
   </data>
   <data name="Exclude folders" xml:space="preserve">
-    <value>Exclure des dossiers</value>
+    <value>Dossiers à exclure</value>
   </data>
   <data name="Menu Font Size" xml:space="preserve">
     <value>Taille de la police du menu</value>
@@ -202,10 +202,10 @@
     <value>Grand</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clair</value>
+    <value>Effacer</value>
   </data>
   <data name="OK" xml:space="preserve">
-    <value>D'ACCORD</value>
+    <value>Valider</value>
   </data>
   <data name="Press the keys to use as the shortcut key" xml:space="preserve">
     <value>Appuyez sur les touches à utiliser comme raccourci clavier</value>
@@ -217,6 +217,6 @@
     <value>Touche de raccourci</value>
   </data>
   <data name="Include files" xml:space="preserve">
-    <value>Inclure des fichiers</value>
+    <value>Fichiers à inclure</value>
   </data>
 </root>
