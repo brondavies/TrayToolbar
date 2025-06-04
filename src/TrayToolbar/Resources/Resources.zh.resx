@@ -219,4 +219,7 @@
   <data name="Include files" xml:space="preserve">
     <value>包括文件类型</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
 </root>

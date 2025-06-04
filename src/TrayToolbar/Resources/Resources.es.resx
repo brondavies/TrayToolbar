@@ -219,4 +219,7 @@
   <data name="Include files" xml:space="preserve">
     <value>Archivos incluidos</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Idioma</value>
+  </data>
 </root>
