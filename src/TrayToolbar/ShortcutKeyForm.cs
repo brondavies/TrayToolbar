@@ -37,7 +37,7 @@ public partial class ShortcutKeyForm : Form
     {
         e.SuppressKeyPress = true;
         e.Handled = true;
-        SetText(keyCode: e.KeyCode,
+        SetHotkey(keyCode: e.KeyCode,
             win: PInvoke.GetAsyncKeyState((int)Keys.LWin) < 0 || PInvoke.GetAsyncKeyState((int)Keys.RWin) < 0,
             ctrl: e.Modifiers.HasFlag(Keys.Control),
             alt: e.Modifiers.HasFlag(Keys.Alt),
@@ -57,12 +57,13 @@ public partial class ShortcutKeyForm : Form
         Keys.Clear, Keys.OemClear,
     ];
 
-    private void SetText(Keys keyCode, bool win, bool ctrl, bool alt, bool shift)
+    private void SetHotkey(Keys keyCode, bool win, bool ctrl, bool alt, bool shift)
     {
         var text = "";
-        var keyOK = false;
+        var modifier = ctrl || alt || shift;
+        var keyOK = win && modifier;
 
-        if (win)
+        if (win && !modifier)
         {
             text = "\u229E";
         }
@@ -77,6 +78,10 @@ public partial class ShortcutKeyForm : Form
         if (shift)
         {
             text += " SHIFT";
+        }
+        if (win && modifier)
+        {
+            text += " \u229E";
         }
         if (!ExcludedKeys.Contains(keyCode))
         {
