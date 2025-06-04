@@ -715,6 +715,7 @@ public partial class SettingsForm : Form
         {
             code = SupportedLanguages[idx - 1].TwoLetterISOLanguageName;
         }
+        Configuration.Language = code;
         LoadResources(code);
     }
 }
