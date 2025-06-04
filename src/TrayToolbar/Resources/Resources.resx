@@ -235,4 +235,7 @@
   <data name="Include files" xml:space="preserve">
     <value>Include file types</value>
   </data>
+  <data name="Language" xml:space="preserve">
+    <value>Language</value>
+  </data>
 </root>

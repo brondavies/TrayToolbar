@@ -10,13 +10,18 @@ namespace TrayToolbar.Controls
         public ThemeToggle()
         {
             InitializeComponent();
-            SystemRadioButton.Text = R.System;
-            LightRadioButton.Text = R.Light;
-            DarkRadioButton.Text = R.Dark;
+            UpdateConfig();
 
             SystemRadioButton.CheckedChanged += Changed;
             LightRadioButton.CheckedChanged += Changed;
             DarkRadioButton.CheckedChanged += Changed;
+        }
+
+        public void UpdateConfig()
+        {
+            SystemRadioButton.Text = R.System;
+            LightRadioButton.Text = R.Light;
+            DarkRadioButton.Text = R.Dark;
         }
 
         private void Changed(object? sender, EventArgs e)

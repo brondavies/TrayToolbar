@@ -35,6 +35,8 @@
             SaveButton = new Button();
             NewVersionLabel = new LinkLabel();
             tableLayout = new TableLayoutPanel();
+            LanguageLabel = new Label();
+            row8col1placeholder = new Label();
             IncludeFilesTextBox = new TextBox();
             IncludeFileTypesLabel = new Label();
             FoldersLabel = new Label();
@@ -53,6 +55,7 @@
             IconSizeLabel = new Label();
             FontSizeInput = new NumericUpDown();
             IconSizeSmallCheckbox = new RadioButton();
+            LanguageSelectList = new TrayToolbar.Controls.CustomComboBox();
             row2col1placeholder = new Label();
             RightClickMenu = new ContextMenuStrip(components);
             LeftClickMenu = new ContextMenuStrip(components);
@@ -73,7 +76,7 @@
             flowLayoutPanel1.Controls.Add(NewVersionLabel);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
-            flowLayoutPanel1.Location = new Point(10, 328);
+            flowLayoutPanel1.Location = new Point(10, 433);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(3);
             flowLayoutPanel1.Size = new Size(520, 39);
@@ -132,6 +135,8 @@
             tableLayout.ColumnCount = 2;
             tableLayout.ColumnStyles.Add(new ColumnStyle());
             tableLayout.ColumnStyles.Add(new ColumnStyle());
+            tableLayout.Controls.Add(LanguageLabel, 0, 7);
+            tableLayout.Controls.Add(row8col1placeholder, 0, 8);
             tableLayout.Controls.Add(IncludeFilesTextBox, 1, 2);
             tableLayout.Controls.Add(IncludeFileTypesLabel, 0, 2);
             tableLayout.Controls.Add(FoldersLabel, 0, 0);
@@ -144,14 +149,15 @@
             tableLayout.Controls.Add(AddFolderButton, 1, 1);
             tableLayout.Controls.Add(IgnoreFilesTextBox, 1, 3);
             tableLayout.Controls.Add(ThemeToggleButton, 1, 5);
-            tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 7);
+            tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 8);
             tableLayout.Controls.Add(fontImageSizeTableLayout, 1, 6);
+            tableLayout.Controls.Add(LanguageSelectList, 1, 7);
             tableLayout.Controls.Add(row2col1placeholder, 0, 1);
             tableLayout.Dock = DockStyle.Fill;
             tableLayout.Location = new Point(10, 10);
             tableLayout.Margin = new Padding(10);
             tableLayout.Name = "tableLayout";
-            tableLayout.RowCount = 8;
+            tableLayout.RowCount = 9;
             tableLayout.RowStyles.Add(new RowStyle());
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
@@ -160,8 +166,32 @@
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayout.Size = new Size(520, 318);
+            tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            tableLayout.Size = new Size(520, 423);
             tableLayout.TabIndex = 3;
+            // 
+            // LanguageLabel
+            // 
+            LanguageLabel.AutoSize = true;
+            LanguageLabel.Dock = DockStyle.Top;
+            LanguageLabel.Location = new Point(3, 325);
+            LanguageLabel.Name = "LanguageLabel";
+            LanguageLabel.Padding = new Padding(5);
+            LanguageLabel.Size = new Size(107, 25);
+            LanguageLabel.TabIndex = 18;
+            LanguageLabel.Text = "Language";
+            LanguageLabel.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // row8col1placeholder
+            // 
+            row8col1placeholder.AutoSize = true;
+            row8col1placeholder.Dock = DockStyle.Top;
+            row8col1placeholder.Location = new Point(3, 375);
+            row8col1placeholder.Name = "row8col1placeholder";
+            row8col1placeholder.Padding = new Padding(5);
+            row8col1placeholder.Size = new Size(107, 25);
+            row8col1placeholder.TabIndex = 17;
+            row8col1placeholder.TextAlign = ContentAlignment.MiddleRight;
             // 
             // IncludeFilesTextBox
             // 
@@ -309,7 +339,7 @@
             // RunOnLoginCheckbox
             // 
             RunOnLoginCheckbox.AutoSize = true;
-            RunOnLoginCheckbox.Location = new Point(116, 328);
+            RunOnLoginCheckbox.Location = new Point(116, 378);
             RunOnLoginCheckbox.Name = "RunOnLoginCheckbox";
             RunOnLoginCheckbox.Size = new Size(97, 19);
             RunOnLoginCheckbox.TabIndex = 9;
@@ -382,12 +412,25 @@
             IconSizeSmallCheckbox.UseVisualStyleBackColor = true;
             IconSizeSmallCheckbox.CheckedChanged += IconSizeSmallCheckbox_CheckedChanged;
             // 
+            // LanguageSelectList
+            // 
+            LanguageSelectList.BorderColor = SystemColors.WindowFrame;
+            LanguageSelectList.DropDownStyle = ComboBoxStyle.DropDownList;
+            LanguageSelectList.FormattingEnabled = true;
+            LanguageSelectList.Items.AddRange(new object[] { "(System)", "English", "Español", "Français", "Deutsch", "Português", "Italiano", "日本語", "中文", "Русский", "한국어" });
+            LanguageSelectList.Location = new Point(116, 328);
+            LanguageSelectList.Name = "LanguageSelectList";
+            LanguageSelectList.Size = new Size(121, 23);
+            LanguageSelectList.TabIndex = 19;
+            LanguageSelectList.SelectedIndexChanged += LanguageSelectList_SelectedIndexChanged;
+            // 
             // row2col1placeholder
             // 
             row2col1placeholder.AutoSize = true;
+            row2col1placeholder.Dock = DockStyle.Top;
             row2col1placeholder.Location = new Point(3, 25);
             row2col1placeholder.Name = "row2col1placeholder";
-            row2col1placeholder.Size = new Size(0, 15);
+            row2col1placeholder.Size = new Size(107, 15);
             row2col1placeholder.TabIndex = 15;
             // 
             // RightClickMenu
@@ -409,7 +452,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(540, 377);
+            ClientSize = new Size(540, 482);
             Controls.Add(tableLayout);
             Controls.Add(flowLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -462,5 +505,8 @@
         private Label row2col1placeholder;
         private TextBox IncludeFilesTextBox;
         private Label IncludeFileTypesLabel;
+        private Label LanguageLabel;
+        private Label row8col1placeholder;
+        private TrayToolbar.Controls.CustomComboBox LanguageSelectList;
     }
 }

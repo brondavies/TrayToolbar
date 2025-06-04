@@ -9,7 +9,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <StartupObject>TrayToolbar.Program</StartupObject>
     <ApplicationIcon>Resources\TrayIcon.ico</ApplicationIcon>
-    <Version>1.4.1</Version>
+    <Version>1.4.2</Version>
     <Title>TrayToolbar</Title>
     <Copyright>© Brontech, LLC</Copyright>
     <PackageProjectUrl>https://github.com/brondavies/TrayToolbar</PackageProjectUrl>

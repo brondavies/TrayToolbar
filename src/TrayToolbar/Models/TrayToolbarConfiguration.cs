@@ -37,6 +37,8 @@ namespace TrayToolbar.Models
 
         public bool LargeIcons { get; set; }
 
+        public string? Language { get; set; }
+
         public bool CheckForUpdates { get; set; } = true;
 
         [Obsolete("Folder is obsolete", true)]

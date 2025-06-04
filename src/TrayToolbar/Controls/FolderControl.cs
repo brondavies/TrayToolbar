@@ -15,10 +15,6 @@ public partial class FolderControl : UserControl
     {
         InitializeComponent();
         UpdateConfig();
-        RecursiveCheckbox.Text = R.Include_Subfolders;
-        HotkeyLabel.Text = R.Shortcut_Key;
-        toolTips.SetToolTip(BrowseFolderButton, R.Browse_Folder);
-        toolTips.SetToolTip(DeleteFolderButton, R.Remove_Folder);
     }
 
     public bool ShowRemoveButton
@@ -59,6 +55,10 @@ public partial class FolderControl : UserControl
             Invoke(UpdateConfig);
             return;
         }
+        RecursiveCheckbox.Text = R.Include_Subfolders;
+        HotkeyLabel.Text = R.Shortcut_Key;
+        toolTips.SetToolTip(BrowseFolderButton, R.Browse_Folder);
+        toolTips.SetToolTip(DeleteFolderButton, R.Remove_Folder);
         if (config != null)
         {
             if (FolderComboBox != null) FolderComboBox.Text = config.Name;

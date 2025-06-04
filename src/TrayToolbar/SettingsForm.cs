@@ -1,4 +1,5 @@
 using System.Collections.Concurrent;
+using System.Globalization;
 using TrayToolbar.Controls;
 using TrayToolbar.Extensions;
 using TrayToolbar.Models;
@@ -16,12 +17,27 @@ public partial class SettingsForm : Form
 
     internal bool RightMouseClicked;
 
+    internal readonly CultureInfo DefaultCulture = CultureInfo.CurrentCulture;
+
+    internal readonly CultureInfo[] SupportedLanguages = [
+        CultureInfo.GetCultureInfo("en"),
+        CultureInfo.GetCultureInfo("es"),
+        CultureInfo.GetCultureInfo("fr"),
+        CultureInfo.GetCultureInfo("de"),
+        CultureInfo.GetCultureInfo("pt"),
+        CultureInfo.GetCultureInfo("it"),
+        CultureInfo.GetCultureInfo("ja"),
+        CultureInfo.GetCultureInfo("zh"),
+        CultureInfo.GetCultureInfo("ru"),
+        CultureInfo.GetCultureInfo("ko"),
+    ];
+
     public SettingsForm()
     {
         InitializeComponent();
-        LoadResources();
         SetupMenu();
         PopulateConfig();
+        LoadResources();
         if (!ValidateFolderConfigurations())
         {
             ShowNormal();
@@ -53,8 +69,18 @@ public partial class SettingsForm : Form
     const string Command_Open = "Open";
     const string Command_Exit = "Exit";
 
-    private void LoadResources()
+    private void LoadResources(string language = "")
     {
+        if (language.HasValue())
+        {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo(language);
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo(language);
+        }
+        else
+        {
+            Thread.CurrentThread.CurrentCulture = DefaultCulture;
+            Thread.CurrentThread.CurrentUICulture = DefaultCulture;
+        }
         FoldersLabel.Text = R.Folders;
         IncludeFileTypesLabel.Text = R.Include_files;
         ExcludeFileTypesLabel.Text = R.Exclude_files;
@@ -70,15 +96,22 @@ public partial class SettingsForm : Form
         AddFolderButton.Text = R.Add_Folder;
         Text = $"{R.TrayToolbar_Settings} ({ConfigHelper.ApplicationVersion})";
         NewVersionLabel.Text = R.A_new_version_is_available;
+        LanguageLabel.Text = R.Language;
 
         List<ToolStripItem> itemsToAdd = [
            new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
            new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = Command_Open },
            new ToolStripMenuItem { Text = R.Exit, CommandParameter = Command_Exit }
-       ];
+        ];
 
-
+        RightClickMenu.Items.Clear();
         RightClickMenu.Items.AddRange(itemsToAdd.ToArray());
+
+        foreach(var control in FolderControls())
+        {
+            control.UpdateConfig();
+        }
+        ThemeToggleButton.UpdateConfig();
     }
 
     private void ShowUpdateAvailable(string updateUri)
@@ -162,8 +195,10 @@ public partial class SettingsForm : Form
 
     private FileSystemEventHandler MenuItemChanged(FolderConfig folder)
     {
-        return (_, changed) => {
-            Invoke(() => {
+        return (_, changed) =>
+        {
+            Invoke(() =>
+            {
                 MenuItems[folder].DeleteMenu(changed.FullPath);
                 CreateMenuItem(changed.FullPath, folder);
             });
@@ -172,8 +207,10 @@ public partial class SettingsForm : Form
 
     private FileSystemEventHandler MenuItemCreated(FolderConfig folder)
     {
-        return (_, created) => {
-            Invoke(() => {
+        return (_, created) =>
+        {
+            Invoke(() =>
+            {
                 CreateMenuItem(created.FullPath, folder);
             });
         };
@@ -181,8 +218,10 @@ public partial class SettingsForm : Form
 
     private FileSystemEventHandler MenuItemDeleted(FolderConfig folder)
     {
-        return (_, deleted) => {
-            Invoke(() => {
+        return (_, deleted) =>
+        {
+            Invoke(() =>
+            {
                 MenuItems[folder].DeleteMenu(deleted.FullPath);
             });
         };
@@ -190,8 +229,10 @@ public partial class SettingsForm : Form
 
     private RenamedEventHandler MenuItemRenamed(FolderConfig folder)
     {
-        return (_, renamed) => {
-            Invoke(() => {
+        return (_, renamed) =>
+        {
+            Invoke(() =>
+            {
                 MenuItems[folder].DeleteMenu(renamed.OldFullPath);
                 CreateMenuItem(renamed.FullPath, folder);
             });
@@ -271,6 +312,7 @@ public partial class SettingsForm : Form
         FontSizeInput.Text = Configuration.FontSize.ToString();
         IconSizeLargeCheckbox.Checked = Configuration.LargeIcons;
         IconSizeSmallCheckbox.Checked = !Configuration.LargeIcons;
+        LanguageSelectList.SelectedIndex = SupportedLanguages.IndexOf(l => l.TwoLetterISOLanguageName == Configuration.Language) + 1;
         RunOnLoginCheckbox.Checked = ConfigHelper.IsAutoStartupConfigured();
         if (SystemTheme.IsDarkModeSupported())
         {
@@ -663,5 +705,16 @@ public partial class SettingsForm : Form
     private void SettingsForm_SystemColorsChanged(object sender, EventArgs e)
     {
         SettingsForm_SystemThemeChanged(sender, e);
+    }
+
+    private void LanguageSelectList_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        var idx = LanguageSelectList.SelectedIndex;
+        var code = "";
+        if (idx > 0 && idx <= SupportedLanguages.Length)
+        {
+            code = SupportedLanguages[idx - 1].TwoLetterISOLanguageName;
+        }
+        LoadResources(code);
     }
 }

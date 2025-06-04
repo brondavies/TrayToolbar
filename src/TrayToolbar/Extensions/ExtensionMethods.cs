@@ -26,6 +26,13 @@ public static class ExtensionMethods
         return !string.IsNullOrEmpty(value);
     }
 
+    public static int IndexOf<T>(this IList<T> value, Func<T, bool> predicate)
+    {
+        var index = value.Select((m, idx) => new { m, idx })
+            .FirstOrDefault(x => predicate.Invoke(x.m))?.idx;
+        return index ?? -1;
+    }
+
     public static bool Is(this string? value, string? compare)
     {
         if (value == compare) return true;
