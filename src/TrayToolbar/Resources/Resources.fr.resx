@@ -193,13 +193,13 @@
     <value>Taille de la police du menu</value>
   </data>
   <data name="Icon Size" xml:space="preserve">
-    <value>Taille de l'icône</value>
+    <value>Taille des icônes</value>
   </data>
   <data name="Small" xml:space="preserve">
-    <value>Petit</value>
+    <value>Petites</value>
   </data>
   <data name="Large" xml:space="preserve">
-    <value>Grand</value>
+    <value>Grandes</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Effacer</value>
