@@ -145,10 +145,10 @@
     <value>Der Ordner existiert nicht.</value>
   </data>
   <data name="The folder value must be set" xml:space="preserve">
-    <value>Der Ordnerwert muss festgelegt werden.</value>
+    <value>Der Ordnerpfad muss festgelegt werden.</value>
   </data>
   <data name="TrayToolbar" xml:space="preserve">
-    <value>Tray-Symbolleiste</value>
+    <value>TrayToolbar</value>
   </data>
   <data name="TrayToolbar Settings" xml:space="preserve">
     <value>TrayToolbar-Einstellungen</value>
@@ -202,7 +202,7 @@
     <value>Groß</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Klar</value>
+    <value>Löschen</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
@@ -211,7 +211,7 @@
     <value>Drücken Sie die Tasten, die Sie als Tastenkombination verwenden möchten</value>
   </data>
   <data name="Set" xml:space="preserve">
-    <value>Legen</value>
+    <value>Festlegen</value>
   </data>
   <data name="Shortcut Key" xml:space="preserve">
     <value>Tastenkombination</value>
