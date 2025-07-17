@@ -8,13 +8,15 @@ public class MenuItemCollection : ObservableCollection<ToolStripMenuItem>
     public MenuItemCollection() { }
     public bool NeedsRefresh { get; set; } = true;
 
-    public ToolStripMenuItem? CreateFolder(string path, string target, TrayToolbarConfiguration configuration, ToolStripItemClickedEventHandler clickHandler, MouseEventHandler mouseDownHandler)
+    public ToolStripMenuItem? CreateFolder(string path, string parentPath, string? targetPath, TrayToolbarConfiguration configuration, ToolStripItemClickedEventHandler clickHandler, MouseEventHandler mouseDownHandler)
     {
         var parts = path.Split(Path.DirectorySeparatorChar);
         ToolStripMenuItem? parent = null;
+        targetPath ??= parentPath;
         foreach (var part in parts)
         {
-            var exists = AddFolder(parent, part.ToMenuName(), target, clickHandler, mouseDownHandler, configuration, out ToolStripMenuItem? menu);
+            targetPath = Path.Combine(targetPath, part);
+            var exists = AddFolder(parent, part.Or(Path.GetFileName(targetPath)).ToMenuName(), targetPath, clickHandler, mouseDownHandler, configuration, out ToolStripMenuItem? menu);
             parent = menu;
             if (!exists && menu != null)
             {
@@ -49,16 +51,16 @@ public class MenuItemCollection : ObservableCollection<ToolStripMenuItem>
 
     private bool AddFolder(ToolStripMenuItem? parent, string name, string target, ToolStripItemClickedEventHandler handler, MouseEventHandler mouseDownHandler, TrayToolbarConfiguration configuration, out ToolStripMenuItem? menu)
     {
-        var result = false;//true if it was already added
+        var exists = false;//true if it was already added
         if (parent != null)
         {
             menu = (ToolStripMenuItem?)parent.DropDownItems.Find(name, false).FirstOrDefault();
-            result = menu != null;
+            exists = menu != null;
         }
         else
         {
             menu = this.FirstOrDefault(m => m.Name == name);
-            result = menu != null;
+            exists = menu != null;
         }
         if (menu == null)
         {
@@ -67,52 +69,77 @@ public class MenuItemCollection : ObservableCollection<ToolStripMenuItem>
                 Name = name,
                 Tag = target,
                 Image = target.GetImage(configuration.LargeIcons),
-                ImageScaling = ToolStripItemImageScaling.None
+                ImageScaling = ToolStripItemImageScaling.None,
+                CommandParameter = target,
+                ToolTipText = target
             };
             menu.MouseDown += mouseDownHandler;
+            var eventArgs = new ToolStripItemClickedEventArgs(menu);
+            menu.Click += (s, e) => handler.Invoke(s, eventArgs);
             menu.DropDownItemClicked += handler;
-            result = parent != null;
-            if (result)
+            exists = parent != null;
+            if (exists)
             {
                 var items = parent!.DropDownItems;
                 //Adds to the menu with folders first, alphabetically
                 items?.Insert(LastSubMenuIndex(parent.DropDownItems, menu.Name), menu);
             }
         }
-        return result;
+        return exists;
     }
 
     internal void CreateMenuItem(
         bool sequential,
         string file,
         FolderConfig folder,
-        TrayToolbarConfiguration configuration,
+        TrayToolbarConfiguration config,
         ToolStripItemClickedEventHandler clickHandler,
-        MouseEventHandler mouseDownHandler)
+        MouseEventHandler mouseDownHandler,
+        ToolStripMenuItem? submenu = null)
     {
-        ToolStripMenuItem? submenu = null;
         var parentPath = Path.GetDirectoryName(file);
-        if (parentPath.HasValue() && !parentPath.Is(folder.Name!.ToLocalPath()))
+        var folderPath = folder.Name!.ToLocalPath();
+        if (parentPath.HasValue() && !parentPath.Is(folderPath))
         {
-            if (configuration.IgnoreAllDotFiles && parentPath.Contains(@"\."))
+            if (config.IgnoreAllDotFiles && parentPath.Contains(@"\."))
                 return; //it's in a dot folder like .git or it's a dot file
-            if (configuration.IgnoreFolders.Contains(Path.GetFileName(parentPath)))
+            if (config.IgnoreFolders.Contains(Path.GetFileName(parentPath)))
                 return; //it's in an ignored folder name
-            var relativePath = Path.GetRelativePath(folder.Name!.ToLocalPath(), parentPath);
-            submenu = CreateFolder(relativePath, parentPath, configuration, clickHandler, mouseDownHandler);
+            var targetPath = submenu == null ? parentPath : file;
+            var relativePath = Path.GetRelativePath(folderPath, targetPath);
+            submenu ??= CreateFolder(relativePath, folderPath, null, config, clickHandler, mouseDownHandler);
         }
-        var menuText = Path.GetFileName(file);
-        if (configuration.HideFileExtensions || file.FileExtension().IsOneOf(".lnk", ".url"))
+        if (file.FileExtension() == ".lnk" && config.ShowFolderLinksAsSubMenu)
         {
-            menuText = Path.GetFileNameWithoutExtension(file);
+            // Check if file points to a folder
+            try
+            {
+                var targetPath = file.ResolveShortcutTarget();
+                if (targetPath.IsDirectory() && parentPath.HasValue())
+                {
+                    var targetDirName = Path.GetFileName(targetPath);
+                    var submenuName = Path.GetFileNameWithoutExtension(file);
+                    submenu = CreateFolder(submenuName == targetDirName ? "" : submenuName, parentPath, targetPath, config, clickHandler, mouseDownHandler);
+                    foreach (var f in EnumerateFiles(targetPath, folder.Recursive, config))
+                    {
+                        CreateMenuItem(sequential, f, folder.WithPath(targetPath), config, clickHandler, mouseDownHandler, submenu);
+                    }
+                    return; // Skip adding the link itself, as it's now a submenu
+                }
+            }
+            catch { } // If resolving fails, treat as a regular file
         }
+        var menuText = (config.HideFileExtensions || file.FileExtension().IsOneOf(".lnk", ".url"))
+            ? Path.GetFileNameWithoutExtension(file)
+            : Path.GetFileName(file);
         var entry = new ToolStripMenuItem
         {
             Name = menuText,
             Text = menuText.ToMenuName(),
             CommandParameter = file,
-            Image = file.GetImage(configuration.LargeIcons),
-            ImageScaling = ToolStripItemImageScaling.None
+            Image = file.GetImage(config.LargeIcons),
+            ImageScaling = ToolStripItemImageScaling.None,
+            ToolTipText = file,
         };
         entry.MouseDown += mouseDownHandler;
         if (submenu != null)
@@ -134,12 +161,24 @@ public class MenuItemCollection : ObservableCollection<ToolStripMenuItem>
         }
     }
 
+    private static IEnumerable<string> EnumerateFiles(string path, bool recursive, TrayToolbarConfiguration config)
+    {
+        var options = new EnumerationOptions
+        {
+            RecurseSubdirectories = recursive,
+            ReturnSpecialDirectories = false,
+        };
+        return Directory.EnumerateFiles(path, "*.*", options)
+            .Where(config.IncludesFile)
+            .OrderBy(f => f.ToUpper());
+    }
+
     private static int IndexOfItem(ToolStripItemCollection list, string text)
     {
         var i = 0;
         foreach (ToolStripMenuItem entry in list)
         {
-            if (entry.CommandParameter != null && StringComparer.OrdinalIgnoreCase.Compare(entry.Text, text) > 0) break;
+            if (entry.Tag == null && StringComparer.OrdinalIgnoreCase.Compare(entry.Text, text) > 0) break;
             i++;
         }
         return i;
@@ -150,7 +189,7 @@ public class MenuItemCollection : ObservableCollection<ToolStripMenuItem>
         var i = 0;
         foreach (var entry in this)
         {
-            if (entry.CommandParameter != null && StringComparer.OrdinalIgnoreCase.Compare(entry.Text, text) > 0) break;
+            if (entry.Tag == null && StringComparer.OrdinalIgnoreCase.Compare(entry.Text, text) > 0) break;
             i++;
         }
         return i;

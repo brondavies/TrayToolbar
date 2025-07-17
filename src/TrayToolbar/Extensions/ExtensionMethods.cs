@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using IWshRuntimeLibrary;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -33,6 +34,13 @@ public static class ExtensionMethods
         return index ?? -1;
     }
 
+    /// <summary>
+    /// Determines whether the specified string is equal to the current string, using case-insensitive comparison.
+    /// </summary>
+    /// <param name="value">The string to compare. Can be <see langword="null"/>.</param>
+    /// <param name="compare">The string to compare against. Can be <see langword="null"/>.</param>
+    /// <returns><see langword="true"/> if the strings are equal, either by reference or by case-insensitive comparison; 
+    /// otherwise, <see langword="false"/>.</returns>
     public static bool Is(this string? value, string? compare)
     {
         if (value == compare) return true;
@@ -62,7 +70,7 @@ public static class ExtensionMethods
 
     public static bool IsOneOf(this string? value, params string?[] compare)
     {
-        foreach(var item in compare)
+        foreach (var item in compare)
         {
             if (value.Is(item)) return true;
         }
@@ -79,14 +87,26 @@ public static class ExtensionMethods
         return string.IsNullOrEmpty(value) ? defaultValue : value;
     }
 
-    public static string ToLocalPath(this string value)
+    public static string RemovePath(this string value, string path)
     {
-        var path = Environment.ExpandEnvironmentVariables(value);
-        if (path.StartsWith("file://"))
+        if (!value.HasValue() || !path.HasValue()) return value;
+        if (value.EndsWith(path))
         {
-            path = new Uri(path).LocalPath;
+            return value[..^path.Length];
         }
-        return path;
+        return value;
+    }
+
+    public static string ResolveShortcutTarget(this string shortcutPath)
+    {
+        try
+        {
+            var shell = new WshShell();
+            var link = (IWshShortcut)shell.CreateShortcut(shortcutPath);
+            return link.TargetPath;
+        }
+        catch { }
+        return shortcutPath;
     }
 
     public static void ShowContextMenu(this NotifyIcon notifyIcon)
@@ -98,6 +118,16 @@ public static class ExtensionMethods
     public static string[] SplitPaths(this string value, char[]? splitchars = null)
     {
         return value.Split(splitchars ?? [';', ','], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+    }
+
+    public static string ToLocalPath(this string value)
+    {
+        var path = Environment.ExpandEnvironmentVariables(value);
+        if (path.StartsWith("file://"))
+        {
+            path = new Uri(path).LocalPath;
+        }
+        return path;
     }
 
     public static string ToMenuName(this string? value)

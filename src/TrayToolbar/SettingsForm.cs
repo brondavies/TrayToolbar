@@ -11,7 +11,7 @@ public partial class SettingsForm : Form
 {
     internal TrayToolbarConfiguration Configuration = new();
 
-    public Dictionary<FolderConfig, MenuItemCollection> MenuItems = [];
+    public Dictionary<FolderConfig, MenuItemCollection2> MenuItems = [];
 
     internal List<NotifyIcon> TrayIcons = [];
 
@@ -107,7 +107,7 @@ public partial class SettingsForm : Form
         RightClickMenu.Items.Clear();
         RightClickMenu.Items.AddRange(itemsToAdd.ToArray());
 
-        foreach(var control in FolderControls())
+        foreach (var control in FolderControls())
         {
             control.UpdateConfig();
         }
@@ -406,7 +406,7 @@ public partial class SettingsForm : Form
         RightMouseClicked = e.Button == MouseButtons.Right;
     }
 
-    private void SetupLeftClickMenu(MenuItemCollection menu)
+    private void SetupLeftClickMenu(MenuItemCollection2 menu)
     {
         if (LeftClickMenu.InvokeRequired)
         {
@@ -423,14 +423,7 @@ public partial class SettingsForm : Form
 
     private IEnumerable<string> EnumerateFiles(string path, bool recursive)
     {
-        var options = new EnumerationOptions
-        {
-            RecurseSubdirectories = recursive,
-            ReturnSpecialDirectories = false,
-        };
-        return Directory.EnumerateFiles(path, "*.*", options)
-            .Where(Configuration.IncludesFile)
-            .OrderBy(f => f.ToUpper());
+        return MenuItemCollection2.EnumerateFiles(path, recursive, Configuration);
     }
 
     private void TrayIcon_DoubleClick(object? sender, EventArgs e)
@@ -507,7 +500,7 @@ public partial class SettingsForm : Form
 
     private void LeftClickMenu_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
     {
-        if (e.ClickedItem?.CommandParameter != null)
+        if (e.ClickedItem != null && e.ClickedItem.AccessibleRole != AccessibleRole.MenuPopup)
         {
             Visible = false;
             ShowInTaskbar = false;

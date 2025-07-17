@@ -41,6 +41,8 @@ namespace TrayToolbar.Models
 
         public bool CheckForUpdates { get; set; } = true;
 
+        public bool ShowFolderLinksAsSubMenu { get; set; } = true;
+
         [Obsolete("Folder is obsolete", true)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string? Folder
@@ -78,5 +80,16 @@ namespace TrayToolbar.Models
         public bool Recursive { get; set; }
 
         public string? Hotkey { get; set; }
+
+        internal FolderConfig WithPath(string targetPath)
+        {
+            return new FolderConfig
+            {
+                Hotkey = Hotkey,
+                Icon = Icon,
+                Name = targetPath,
+                Recursive = Recursive
+            };
+        }
     }
 }
