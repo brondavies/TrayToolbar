@@ -6,9 +6,11 @@
 - Replaces the Windows 7-10 feature that no longer exists in Windows 11 for custom toolbars on the taskbar
 - Choose the folder(s) and customize the file filter
 - Launches links, files and apps from this menu which exist in the chosen folders and subfolders
-- Quick access to this menu with configurable global shortcut keys
 - Automatically updates the menu with changes in the folder
+- Quick access to this menu with configurable global shortcut keys
+- Custom icons for individual folders
 - Choose your preference for icon and font sizes
+- Windows 10/11 ["Dark mode"](https://support.microsoft.com/en-us/windows/change-colors-in-windows-d26ef4d6-819a-581c-1581-493cfcc005fe) support
 - Includes support for English, Spanish, French, German, Portuguese, Italian, Japanese, Chinese, Russian, and Korean
 
 <p style="background:#f9f9f9">💡 Can also be used in Windows 8 and 10!</p>
@@ -21,8 +23,7 @@ This application runs on .NET Desktop Runtime 8.  Download and install the runti
 
 [Download .NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 
-
-[Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.3-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.3-windows-x64-installer) | [x86](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.3-windows-x86-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
+[Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.18-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
 
 ## Installation
 This application is "portable" so there is no setup package, just extract and go!
@@ -33,14 +34,3 @@ This application is "portable" so there is no setup package, just extract and go
 - Select **Run on log in** to start the application every time
 - Click **Save**
 - If you don't see the icon in your system tray, open **Settings** → **Personalization** → **Taskbar** → **Other system tray icons** and turn on TrayToolbar
-
-## Customization
-You can customize the icons used for each folder in the system tray by changing the folder icon in Windows File Explorer
-
-1. Right click on folder.
-1. Then click on **Properties**.
-1. Click on the **Customize** tab.
-1. Then click on **Change icon**.
-1. Select an icon from the list or browse for another icon option.
-
-You may have to restart TrayToolbar after changing this option to see the new icon in the system tray
