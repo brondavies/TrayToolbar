@@ -87,6 +87,17 @@ public static class ExtensionMethods
         return string.IsNullOrEmpty(value) ? defaultValue : value;
     }
 
+    public static T? Pop<T>(this List<T> list)
+    {
+        if (list.Count > 0)
+        {
+            var value = list[0];
+            list.RemoveAt(0);
+            return value;
+        }
+        return default;
+    }
+
     public static string RemovePath(this string value, string path)
     {
         if (!value.HasValue() || !path.HasValue()) return value;

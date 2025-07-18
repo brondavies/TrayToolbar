@@ -11,7 +11,7 @@ public partial class SettingsForm : Form
 {
     internal TrayToolbarConfiguration Configuration = new();
 
-    public Dictionary<FolderConfig, MenuItemCollection2> MenuItems = [];
+    public Dictionary<FolderConfig, MenuItemCollection> MenuItems = [];
 
     internal List<NotifyIcon> TrayIcons = [];
 
@@ -183,13 +183,12 @@ public partial class SettingsForm : Form
             watcher.Deleted += MenuItemDeleted(folder);
             watcher.Renamed += MenuItemRenamed(folder);
             Watchers[folder.Name] = watcher;
-            MenuItems[folder] = [];
+            MenuItems[folder] = new MenuItemCollection(Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
             if (folder.Hotkey.HasValue())
             {
                 HotKeys.Register(TrayIcons.Count, folder.Hotkey);
             }
             TrayIcons.Add(CreateTrayIcon(folder));
-
         }
     }
 
@@ -249,12 +248,12 @@ public partial class SettingsForm : Form
         {
             foreach (var file in EnumerateFiles(fullPath, folder.Recursive))
             {
-                MenuItems[folder].CreateMenuItem(false, file, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
+                MenuItems[folder].CreateMenuItem(file, folder);
             }
         }
         else if (File.Exists(fullPath) && Configuration.IncludesFile(fullPath))
         {
-            MenuItems[folder].CreateMenuItem(false, fullPath, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
+            MenuItems[folder].CreateMenuItem(fullPath, folder);
         }
     }
 
@@ -395,7 +394,7 @@ public partial class SettingsForm : Form
             {
                 if (token.IsCancellationRequested == true) { return; }
                 //If path is not in the root folder, create a submenu to add it into
-                menu.CreateMenuItem(true, file, folder, Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
+                menu.CreateMenuItem(file, folder);
             }
             SetupLeftClickMenu(menu);
         }
@@ -406,7 +405,7 @@ public partial class SettingsForm : Form
         RightMouseClicked = e.Button == MouseButtons.Right;
     }
 
-    private void SetupLeftClickMenu(MenuItemCollection2 menu)
+    private void SetupLeftClickMenu(MenuItemCollection menu)
     {
         if (LeftClickMenu.InvokeRequired)
         {
@@ -423,7 +422,7 @@ public partial class SettingsForm : Form
 
     private IEnumerable<string> EnumerateFiles(string path, bool recursive)
     {
-        return MenuItemCollection2.EnumerateFiles(path, recursive, Configuration);
+        return MenuItemCollection.EnumerateFiles(path, recursive, Configuration);
     }
 
     private void TrayIcon_DoubleClick(object? sender, EventArgs e)
@@ -500,22 +499,25 @@ public partial class SettingsForm : Form
 
     private void LeftClickMenu_ItemClicked(object? sender, ToolStripItemClickedEventArgs e)
     {
-        if (e.ClickedItem != null && e.ClickedItem.AccessibleRole != AccessibleRole.MenuPopup)
+        if (e.ClickedItem != null)
         {
-            Visible = false;
-            ShowInTaskbar = false;
             var filename = $"{e.ClickedItem.CommandParameter}";
             if (RightMouseClicked)
             {
                 ShowContextMenu(filename);
             }
-            else
+            else if (e.ClickedItem.AccessibleRole != AccessibleRole.MenuPopup)
             {
                 try
                 {
                     Program.Launch(filename);
                 }
                 catch { }
+            }
+            if (Visible)
+            {
+                Visible = false;
+                ShowInTaskbar = false;
             }
         }
     }

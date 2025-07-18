@@ -443,7 +443,6 @@
             // 
             LeftClickMenu.Name = "leftClickMenu";
             LeftClickMenu.Size = new Size(61, 4);
-            LeftClickMenu.ItemClicked += LeftClickMenu_ItemClicked;
             // 
             // SettingsForm
             // 

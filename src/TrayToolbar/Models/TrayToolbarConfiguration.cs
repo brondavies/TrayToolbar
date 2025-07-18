@@ -31,6 +31,8 @@ namespace TrayToolbar.Models
         [JsonIgnore]
         public int MaxRecursionDepth { get; set; }
 
+        public int MaxMenuPath { get; set; } = 512;
+
         public int Theme { get; set; } = 0;
 
         public float FontSize { get; set; } = 9;
@@ -42,6 +44,8 @@ namespace TrayToolbar.Models
         public bool CheckForUpdates { get; set; } = true;
 
         public bool ShowFolderLinksAsSubMenu { get; set; } = true;
+
+        public bool ShowToolTips { get; set; }
 
         [Obsolete("Folder is obsolete", true)]
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
