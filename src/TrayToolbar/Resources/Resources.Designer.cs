@@ -325,6 +325,15 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select icon.
+        /// </summary>
+        internal static string Select_icon {
+            get {
+                return ResourceManager.GetString("Select icon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Set.
         /// </summary>
         internal static string Set {

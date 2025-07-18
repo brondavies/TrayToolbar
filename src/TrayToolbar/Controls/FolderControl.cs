@@ -1,5 +1,7 @@
 ﻿using TrayToolbar.Extensions;
 using TrayToolbar.Models;
+using Windows.Win32;
+using Windows.Win32.Foundation;
 using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar;
@@ -43,7 +45,7 @@ public partial class FolderControl : UserControl
         }
     }
 
-    public void OnThemeChanged(bool darkMode)
+    public void OnThemeChanged(bool _)
     {
         ErrorIcon.BackColor = FolderComboBox.BackColor;
     }
@@ -59,6 +61,9 @@ public partial class FolderControl : UserControl
         HotkeyLabel.Text = R.Shortcut_Key;
         toolTips.SetToolTip(BrowseFolderButton, R.Browse_Folder);
         toolTips.SetToolTip(DeleteFolderButton, R.Remove_Folder);
+        toolTips.SetToolTip(SelectIconButton, R.Select_icon);
+        toolTips.SetToolTip(ClearIconButton, R.Clear);
+        Image? folderImage = null;
         if (config != null)
         {
             if (FolderComboBox != null) FolderComboBox.Text = config.Name;
@@ -78,8 +83,13 @@ public partial class FolderControl : UserControl
             {
                 SetHotKey.Text = config.Hotkey.HasValue() ? R.Clear : R.Set;
             }
+            folderImage = config.GetIcon();
+            ClearIconButton.Visible = config.Icon.HasValue();
         }
+        SelectIconButton.BackgroundImage = folderImage ?? GetDefaultIcon();
     }
+
+    private static Bitmap GetDefaultIcon() => SystemIcons.GetStockIcon(StockIconId.Folder, StockIconOptions.ShellIconSize).ToBitmap();
 
     private void BrowseFolderButton_Click(object sender, EventArgs e)
     {
@@ -109,13 +119,49 @@ public partial class FolderControl : UserControl
         }
         else
         {
-            var dialog = new ShortcutKeyForm();
-            dialog.Hotkey = Config?.Hotkey ?? "";
+            var dialog = new ShortcutKeyForm
+            {
+                Hotkey = Config?.Hotkey ?? ""
+            };
             if (dialog.ShowDialog(this) == DialogResult.OK)
             {
                 config.Hotkey = dialog.Hotkey;
             }
         }
+        UpdateConfig();
+    }
+
+    private void SelectIconButton_Click(object sender, EventArgs e)
+    {
+        var hwnd = new HWND(ParentForm!.Handle);
+        var path = config.Icon?.ToLocalPath() ?? config.Name?.ToLocalPath() ?? ShellIcons.Shell32Dll;
+        if (!File.Exists(path))
+        {
+            path = ShellIcons.Shell32Dll; // fallback to shell32.dll if the path is invalid  
+        }
+
+        uint capacity = 512;
+        Span<char> iconPathBuffer = stackalloc char[(int)capacity];
+        path.AsSpan().CopyTo(iconPathBuffer);
+
+        int index = 0;
+        int result = 0;
+        unsafe
+        {
+            result = PInvoke.PickIconDlg(hwnd, ref iconPathBuffer, capacity, &index);
+        }
+        if (result != 0)
+        {
+            config.Icon = iconPathBuffer.ToString();
+            config.IconIndex = index;
+            UpdateConfig();
+        }
+    }
+
+    private void ClearIconButton_Click(object sender, EventArgs e)
+    {
+        config.Icon = null;
+        config.IconIndex = 0;
         UpdateConfig();
     }
 }

@@ -78,6 +78,9 @@ namespace TrayToolbar.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull | JsonIgnoreCondition.WhenWritingDefault)]
         public string? Icon { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int IconIndex { get; set; }
+
         public string? Name { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
@@ -94,6 +97,25 @@ namespace TrayToolbar.Models
                 Name = targetPath,
                 Recursive = Recursive
             };
+        }
+
+        internal Bitmap? GetIcon()
+        {
+            if (Icon.HasValue() && File.Exists(Icon.ToLocalPath()))
+            {
+                try
+                {
+                    return System.Drawing.Icon.ExtractIcon(Icon.ToLocalPath(), IconIndex)?.ToBitmap()
+                        ?? GetDefaultIcon();
+                }
+                catch { }
+            }
+            return GetDefaultIcon();
+        }
+
+        private Bitmap? GetDefaultIcon()
+        {
+            return Name?.ToLocalPath().GetImage(true);
         }
     }
 }

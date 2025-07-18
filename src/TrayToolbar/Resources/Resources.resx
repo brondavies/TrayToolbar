@@ -241,4 +241,7 @@
   <data name="Show links to folders as submenus" xml:space="preserve">
     <value>Show links to folders as submenus</value>
   </data>
+  <data name="Select icon" xml:space="preserve">
+    <value>Select icon</value>
+  </data>
 </root>

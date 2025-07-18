@@ -81,7 +81,7 @@ public static class ShellIcons
     }
 
     static readonly int SETTINGS_ICON_INDEX = ConfigHelper.WindowsMajorVersion == 11 ? 314 : 316;
-    static readonly string Shell32Dll = Path.Combine(Environment.SystemDirectory, "SHELL32.dll");
+    public static readonly string Shell32Dll = Path.Combine(Environment.SystemDirectory, "SHELL32.dll");
     static readonly uint SizeOfSHGetFileInfo = (uint)Unsafe.SizeOf<SHFILEINFOW>();
     private static unsafe Icon ExtractFromPath(string path, bool large = false)
     {

@@ -4,6 +4,7 @@ DWMWINDOWATTRIBUTE
 GetAsyncKeyState
 ImageList_GetIcon
 IMAGE_LIST_DRAW_STYLE
+PickIconDlg
 RegCloseKey
 RegisterHotKey
 RegNotifyChangeKeyValue

@@ -31,6 +31,7 @@ namespace TrayToolbar
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FolderControl));
             FolderComboBox = new CustomComboBox();
             BrowseFolderButton = new PictureBox();
             DeleteFolderButton = new PictureBox();
@@ -42,10 +43,14 @@ namespace TrayToolbar
             HotkeyValue = new Label();
             SetHotKey = new Label();
             BottomLine = new Label();
+            SelectIconButton = new PictureBox();
+            ClearIconButton = new PictureBox();
             ((System.ComponentModel.ISupportInitialize)BrowseFolderButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)DeleteFolderButton).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ErrorIcon).BeginInit();
             flowLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)SelectIconButton).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)ClearIconButton).BeginInit();
             SuspendLayout();
             // 
             // FolderComboBox
@@ -56,10 +61,10 @@ namespace TrayToolbar
             FolderComboBox.BorderColor = SystemColors.WindowFrame;
             FolderComboBox.DropDownStyle = ComboBoxStyle.Simple;
             FolderComboBox.FormattingEnabled = true;
-            FolderComboBox.Location = new Point(3, 3);
+            FolderComboBox.Location = new Point(38, 3);
             FolderComboBox.MaxDropDownItems = 15;
             FolderComboBox.Name = "FolderComboBox";
-            FolderComboBox.Size = new Size(330, 23);
+            FolderComboBox.Size = new Size(295, 23);
             FolderComboBox.Sorted = true;
             FolderComboBox.TabIndex = 0;
             FolderComboBox.TextUpdate += FolderComboBox_TextUpdate;
@@ -72,6 +77,7 @@ namespace TrayToolbar
             BrowseFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             BrowseFolderButton.BackgroundImage = Resources.Resources.TrayIcon;
             BrowseFolderButton.BackgroundImageLayout = ImageLayout.Zoom;
+            BrowseFolderButton.Cursor = Cursors.Hand;
             BrowseFolderButton.Location = new Point(335, 3);
             BrowseFolderButton.Name = "BrowseFolderButton";
             BrowseFolderButton.Size = new Size(30, 23);
@@ -87,6 +93,7 @@ namespace TrayToolbar
             DeleteFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             DeleteFolderButton.BackgroundImage = Resources.Resources.delete;
             DeleteFolderButton.BackgroundImageLayout = ImageLayout.Zoom;
+            DeleteFolderButton.Cursor = Cursors.Hand;
             DeleteFolderButton.Location = new Point(367, 3);
             DeleteFolderButton.Name = "DeleteFolderButton";
             DeleteFolderButton.Size = new Size(30, 23);
@@ -97,7 +104,7 @@ namespace TrayToolbar
             // RecursiveCheckbox
             // 
             RecursiveCheckbox.AutoSize = true;
-            RecursiveCheckbox.Location = new Point(3, 32);
+            RecursiveCheckbox.Location = new Point(40, 32);
             RecursiveCheckbox.Name = "RecursiveCheckbox";
             RecursiveCheckbox.Size = new Size(124, 19);
             RecursiveCheckbox.TabIndex = 1;
@@ -181,11 +188,42 @@ namespace TrayToolbar
             BottomLine.Size = new Size(400, 1);
             BottomLine.TabIndex = 12;
             // 
+            // SelectIconButton
+            // 
+            SelectIconButton.AccessibleDescription = "Browse for folder";
+            SelectIconButton.AccessibleName = "Browse";
+            SelectIconButton.AccessibleRole = AccessibleRole.PushButton;
+            SelectIconButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            SelectIconButton.BackgroundImageLayout = ImageLayout.Zoom;
+            SelectIconButton.Cursor = Cursors.Hand;
+            SelectIconButton.Location = new Point(3, 3);
+            SelectIconButton.Name = "SelectIconButton";
+            SelectIconButton.Size = new Size(32, 32);
+            SelectIconButton.TabIndex = 13;
+            SelectIconButton.TabStop = false;
+            SelectIconButton.Click += SelectIconButton_Click;
+            // 
+            // ClearIconButton
+            // 
+            ClearIconButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            ClearIconButton.BackColor = Color.Transparent;
+            ClearIconButton.BackgroundImage = (Image)resources.GetObject("ClearIconButton.BackgroundImage");
+            ClearIconButton.BackgroundImageLayout = ImageLayout.None;
+            ClearIconButton.Location = new Point(24, 3);
+            ClearIconButton.Margin = new Padding(0);
+            ClearIconButton.Name = "ClearIconButton";
+            ClearIconButton.Size = new Size(12, 12);
+            ClearIconButton.TabIndex = 14;
+            ClearIconButton.TabStop = false;
+            ClearIconButton.Visible = false;
+            ClearIconButton.Click += ClearIconButton_Click;
+            // 
             // FolderControl
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            AutoSize = true;
+            Controls.Add(ClearIconButton);
+            Controls.Add(SelectIconButton);
             Controls.Add(BottomLine);
             Controls.Add(flowLayoutPanel1);
             Controls.Add(ErrorIcon);
@@ -200,6 +238,8 @@ namespace TrayToolbar
             ((System.ComponentModel.ISupportInitialize)ErrorIcon).EndInit();
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)SelectIconButton).EndInit();
+            ((System.ComponentModel.ISupportInitialize)ClearIconButton).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -217,5 +257,7 @@ namespace TrayToolbar
         private Label HotkeyValue;
         private Label SetHotKey;
         private Label BottomLine;
+        private PictureBox SelectIconButton;
+        private PictureBox ClearIconButton;
     }
 }
