@@ -37,7 +37,7 @@ namespace TrayToolbar.Models
             }
             var relativePath = Path.GetRelativePath(folderPath, parentPath ?? folderPath);
             if (relativePath == ".") relativePath = "";
-            if (Configuration.ShowFolderLinksAsSubMenu && file.FileExtension() == ".lnk")
+            if (Configuration.ShowFolderLinksAsSubMenus && file.FileExtension() == ".lnk")
             {
                 // Check if file points to a folder
                 try

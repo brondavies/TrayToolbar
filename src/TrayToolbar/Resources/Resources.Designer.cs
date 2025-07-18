@@ -244,7 +244,7 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Menu Font Size.
+        ///   Looks up a localized string similar to Menu font size.
         /// </summary>
         internal static string Menu_Font_Size {
             get {
@@ -339,6 +339,15 @@ namespace TrayToolbar.Resources {
         internal static string Shortcut_Key {
             get {
                 return ResourceManager.GetString("Shortcut Key", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show links to folders as submenus.
+        /// </summary>
+        internal static string Show_links_to_folders_as_submenus {
+            get {
+                return ResourceManager.GetString("Show links to folders as submenus", resourceCulture);
             }
         }
         

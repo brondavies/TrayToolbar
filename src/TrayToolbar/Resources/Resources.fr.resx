@@ -222,4 +222,7 @@
   <data name="Language" xml:space="preserve">
     <value>Langue</value>
   </data>
+  <data name="Show links to folders as submenus" xml:space="preserve">
+    <value>Afficher les liens vers les dossiers sous forme de sous-menus</value>
+  </data>
 </root>

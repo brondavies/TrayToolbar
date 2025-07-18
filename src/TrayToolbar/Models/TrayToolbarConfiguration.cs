@@ -43,7 +43,7 @@ namespace TrayToolbar.Models
 
         public bool CheckForUpdates { get; set; } = true;
 
-        public bool ShowFolderLinksAsSubMenu { get; set; } = true;
+        public bool ShowFolderLinksAsSubMenus { get; set; }
 
         public bool ShowToolTips { get; set; }
 

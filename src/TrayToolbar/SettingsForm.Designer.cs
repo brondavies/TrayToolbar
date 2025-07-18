@@ -60,6 +60,8 @@
             RightClickMenu = new ContextMenuStrip(components);
             LeftClickMenu = new ContextMenuStrip(components);
             FolderDialog = new FolderBrowserDialog();
+            row6col1placeholder = new Label();
+            ShowFolderLinksAsSubMenusCheckbox = new CheckBox();
             flowLayoutPanel1 = new FlowLayoutPanel();
             flowLayoutPanel1.SuspendLayout();
             tableLayout.SuspendLayout();
@@ -135,30 +137,33 @@
             tableLayout.ColumnCount = 2;
             tableLayout.ColumnStyles.Add(new ColumnStyle());
             tableLayout.ColumnStyles.Add(new ColumnStyle());
-            tableLayout.Controls.Add(LanguageLabel, 0, 7);
-            tableLayout.Controls.Add(row8col1placeholder, 0, 8);
+            tableLayout.Controls.Add(row6col1placeholder, 0, 5);
+            tableLayout.Controls.Add(LanguageLabel, 0, 8);
+            tableLayout.Controls.Add(row8col1placeholder, 0, 9);
             tableLayout.Controls.Add(IncludeFilesTextBox, 1, 2);
             tableLayout.Controls.Add(IncludeFileTypesLabel, 0, 2);
             tableLayout.Controls.Add(FoldersLabel, 0, 0);
             tableLayout.Controls.Add(ExcludeFileTypesLabel, 0, 3);
             tableLayout.Controls.Add(ExcludeFoldersLabel, 0, 4);
             tableLayout.Controls.Add(IgnoreFoldersTextBox, 1, 4);
-            tableLayout.Controls.Add(ThemeLabel, 0, 5);
-            tableLayout.Controls.Add(MenuFontSizeLabel, 0, 6);
+            tableLayout.Controls.Add(ThemeLabel, 0, 6);
+            tableLayout.Controls.Add(MenuFontSizeLabel, 0, 7);
             tableLayout.Controls.Add(FoldersLayout, 1, 0);
             tableLayout.Controls.Add(AddFolderButton, 1, 1);
             tableLayout.Controls.Add(IgnoreFilesTextBox, 1, 3);
-            tableLayout.Controls.Add(ThemeToggleButton, 1, 5);
-            tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 8);
-            tableLayout.Controls.Add(fontImageSizeTableLayout, 1, 6);
-            tableLayout.Controls.Add(LanguageSelectList, 1, 7);
+            tableLayout.Controls.Add(ThemeToggleButton, 1, 6);
+            tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 9);
+            tableLayout.Controls.Add(fontImageSizeTableLayout, 1, 7);
+            tableLayout.Controls.Add(LanguageSelectList, 1, 8);
             tableLayout.Controls.Add(row2col1placeholder, 0, 1);
+            tableLayout.Controls.Add(ShowFolderLinksAsSubMenusCheckbox, 1, 5);
             tableLayout.Dock = DockStyle.Fill;
             tableLayout.Location = new Point(10, 10);
             tableLayout.Margin = new Padding(10);
             tableLayout.Name = "tableLayout";
-            tableLayout.RowCount = 9;
+            tableLayout.RowCount = 10;
             tableLayout.RowStyles.Add(new RowStyle());
+            tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
@@ -174,7 +179,7 @@
             // 
             LanguageLabel.AutoSize = true;
             LanguageLabel.Dock = DockStyle.Top;
-            LanguageLabel.Location = new Point(3, 325);
+            LanguageLabel.Location = new Point(3, 375);
             LanguageLabel.Name = "LanguageLabel";
             LanguageLabel.Padding = new Padding(5);
             LanguageLabel.Size = new Size(107, 25);
@@ -186,7 +191,7 @@
             // 
             row8col1placeholder.AutoSize = true;
             row8col1placeholder.Dock = DockStyle.Top;
-            row8col1placeholder.Location = new Point(3, 375);
+            row8col1placeholder.Location = new Point(3, 425);
             row8col1placeholder.Name = "row8col1placeholder";
             row8col1placeholder.Padding = new Padding(5);
             row8col1placeholder.Size = new Size(107, 25);
@@ -265,7 +270,7 @@
             // 
             ThemeLabel.AutoSize = true;
             ThemeLabel.Dock = DockStyle.Top;
-            ThemeLabel.Location = new Point(3, 225);
+            ThemeLabel.Location = new Point(3, 275);
             ThemeLabel.Name = "ThemeLabel";
             ThemeLabel.Padding = new Padding(5);
             ThemeLabel.Size = new Size(107, 25);
@@ -277,7 +282,7 @@
             // 
             MenuFontSizeLabel.AutoSize = true;
             MenuFontSizeLabel.Dock = DockStyle.Top;
-            MenuFontSizeLabel.Location = new Point(3, 275);
+            MenuFontSizeLabel.Location = new Point(3, 325);
             MenuFontSizeLabel.Name = "MenuFontSizeLabel";
             MenuFontSizeLabel.Padding = new Padding(5);
             MenuFontSizeLabel.Size = new Size(107, 25);
@@ -329,7 +334,7 @@
             // 
             ThemeToggleButton.AutoSize = true;
             ThemeToggleButton.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ThemeToggleButton.Location = new Point(116, 228);
+            ThemeToggleButton.Location = new Point(116, 278);
             ThemeToggleButton.Name = "ThemeToggleButton";
             ThemeToggleButton.Size = new Size(182, 25);
             ThemeToggleButton.TabIndex = 5;
@@ -339,7 +344,7 @@
             // RunOnLoginCheckbox
             // 
             RunOnLoginCheckbox.AutoSize = true;
-            RunOnLoginCheckbox.Location = new Point(116, 378);
+            RunOnLoginCheckbox.Location = new Point(116, 428);
             RunOnLoginCheckbox.Name = "RunOnLoginCheckbox";
             RunOnLoginCheckbox.Size = new Size(97, 19);
             RunOnLoginCheckbox.TabIndex = 9;
@@ -359,7 +364,7 @@
             fontImageSizeTableLayout.Controls.Add(FontSizeInput, 0, 0);
             fontImageSizeTableLayout.Controls.Add(IconSizeSmallCheckbox, 2, 0);
             fontImageSizeTableLayout.Dock = DockStyle.Fill;
-            fontImageSizeTableLayout.Location = new Point(116, 278);
+            fontImageSizeTableLayout.Location = new Point(116, 328);
             fontImageSizeTableLayout.Name = "fontImageSizeTableLayout";
             fontImageSizeTableLayout.RowCount = 1;
             fontImageSizeTableLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
@@ -418,7 +423,7 @@
             LanguageSelectList.DropDownStyle = ComboBoxStyle.DropDownList;
             LanguageSelectList.FormattingEnabled = true;
             LanguageSelectList.Items.AddRange(new object[] { "(System)", "English", "Español", "Français", "Deutsch", "Português", "Italiano", "日本語", "中文", "Русский", "한국어" });
-            LanguageSelectList.Location = new Point(116, 328);
+            LanguageSelectList.Location = new Point(116, 378);
             LanguageSelectList.Name = "LanguageSelectList";
             LanguageSelectList.Size = new Size(121, 23);
             LanguageSelectList.TabIndex = 19;
@@ -443,6 +448,25 @@
             // 
             LeftClickMenu.Name = "leftClickMenu";
             LeftClickMenu.Size = new Size(61, 4);
+            // 
+            // row6col1placeholder
+            // 
+            row6col1placeholder.AutoSize = true;
+            row6col1placeholder.Dock = DockStyle.Top;
+            row6col1placeholder.Location = new Point(3, 225);
+            row6col1placeholder.Name = "row6col1placeholder";
+            row6col1placeholder.Size = new Size(107, 15);
+            row6col1placeholder.TabIndex = 20;
+            // 
+            // ShowFolderLinksAsSubMenusCheckbox
+            // 
+            ShowFolderLinksAsSubMenusCheckbox.AutoSize = true;
+            ShowFolderLinksAsSubMenusCheckbox.Location = new Point(116, 228);
+            ShowFolderLinksAsSubMenusCheckbox.Name = "ShowFolderLinksAsSubMenusCheckbox";
+            ShowFolderLinksAsSubMenusCheckbox.Size = new Size(207, 19);
+            ShowFolderLinksAsSubMenusCheckbox.TabIndex = 21;
+            ShowFolderLinksAsSubMenusCheckbox.Text = "Show links to folders as submenus";
+            ShowFolderLinksAsSubMenusCheckbox.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -507,5 +531,8 @@
         private Label LanguageLabel;
         private Label row8col1placeholder;
         private TrayToolbar.Controls.CustomComboBox LanguageSelectList;
+        private Label FolderLinksAsSubMenusLabel;
+        private Label row6col1placeholder;
+        private CheckBox ShowFolderLinksAsSubMenusCheckbox;
     }
 }

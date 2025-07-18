@@ -97,6 +97,7 @@ public partial class SettingsForm : Form
         Text = $"{R.TrayToolbar_Settings} ({ConfigHelper.ApplicationVersion})";
         NewVersionLabel.Text = R.A_new_version_is_available;
         LanguageLabel.Text = R.Language;
+        ShowFolderLinksAsSubMenusCheckbox.Text = R.Show_links_to_folders_as_submenus;
 
         List<ToolStripItem> itemsToAdd = [
            new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
@@ -308,6 +309,7 @@ public partial class SettingsForm : Form
         IncludeFilesTextBox.Text = Configuration.IncludeFiles.Join("; ");
         IgnoreFilesTextBox.Text = Configuration.IgnoreFiles.Join("; ");
         IgnoreFoldersTextBox.Text = Configuration.IgnoreFolders.Join("; ");
+        ShowFolderLinksAsSubMenusCheckbox.Checked = Configuration.ShowFolderLinksAsSubMenus;
         FontSizeInput.Text = Configuration.FontSize.ToString();
         IconSizeLargeCheckbox.Checked = Configuration.LargeIcons;
         IconSizeSmallCheckbox.Checked = !Configuration.LargeIcons;
@@ -557,6 +559,7 @@ public partial class SettingsForm : Form
         Configuration.IncludeFiles = IncludeFilesTextBox.Text.SplitPaths();
         Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.SplitPaths();
         Configuration.IgnoreFolders = IgnoreFoldersTextBox.Text.SplitPaths();
+        Configuration.ShowFolderLinksAsSubMenus = ShowFolderLinksAsSubMenusCheckbox.Checked;
         Configuration.Theme = (int)ThemeToggleButton.Theme;
         Configuration.LargeIcons = IconSizeLargeCheckbox.Checked;
         if (FontSizeInput.Validate())
