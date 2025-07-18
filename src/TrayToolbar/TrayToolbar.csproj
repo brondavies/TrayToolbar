@@ -17,6 +17,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
 	<Platforms>AnyCPU;x64;ARM64</Platforms>
+	<RuntimeIdentifiers>win-arm64;win-x64</RuntimeIdentifiers>
 	<ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
 

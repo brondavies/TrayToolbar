@@ -531,7 +531,6 @@
         private Label LanguageLabel;
         private Label row8col1placeholder;
         private TrayToolbar.Controls.CustomComboBox LanguageSelectList;
-        private Label FolderLinksAsSubMenusLabel;
         private Label row6col1placeholder;
         private CheckBox ShowFolderLinksAsSubMenusCheckbox;
     }
