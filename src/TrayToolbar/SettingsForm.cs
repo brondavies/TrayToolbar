@@ -263,7 +263,7 @@ public partial class SettingsForm : Form
 
     private NotifyIcon CreateTrayIcon(FolderConfig folder)
     {
-        var text = Path.GetFileName(folder.Name!.ToLocalPath()).Or(folder.Name!.ToLocalPath());
+        var text = Path.GetFileName(folder.Name!.ToLocalPath());
         var customIcon = folder.GetIcon();
         var icon = new NotifyIcon(components)
         {
@@ -378,27 +378,39 @@ public partial class SettingsForm : Form
         }
         else
         {
-            if (MenuItems[folder].NeedsRefresh)
-            {
-                return;
-            }
-            var font = LeftClickMenu.Font;
-            LeftClickMenu.Font = new Font(font.FontFamily, Configuration.FontSize, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
-            LeftClickMenu.Items.Clear();
-            List<ToolStripItem> itemsToAdd = [.. MenuItems[folder]];
-
-            LeftClickMenu.Items.AddRange(itemsToAdd.ToArray());
-            LeftClickMenu.Renderer = new MenuRenderer();
-            trayIcon.ContextMenuStrip = LeftClickMenu;
-            SystemTheme.SetThemeColors(LeftClickMenu, UseDarkMode());
-
-            if (LeftClickMenu.Items.Count == 0)
-            {
-                ShowNormal();
-                return;
-            }
+            if (!ShowLeftClickMenu(trayIcon, folder)) return;
         }
         trayIcon.ShowContextMenu();
+    }
+
+    private bool ShowLeftClickMenu(NotifyIcon trayIcon, FolderConfig folder)
+    {
+        if (MenuItems[folder].NeedsRefresh)
+        {
+            return false;
+        }
+        if (LeftClickMenu.InvokeRequired)
+        {
+            return LeftClickMenu.Invoke(() => {
+                return ShowLeftClickMenu(trayIcon, folder);
+            });
+        }
+        var font = LeftClickMenu.Font;
+        LeftClickMenu.Font = new Font(font.FontFamily, Configuration.FontSize, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
+        LeftClickMenu.Items.Clear();
+        List<ToolStripItem> itemsToAdd = [.. MenuItems[folder]];
+
+        LeftClickMenu.Items.AddRange(itemsToAdd.ToArray());
+        LeftClickMenu.Renderer = new MenuRenderer();
+        trayIcon.ContextMenuStrip = LeftClickMenu;
+        SystemTheme.SetThemeColors(LeftClickMenu, UseDarkMode());
+
+        if (LeftClickMenu.Items.Count == 0)
+        {
+            ShowNormal();
+            return false;
+        }
+        return true;
     }
 
     private void ReloadMenuItems(FolderConfig folder, CancellationToken token)
@@ -422,13 +434,14 @@ public partial class SettingsForm : Form
     private void LeftClickMenuEntry_MouseDown(object? sender, MouseEventArgs e)
     {
         RightMouseClicked = e.Button == MouseButtons.Right;
+        LeftClickMenu.AutoClose = !RightMouseClicked;
     }
 
     private void SetupLeftClickMenu(MenuItemCollection menu)
     {
-        if (LeftClickMenu.InvokeRequired)
+        if (InvokeRequired)
         {
-            LeftClickMenu.Invoke(SetupLeftClickMenu, menu);
+            Invoke(SetupLeftClickMenu, menu);
             return;
         }
         LeftClickMenu.Renderer = new MenuRenderer();
@@ -524,6 +537,7 @@ public partial class SettingsForm : Form
             if (RightMouseClicked)
             {
                 ShowContextMenu(filename);
+                LeftClickMenu.AutoClose = true;
             }
             else if (e.ClickedItem.AccessibleRole != AccessibleRole.MenuPopup)
             {
@@ -532,11 +546,12 @@ public partial class SettingsForm : Form
                     Program.Launch(filename);
                 }
                 catch { }
-            }
-            if (Visible)
-            {
-                Visible = false;
-                ShowInTaskbar = false;
+                LeftClickMenu.Close(ToolStripDropDownCloseReason.ItemClicked);
+                if (Visible)
+                {
+                    Visible = false;
+                    ShowInTaskbar = false;
+                }
             }
         }
     }
