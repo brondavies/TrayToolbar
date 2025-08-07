@@ -104,6 +104,7 @@ namespace TrayToolbar.Models
             foreach (var part in parts)
             {
                 tag = Path.Combine(tag, part);
+                folderPath = Path.Combine(folderPath, directory.Pop() ?? "");
                 if (parent == null)
                 {
                     parent = this.FirstOrDefault(i => $"{i.Tag}" == tag);
@@ -112,17 +113,12 @@ namespace TrayToolbar.Models
                         parent = CreateSubMenu(tag, part, folderPath);
                         Insert(IndexOfItem(parent.Text!, AccessibleRole.MenuPopup), parent);
                     }
-                    else
-                    {
-                        folderPath = Path.Combine(folderPath, directory.Pop() ?? "");
-                    }
                 }
                 else
                 {
                     var submenu = parent.DropDownItems
                         .OfType<ToolStripMenuItem>()
                         .FirstOrDefault(i => $"{i.Tag}" == tag);
-                    folderPath = Path.Combine(folderPath, directory.Pop() ?? "");
                     if (submenu == null)
                     {
                         submenu = CreateSubMenu(tag, part, folderPath);
