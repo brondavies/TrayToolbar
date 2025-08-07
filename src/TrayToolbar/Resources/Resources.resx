@@ -244,4 +244,7 @@
   <data name="Select icon" xml:space="preserve">
     <value>Select icon</value>
   </data>
+  <data name="You are using a prerelease version" xml:space="preserve">
+    <value>You are using a prerelease version</value>
+  </data>
 </root>

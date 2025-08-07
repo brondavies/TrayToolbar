@@ -115,13 +115,16 @@ public partial class SettingsForm : Form
         ThemeToggleButton.UpdateConfig();
     }
 
-    private void ShowUpdateAvailable(string updateUri)
+    private void ShowUpdateAvailable(string updateUri, bool prerelease)
     {
         if (NewVersionLabel.InvokeRequired)
         {
-            NewVersionLabel.Invoke(ShowUpdateAvailable, updateUri);
+            NewVersionLabel.Invoke(ShowUpdateAvailable, updateUri, prerelease);
             return;
         }
+        NewVersionLabel.Text = prerelease
+            ? R.You_are_using_a_prerelease_version
+            : R.A_new_version_is_available;
         NewVersionLabel.Visible = true;
         NewVersionLabel.Tag = "https://github.com" + updateUri;
     }
@@ -333,9 +336,22 @@ public partial class SettingsForm : Form
             {
                 if (r.Result?.Name != null && r.Result.Name != "v" + ConfigHelper.ApplicationVersion)
                 {
-                    ShowUpdateAvailable(r.Result.UpdateUrl);
+                    var prerelease = IsPrereleaseVersion(r.Result.Name[1..]);
+                    ShowUpdateAvailable(r.Result.UpdateUrl, prerelease);
                 }
             });
+        }
+    }
+
+    private bool IsPrereleaseVersion(string version)
+    {
+        try
+        {
+            return Version.Parse(ConfigHelper.ApplicationVersion).CompareTo(Version.Parse(version)) == 1;
+        }
+        catch
+        {
+            return false;
         }
     }
 

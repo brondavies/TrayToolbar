@@ -442,5 +442,14 @@ namespace TrayToolbar.Resources {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are using a prerelease version.
+        /// </summary>
+        internal static string You_are_using_a_prerelease_version {
+            get {
+                return ResourceManager.GetString("You are using a prerelease version", resourceCulture);
+            }
+        }
     }
 }
