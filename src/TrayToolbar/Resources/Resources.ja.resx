@@ -225,4 +225,10 @@
   <data name="Show links to folders as submenus" xml:space="preserve">
     <value>フォルダへのリンクをサブメニューとして表示する</value>
   </data>
+  <data name="Select icon" xml:space="preserve">
+    <value>アイコンを選択</value>
+  </data>
+  <data name="You are using a prerelease version" xml:space="preserve">
+    <value>プレリリース版を使用しています</value>
+  </data>
 </root>

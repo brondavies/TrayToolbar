@@ -225,4 +225,10 @@
   <data name="Show links to folders as submenus" xml:space="preserve">
     <value>Afficher les liens vers les dossiers sous forme de sous-menus</value>
   </data>
+  <data name="Select icon" xml:space="preserve">
+    <value>Sélectionner l'icône</value>
+  </data>
+  <data name="You are using a prerelease version" xml:space="preserve">
+    <value>Vous utilisez une version préliminaire</value>
+  </data>
 </root>

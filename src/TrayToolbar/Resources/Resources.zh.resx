@@ -225,4 +225,10 @@
   <data name="Show links to folders as submenus" xml:space="preserve">
     <value>将文件夹链接显示为子菜单</value>
   </data>
+  <data name="Select icon" xml:space="preserve">
+    <value>选择图标</value>
+  </data>
+  <data name="You are using a prerelease version" xml:space="preserve">
+    <value>您正在使用预发布版本</value>
+  </data>
 </root>

@@ -225,4 +225,10 @@
   <data name="Show links to folders as submenus" xml:space="preserve">
     <value>폴더 링크를 하위 메뉴로 표시</value>
   </data>
+  <data name="Select icon" xml:space="preserve">
+    <value>아이콘 선택</value>
+  </data>
+  <data name="You are using a prerelease version" xml:space="preserve">
+    <value>사전 릴리스 버전을 사용하고 있습니다.</value>
+  </data>
 </root>
