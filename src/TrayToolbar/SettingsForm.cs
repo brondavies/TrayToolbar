@@ -61,10 +61,12 @@ public partial class SettingsForm : Form
     {
         var darkmode = UseDarkMode();
         SystemTheme.UseImmersiveDarkMode(Handle, darkmode);
-        foreach (var folder in Configuration.Folders)
-        {
-            StartWatchingFolder(folder);
-            RefreshMenu(folder);
+        lock (this) {
+            foreach (var folder in Configuration.Folders)
+            {
+                StartWatchingFolder(folder);
+                RefreshMenu(folder);
+            } 
         }
     }
 
@@ -188,11 +190,22 @@ public partial class SettingsForm : Form
             watcher.Renamed += MenuItemRenamed(folder);
             Watchers[folder.Name] = watcher;
             MenuItems[folder] = new MenuItemCollection(Configuration, LeftClickMenu_ItemClicked, LeftClickMenuEntry_MouseDown);
+            var icon = TrayIcons.FirstOrDefault(i => i.Tag != null && ((FolderConfig)i.Tag).Name == folder.Name);
+            var index = TrayIcons.Count;
+            if (icon != null)
+            {
+                index = TrayIcons.IndexOf(icon);
+                icon.Visible = false;
+                TrayIcons[index] = CreateTrayIcon(folder);
+            }
+            else
+            {
+                TrayIcons.Add(CreateTrayIcon(folder));
+            }
             if (folder.Hotkey.HasValue())
             {
-                HotKeys.Register(TrayIcons.Count, folder.Hotkey);
+                HotKeys.Register(index, folder.Hotkey);
             }
-            TrayIcons.Add(CreateTrayIcon(folder));
         }
     }
 
@@ -268,12 +281,12 @@ public partial class SettingsForm : Form
         var icon = new NotifyIcon(components)
         {
             Icon = customIcon == null ? Icon : Icon.FromHandle(customIcon.GetHicon()),
+            Tag = folder,
             Text = text,
-            Visible = true
+            Visible = true,
         };
         icon.Click += TrayIcon_Click;
         icon.DoubleClick += TrayIcon_DoubleClick;
-        icon.Tag = folder;
         return icon;
     }
 
