@@ -61,6 +61,11 @@ public partial class SettingsForm : Form
     {
         var darkmode = UseDarkMode();
         SystemTheme.UseImmersiveDarkMode(Handle, darkmode);
+        foreach (var folder in Configuration.Folders)
+        {
+            StartWatchingFolder(folder);
+            RefreshMenu(folder);
+        }
     }
 
     #region LoadResources
@@ -158,11 +163,6 @@ public partial class SettingsForm : Form
             TrayIcons.ForEach(i => i.Visible = false);
             TrayIcons.Clear();
             HotKeys.UnregisterAll();
-            foreach (var folder in Configuration.Folders)
-            {
-                StartWatchingFolder(folder);
-                RefreshMenu(folder);
-            }
         }
     }
 
@@ -389,14 +389,15 @@ public partial class SettingsForm : Form
         {
             return false;
         }
-        if (LeftClickMenu.InvokeRequired)
+        if (InvokeRequired)
         {
-            return LeftClickMenu.Invoke(() => {
+            return Invoke(() => {
                 return ShowLeftClickMenu(trayIcon, folder);
             });
         }
         var font = LeftClickMenu.Font;
-        LeftClickMenu.Font = new Font(font.FontFamily, Configuration.FontSize, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
+        font = new Font(font.FontFamily, Configuration.FontSize, font.Style, font.Unit, font.GdiCharSet, font.GdiVerticalFont);
+        LeftClickMenu.Font = font;
         LeftClickMenu.Items.Clear();
         List<ToolStripItem> itemsToAdd = [.. MenuItems[folder]];
 
@@ -424,8 +425,7 @@ public partial class SettingsForm : Form
             foreach (var file in EnumerateFiles(folder.Name.ToLocalPath(), folder.Recursive))
             {
                 if (token.IsCancellationRequested == true) { return; }
-                //If path is not in the root folder, create a submenu to add it into
-                menu.CreateMenuItem(file, folder);
+                Invoke(() => menu.CreateMenuItem(file, folder));
             }
             SetupLeftClickMenu(menu);
         }
@@ -434,6 +434,10 @@ public partial class SettingsForm : Form
     private void LeftClickMenuEntry_MouseDown(object? sender, MouseEventArgs e)
     {
         RightMouseClicked = e.Button == MouseButtons.Right;
+        if (RightMouseClicked && sender is ToolStripMenuItem menu)
+        {
+            menu.DropDown.SetAutoClose(false);
+        }
         LeftClickMenu.AutoClose = !RightMouseClicked;
     }
 
@@ -538,6 +542,10 @@ public partial class SettingsForm : Form
             {
                 ShowContextMenu(filename);
                 LeftClickMenu.AutoClose = true;
+                if (sender is ToolStripMenuItem menu)
+                {
+                    menu.DropDown.SetAutoClose(true);
+                }
             }
             else if (e.ClickedItem.AccessibleRole != AccessibleRole.MenuPopup)
             {
