@@ -14,7 +14,6 @@ public static class MenuItemExtensions
             if (owner.OwnerItem != null && owner.OwnerItem is ToolStripDropDownItem parent)
             {
                 dropDown = parent.DropDown;
-                Debug.WriteLine(parent.Name);
             }
             else
             {
@@ -22,6 +21,5 @@ public static class MenuItemExtensions
             }
             dropDown.AutoClose = autoClose;
         }
-        Debug.WriteLine($"Set autoclose={autoClose}");
     }
 }
