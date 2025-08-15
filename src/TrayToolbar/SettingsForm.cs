@@ -102,7 +102,7 @@ public partial class SettingsForm : Form
         CancelBtn.Text = R.Cancel;
         AddFolderButton.Text = R.Add_Folder;
         Text = $"{R.TrayToolbar_Settings} ({ConfigHelper.ApplicationVersion})";
-        NewVersionLabel.Text = R.A_new_version_is_available;
+        NewVersionLabel.Text = isPrerelease ? R.You_are_using_a_prerelease_version : R.A_new_version_is_available;
         LanguageLabel.Text = R.Language;
         ShowFolderLinksAsSubMenusCheckbox.Text = R.Show_links_to_folders_as_submenus;
 
@@ -122,6 +122,7 @@ public partial class SettingsForm : Form
         ThemeToggleButton.UpdateConfig();
     }
 
+    private bool isPrerelease;
     private void ShowUpdateAvailable(string updateUri, bool prerelease)
     {
         if (NewVersionLabel.InvokeRequired)
@@ -129,6 +130,7 @@ public partial class SettingsForm : Form
             NewVersionLabel.Invoke(ShowUpdateAvailable, updateUri, prerelease);
             return;
         }
+        isPrerelease = prerelease;
         NewVersionLabel.Text = prerelease
             ? R.You_are_using_a_prerelease_version
             : R.A_new_version_is_available;
@@ -280,7 +282,7 @@ public partial class SettingsForm : Form
         var customIcon = folder.GetIcon();
         var icon = new NotifyIcon(components)
         {
-            Icon = customIcon == null ? Icon : Icon.FromHandle(customIcon.GetHicon()),
+            Icon = (customIcon == null || customIcon.Size.IsEmpty) ? Icon : Icon.FromHandle(customIcon.GetHicon()),
             Tag = folder,
             Text = text,
             Visible = true,
