@@ -144,7 +144,7 @@ public partial class FolderControl : UserControl
         Span<char> iconPathBuffer = stackalloc char[(int)capacity];
         path.AsSpan().CopyTo(iconPathBuffer);
 
-        int index = 0;
+        int index = config.IconIndex;
         int result = 0;
         unsafe
         {

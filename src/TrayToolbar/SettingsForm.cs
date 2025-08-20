@@ -38,12 +38,16 @@ public partial class SettingsForm : Form
         SetupMenu();
         PopulateConfig();
         LoadResources(Configuration.Language);
-        if (!ValidateFolderConfigurations())
+        HandleCreated += SettingsForm_HandleCreated;
+        if (ValidateFolderConfigurations())
+        {
+            CreateIcons();
+        }
+        else
         {
             ShowNormal();
         }
         SystemTheme.UseImmersiveDarkMode(0, UseDarkMode());
-        HandleCreated += SettingsForm_HandleCreated;
         ThemeChangeMessageFilter.ThemeChanged += SettingsForm_SystemThemeChanged;
         HotKeys.HotKeyPressed += HotKey_Pressed;
     }
@@ -61,12 +65,24 @@ public partial class SettingsForm : Form
     {
         var darkmode = UseDarkMode();
         SystemTheme.UseImmersiveDarkMode(Handle, darkmode);
-        lock (this) {
+        CreateIcons();
+    }
+
+    private void CreateIcons()
+    {
+        if (!IsHandleCreated) { return; }
+        if (InvokeRequired) 
+        { 
+            Invoke(CreateIcons);
+            return; 
+        }
+        lock (this)
+        {
             foreach (var folder in Configuration.Folders)
             {
                 StartWatchingFolder(folder);
                 RefreshMenu(folder);
-            } 
+            }
         }
     }
 
