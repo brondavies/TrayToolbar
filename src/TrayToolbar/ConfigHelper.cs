@@ -11,8 +11,11 @@ namespace TrayToolbar
     {
         const string REGKEY_STARTUP = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Run";
         const string REGKEY_SHOWINTRAY = @"Software\Microsoft\Windows\CurrentVersion\RunNotification"; //StartupTNotiTrayToolbar (DWORD) = 1
+        const string REGKEY_SYSTEM_ENVIRONMENT = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
+        const string REGKEY_USER_ENVIRONMENT = @"Environment";
         const string UPDATE_URL = "https://github.com/brondavies/TrayToolbar/releases/latest";
         const string STARTUP_VALUE = "TrayToolbar";
+        const string PathEnvVar = "Path";
 
         internal static string ApplicationExe => Environment.ProcessPath!;
         internal static readonly string ApplicationRoot = new FileInfo(ApplicationExe!).DirectoryName!;
@@ -123,6 +126,70 @@ namespace TrayToolbar
             }
             catch { }
             return version;
+        }
+
+        internal static void RefreshProcessEnvironmentFromRegistry()
+        {
+            try
+            {
+                var allVariables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+                LoadKeyValues(Registry.LocalMachine.OpenSubKey(REGKEY_SYSTEM_ENVIRONMENT), allVariables);
+                // user overrides machine (except Path is merged)
+                LoadKeyValues(Registry.CurrentUser.OpenSubKey(REGKEY_USER_ENVIRONMENT), allVariables);
+
+                foreach (var kvp in allVariables)
+                {
+                    Environment.SetEnvironmentVariable(kvp.Key, kvp.Value, EnvironmentVariableTarget.Process);
+                }
+            }
+            catch { }
+
+            static void LoadKeyValues(RegistryKey? key, Dictionary<string, string> target)
+            {
+                if (key is null) return;
+                using (key)
+                {
+                    foreach (var name in key.GetValueNames())
+                    {
+                        object? raw = key.GetValue(name);
+                        if (raw is null) continue;
+                        string value = raw.ToString() ?? string.Empty;
+
+                        try
+                        {
+                            var kind = key.GetValueKind(name);
+                            if (kind == RegistryValueKind.ExpandString)
+                            {
+                                value = Environment.ExpandEnvironmentVariables(value);
+                            }
+                        }
+                        catch { }
+
+                        // If variable is PATH merge instead of replace
+                        if (name.Is(PathEnvVar) && target.TryGetValue(PathEnvVar, out var existingPath))
+                        {
+                            // Keep existing order. Append only new, non-duplicate segments.
+                            var existingSegments = existingPath.SplitPaths([';']).ToList();
+                            var existingSet = new HashSet<string>(existingSegments, StringComparer.OrdinalIgnoreCase);
+                            var newSegments = value.SplitPaths([';']);
+                            foreach (var seg in newSegments)
+                            {
+                                if (existingSet.Add(seg))
+                                {
+                                    existingSegments.Add(seg);
+                                }
+                            }
+
+                            target[PathEnvVar] = string.Join(';', existingSegments);
+                        }
+                        else
+                        {
+                            target[name] = value;
+                        }
+                    }
+                }
+            }
         }
     }
 }

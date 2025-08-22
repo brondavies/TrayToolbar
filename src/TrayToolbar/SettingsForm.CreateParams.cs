@@ -1,17 +1,16 @@
 ﻿using Windows.Win32.UI.WindowsAndMessaging;
 
-namespace TrayToolbar
+namespace TrayToolbar;
+
+partial class SettingsForm
 {
-    partial class SettingsForm
+    protected override CreateParams CreateParams
     {
-        protected override CreateParams CreateParams
+        get
         {
-            get
-            {
-                CreateParams handleParam = base.CreateParams;
-                handleParam.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_COMPOSITED;
-                return handleParam;
-            }
+            CreateParams handleParam = base.CreateParams;
+            handleParam.ExStyle |= (int)WINDOW_EX_STYLE.WS_EX_COMPOSITED;
+            return handleParam;
         }
     }
 }

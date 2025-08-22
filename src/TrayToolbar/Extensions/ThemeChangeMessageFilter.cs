@@ -26,14 +26,16 @@ internal class ThemeChangeMessageFilter : IMessageFilter
 
     public bool PreFilterMessage(ref Message m)
     {
-        //Debug.WriteLine($"{m.HWnd}: {m.WParam}, {m.LParam}, {m.Msg}");
-        //TODO: I was expecting to be able to check for WM_SETTINGCHANGE but this doesn't actually consistently happen between Win 10/11
-        //      Look for updated documentation on how to get a message when the theme changes
         if ((DateTime.Now - eventTrigger).TotalMilliseconds > 100)
         {
-            ThemeChanged?.Invoke(null, EventArgs.Empty);
-            eventTrigger = DateTime.Now;
+            TriggerThemeChanged();
         }
         return false;
+    }
+
+    internal static void TriggerThemeChanged()
+    {
+        ThemeChanged?.Invoke(null, EventArgs.Empty);
+        eventTrigger = DateTime.Now;
     }
 }
