@@ -19,6 +19,8 @@ public partial class SettingsForm : Form
 
     internal readonly CultureInfo DefaultCulture = CultureInfo.CurrentCulture;
 
+    private bool FirstTimeLoad = false;
+
     internal readonly CultureInfo[] SupportedLanguages = [
         CultureInfo.GetCultureInfo("en"),
         CultureInfo.GetCultureInfo("es"),
@@ -39,12 +41,13 @@ public partial class SettingsForm : Form
         PopulateConfig();
         LoadResources(Configuration.Language);
         HandleCreated += SettingsForm_HandleCreated;
-        if (ValidateFolderConfigurations())
+        if (ValidateFolderConfigurations() && !FirstTimeLoad)
         {
             CreateIcons();
         }
         else
         {
+            FirstTimeLoad = false;
             ShowNormal();
         }
         SystemTheme.UseImmersiveDarkMode(0, UseDarkMode());
@@ -337,7 +340,8 @@ public partial class SettingsForm : Form
         var i = 0;
         if (Configuration.Folders.Count == 0)
         {
-            Configuration.Folders.Add(new FolderConfig { Recursive = true });
+            FirstTimeLoad = true;
+            Configuration.Folders.Add(new FolderConfig { Recursive = true, Name = @"%APPDATA%\Microsoft\Windows\Start Menu" });
         }
         Configuration.Folders.ForEach(f => AddFolder(f, i++));
         FoldersUpdated();
@@ -374,7 +378,7 @@ public partial class SettingsForm : Form
         }
     }
 
-    private bool IsPrereleaseVersion(string version)
+    static bool IsPrereleaseVersion(string version)
     {
         try
         {

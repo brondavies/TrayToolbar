@@ -2,13 +2,17 @@
 DwmSetWindowAttribute
 DWMWINDOWATTRIBUTE
 GetAsyncKeyState
+HWND_BROADCAST
 ImageList_GetIcon
 IMAGE_LIST_DRAW_STYLE
 PickIconDlg
+PostMessage
 RegCloseKey
 RegisterHotKey
+RegisterWindowMessage
 RegNotifyChangeKeyValue
 RegOpenKeyEx
+SetForegroundWindow
 SHGetFileInfo
 SHGetStockIconInfo
 SHGFI_FLAGS
