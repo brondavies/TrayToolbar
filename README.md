@@ -3,7 +3,7 @@
 
 [![CodeQL](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml/badge.svg?branch=master&event=push)](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml) [![Download](https://img.shields.io/github/v/release/brondavies/TrayToolbar?label=Version&labelColor=%23222&color=%233a4)](https://github.com/brondavies/TrayToolbar/releases)
 
-- Replaces the Windows 7-10 feature that no longer exists in Windows 11 for custom toolbars on the taskbar
+- Replaces the feature removed from Windows 11 for custom toolbars on the taskbar
 - Choose the folder(s) and customize the file filter
 - Launches links, files and apps from this menu which exist in the chosen folders and subfolders
 - Automatically updates the menu with changes in the folder
