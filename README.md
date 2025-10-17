@@ -13,7 +13,7 @@
 - Windows 10/11 ["Dark mode"](https://support.microsoft.com/en-us/windows/change-colors-in-windows-d26ef4d6-819a-581c-1581-493cfcc005fe) support
 - Includes support for English, Spanish, French, German, Portuguese, Italian, Japanese, Chinese, Russian, and Korean
 
-<p style="background:#f9f9f9">💡 Can also be used in Windows 8 and 10!</p>
+<p style="background:#f9f9f9">💡 Can also be used in Windows 10!</p>
 
 ## Download
 [Check the releases](https://github.com/brondavies/TrayToolbar/releases) or compile the source code in any modern version of Visual Studio.

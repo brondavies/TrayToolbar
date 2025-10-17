@@ -231,4 +231,7 @@
   <data name="You are using a prerelease version" xml:space="preserve">
     <value>Estás usando una versión preliminar</value>
   </data>
+  <data name="Notify me when a new version is available" xml:space="preserve">
+    <value>Avísame cuando haya una nueva versión disponible</value>
+  </data>
 </root>

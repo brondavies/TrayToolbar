@@ -231,4 +231,7 @@
   <data name="You are using a prerelease version" xml:space="preserve">
     <value>사전 릴리스 버전을 사용하고 있습니다.</value>
   </data>
+  <data name="Notify me when a new version is available" xml:space="preserve">
+    <value>새 버전이 출시되면 알려주세요</value>
+  </data>
 </root>

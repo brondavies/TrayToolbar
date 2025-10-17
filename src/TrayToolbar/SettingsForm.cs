@@ -21,6 +21,8 @@ public partial class SettingsForm : Form
 
     private bool FirstTimeLoad = false;
 
+    private System.Threading.Timer? UpdateCheckTimer;
+
     internal readonly CultureInfo[] SupportedLanguages = [
         CultureInfo.GetCultureInfo("en"),
         CultureInfo.GetCultureInfo("es"),
@@ -53,6 +55,29 @@ public partial class SettingsForm : Form
         SystemTheme.UseImmersiveDarkMode(0, UseDarkMode());
         ThemeChangeMessageFilter.ThemeChanged += SettingsForm_SystemThemeChanged;
         HotKeys.HotKeyPressed += HotKey_Pressed;
+    }
+
+    private void SetupUpdateCheckTimer()
+    {
+        var interval = TimeSpan.FromMinutes(Configuration.UpdateCheckInterval);
+        UpdateCheckTimer = new System.Threading.Timer(
+            callback: _ => CheckForUpdateAsync(),
+            state: null,
+            dueTime: interval,
+            period: interval
+        );
+    }
+
+    private void CheckForUpdateAsync()
+    {
+        ConfigHelper.CheckForUpdate().ContinueWith(r =>
+        {
+            if (r.Result?.Name != null && r.Result.Name != "v" + ConfigHelper.ApplicationVersion)
+            {
+                var prerelease = IsPrereleaseVersion(r.Result.Name[1..]);
+                ShowUpdateAvailable(r.Result.UpdateUrl, prerelease);
+            }
+        });
     }
 
     private void HotKey_Pressed(int value, EventArgs e)
@@ -116,6 +141,7 @@ public partial class SettingsForm : Form
         IconSizeLabel.Text = R.Icon_Size;
         IconSizeSmallCheckbox.Text = R.Small;
         IconSizeLargeCheckbox.Text = R.Large;
+        NotifyOnUpdateAvailableCheckbox.Text = R.Notify_me_when_a_new_version_is_available;
         RunOnLoginCheckbox.Text = R.Run_on_log_in;
         SaveButton.Text = R.Save;
         CancelBtn.Text = R.Cancel;
@@ -155,6 +181,12 @@ public partial class SettingsForm : Form
             : R.A_new_version_is_available;
         NewVersionLabel.Visible = true;
         NewVersionLabel.Tag = "https://github.com" + updateUri;
+        if (!prerelease && Configuration.NotifyOnUpdateAvailable)
+        {
+            NotificationsHelper.Notify(R.A_new_version_is_available, "https://github.com" + updateUri);
+            UpdateCheckTimer?.Dispose();
+            UpdateCheckTimer = null;
+        }
     }
 
     #endregion
@@ -353,6 +385,7 @@ public partial class SettingsForm : Form
         IconSizeLargeCheckbox.Checked = Configuration.LargeIcons;
         IconSizeSmallCheckbox.Checked = !Configuration.LargeIcons;
         LanguageSelectList.SelectedIndex = SupportedLanguages.IndexOf(l => l.TwoLetterISOLanguageName == Configuration.Language) + 1;
+        NotifyOnUpdateAvailableCheckbox.Checked = Configuration.NotifyOnUpdateAvailable;
         RunOnLoginCheckbox.Checked = ConfigHelper.IsAutoStartupConfigured();
         if (SystemTheme.IsDarkModeSupported())
         {
@@ -367,14 +400,11 @@ public partial class SettingsForm : Form
         }
         if (Configuration.CheckForUpdates)
         {
-            ConfigHelper.CheckForUpdate().ContinueWith(r =>
+            if (Configuration.NotifyOnUpdateAvailable)
             {
-                if (r.Result?.Name != null && r.Result.Name != "v" + ConfigHelper.ApplicationVersion)
-                {
-                    var prerelease = IsPrereleaseVersion(r.Result.Name[1..]);
-                    ShowUpdateAvailable(r.Result.UpdateUrl, prerelease);
-                }
-            });
+                SetupUpdateCheckTimer();
+            }
+            CheckForUpdateAsync();
         }
     }
 
@@ -530,6 +560,10 @@ public partial class SettingsForm : Form
             ShowInTaskbar = false;
             e.Cancel = true;
         }
+        else
+        {
+            UpdateCheckTimer?.Dispose();
+        }
     }
 
     private void SettingsForm_Resize(object sender, EventArgs e)
@@ -637,6 +671,7 @@ public partial class SettingsForm : Form
         Configuration.ShowFolderLinksAsSubMenus = ShowFolderLinksAsSubMenusCheckbox.Checked;
         Configuration.Theme = (int)ThemeToggleButton.Theme;
         Configuration.LargeIcons = IconSizeLargeCheckbox.Checked;
+        Configuration.NotifyOnUpdateAvailable = NotifyOnUpdateAvailableCheckbox.Checked;
         if (FontSizeInput.Validate())
         {
             Configuration.FontSize = (float)FontSizeInput.Value;

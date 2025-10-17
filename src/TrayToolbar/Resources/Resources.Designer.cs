@@ -253,6 +253,15 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Notify me when a new version is available.
+        /// </summary>
+        internal static string Notify_me_when_a_new_version_is_available {
+            get {
+                return ResourceManager.GetString("Notify me when a new version is available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         internal static string OK {
