@@ -16,6 +16,7 @@ namespace TrayToolbar
         const string UPDATE_URL = "https://github.com/brondavies/TrayToolbar/releases/latest";
         const string STARTUP_VALUE = "TrayToolbar";
         const string PathEnvVar = "Path";
+        const string UsernameEnvVar = "username";
 
         internal static string ApplicationExe => Environment.ProcessPath!;
         internal static readonly string ApplicationRoot = new FileInfo(ApplicationExe!).DirectoryName!;
@@ -150,7 +151,7 @@ namespace TrayToolbar
                 if (key is null) return;
                 using (key)
                 {
-                    foreach (var name in key.GetValueNames())
+                    foreach (var name in key.GetValueNames().Where(n => !n.Is(UsernameEnvVar)))
                     {
                         object? raw = key.GetValue(name);
                         if (raw is null) continue;
