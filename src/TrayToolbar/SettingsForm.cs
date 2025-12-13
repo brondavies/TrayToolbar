@@ -713,9 +713,13 @@ public partial class SettingsForm : Form
 
     private void CancelBtn_Click(object sender, EventArgs e)
     {
-        Close();
         SetupMenu();
         PopulateConfig();
+        if (ValidateFolderConfigurations())
+        {
+            Close();
+            CreateIcons();
+        }
     }
 
     private void NewVersionLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

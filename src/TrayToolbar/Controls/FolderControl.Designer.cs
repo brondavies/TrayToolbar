@@ -61,10 +61,10 @@ namespace TrayToolbar
             FolderComboBox.BorderColor = SystemColors.WindowFrame;
             FolderComboBox.DropDownStyle = ComboBoxStyle.Simple;
             FolderComboBox.FormattingEnabled = true;
-            FolderComboBox.Location = new Point(38, 3);
+            FolderComboBox.Location = new Point(44, 3);
             FolderComboBox.MaxDropDownItems = 15;
             FolderComboBox.Name = "FolderComboBox";
-            FolderComboBox.Size = new Size(295, 23);
+            FolderComboBox.Size = new Size(289, 23);
             FolderComboBox.Sorted = true;
             FolderComboBox.TabIndex = 0;
             FolderComboBox.TextUpdate += FolderComboBox_TextUpdate;
@@ -81,6 +81,7 @@ namespace TrayToolbar
             BrowseFolderButton.Location = new Point(335, 3);
             BrowseFolderButton.Name = "BrowseFolderButton";
             BrowseFolderButton.Size = new Size(30, 23);
+            BrowseFolderButton.SizeMode = PictureBoxSizeMode.AutoSize;
             BrowseFolderButton.TabIndex = 7;
             BrowseFolderButton.TabStop = false;
             BrowseFolderButton.Click += BrowseFolderButton_Click;
@@ -97,6 +98,7 @@ namespace TrayToolbar
             DeleteFolderButton.Location = new Point(367, 3);
             DeleteFolderButton.Name = "DeleteFolderButton";
             DeleteFolderButton.Size = new Size(30, 23);
+            DeleteFolderButton.SizeMode = PictureBoxSizeMode.AutoSize;
             DeleteFolderButton.TabIndex = 8;
             DeleteFolderButton.TabStop = false;
             DeleteFolderButton.Click += DeleteFolderButton_Click;
@@ -104,7 +106,7 @@ namespace TrayToolbar
             // RecursiveCheckbox
             // 
             RecursiveCheckbox.AutoSize = true;
-            RecursiveCheckbox.Location = new Point(40, 32);
+            RecursiveCheckbox.Location = new Point(44, 32);
             RecursiveCheckbox.Name = "RecursiveCheckbox";
             RecursiveCheckbox.Size = new Size(124, 19);
             RecursiveCheckbox.TabIndex = 1;
@@ -199,6 +201,7 @@ namespace TrayToolbar
             SelectIconButton.Location = new Point(3, 3);
             SelectIconButton.Name = "SelectIconButton";
             SelectIconButton.Size = new Size(32, 32);
+            SelectIconButton.SizeMode = PictureBoxSizeMode.AutoSize;
             SelectIconButton.TabIndex = 13;
             SelectIconButton.TabStop = false;
             SelectIconButton.Click += SelectIconButton_Click;
