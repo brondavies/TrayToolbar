@@ -434,6 +434,15 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TrayToolbar Location.
+        /// </summary>
+        internal static string TrayToolbar_Location {
+            get {
+                return ResourceManager.GetString("TrayToolbar Location", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TrayToolbar Settings.
         /// </summary>
         internal static string TrayToolbar_Settings {

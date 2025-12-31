@@ -119,6 +119,7 @@ public partial class SettingsForm : Form
     const string Command_Options = "Options";
     const string Command_Open = "Open";
     const string Command_Exit = "Exit";
+    const string Command_Locate = "Locate";
 
     private void LoadResources(string? language)
     {
@@ -151,14 +152,14 @@ public partial class SettingsForm : Form
         LanguageLabel.Text = R.Language;
         ShowFolderLinksAsSubMenusCheckbox.Text = R.Show_links_to_folders_as_submenus;
 
-        List<ToolStripItem> itemsToAdd = [
-           new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
-           new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = Command_Open },
-           new ToolStripMenuItem { Text = R.Exit, CommandParameter = Command_Exit }
-        ];
 
         RightClickMenu.Items.Clear();
-        RightClickMenu.Items.AddRange(itemsToAdd.ToArray());
+        RightClickMenu.Items.AddRange([
+            new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
+            new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = Command_Open },
+            new ToolStripMenuItem { Text = R.TrayToolbar_Location, CommandParameter = Command_Locate },
+            new ToolStripMenuItem { Text = R.Exit, CommandParameter = Command_Exit }
+        ]);
 
         foreach (var control in FolderControls())
         {
@@ -594,6 +595,9 @@ public partial class SettingsForm : Form
                 var folder = (FolderConfig?)RightClickMenu.Tag;
                 if (folder?.Name != null)
                     Program.Launch(folder.Name.ToLocalPath());
+                break;
+            case Command_Locate:
+                Program.Launch(ConfigHelper.ApplicationRoot);
                 break;
             case Command_Exit:
                 Quit();

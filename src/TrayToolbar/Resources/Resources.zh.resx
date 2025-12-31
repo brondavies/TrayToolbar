@@ -234,4 +234,7 @@
   <data name="Notify me when a new version is available" xml:space="preserve">
     <value>当有新版本可用时通知我</value>
   </data>
+  <data name="TrayToolbar Location" xml:space="preserve">
+    <value>托盘工具栏 位置</value>
+  </data>
 </root>

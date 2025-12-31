@@ -234,4 +234,7 @@
   <data name="Notify me when a new version is available" xml:space="preserve">
     <value>Avise-me quando uma nova versão estiver disponível</value>
   </data>
+  <data name="TrayToolbar Location" xml:space="preserve">
+    <value>Localização do TrayToolbar</value>
+  </data>
 </root>
