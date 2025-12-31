@@ -146,7 +146,34 @@ namespace TrayToolbar.Models
 
             menu.MouseDown += MouseDownHandler;
             menu.Click += MenuClicked(menu);
+            menu.DropDownOpening += Menu_DropDownOpening;
             return menu;
+        }
+
+        private void Menu_DropDownOpening(object? sender, EventArgs e)
+        {
+            if (sender is ToolStripMenuItem menuItem && menuItem.HasDropDownItems)
+            {
+                var parent = menuItem.GetCurrentParent();
+                if (parent != null)
+                {
+                    var bounds = parent.Bounds;
+                    var currentScreen = Screen.FromPoint(bounds.Location);
+                    var maxWidth = 0;
+                    foreach (ToolStripMenuItem subitem in menuItem.DropDownItems)
+                    {
+                        maxWidth = Math.Max(subitem.Width, maxWidth);
+                    }
+                    maxWidth += 10;
+
+                    var end = bounds.Right + maxWidth;
+                    var currentMonitorRight = currentScreen.Bounds.Right;
+
+                    menuItem.DropDownDirection = end > currentMonitorRight
+                        ? ToolStripDropDownDirection.Left
+                        : ToolStripDropDownDirection.Right;
+                }
+            }
         }
 
         private EventHandler MenuClicked(ToolStripMenuItem menu)
