@@ -152,23 +152,23 @@ namespace TrayToolbar.Models
             };
         }
 
-        internal Bitmap? GetIcon()
+        internal Bitmap? GetIcon(bool small = false)
         {
             if (Icon.HasValue() && File.Exists(Icon.ToLocalPath()))
             {
                 try
                 {
-                    return System.Drawing.Icon.ExtractIcon(Icon.ToLocalPath(), IconIndex)?.ToBitmap()
-                        ?? GetDefaultIcon();
+                    return System.Drawing.Icon.ExtractIcon(Icon.ToLocalPath(), IconIndex, small)?.ToBitmap()
+                        ?? GetDefaultIcon(small);
                 }
                 catch { }
             }
-            return GetDefaultIcon();
+            return GetDefaultIcon(small);
         }
 
-        private Bitmap? GetDefaultIcon()
+        private Bitmap? GetDefaultIcon(bool small)
         {
-            return Name?.ToLocalPath().GetImage(true);
+            return Name?.ToLocalPath().GetImage(!small);
         }
     }
 }

@@ -331,7 +331,7 @@ public partial class SettingsForm : Form
     private NotifyIcon CreateTrayIcon(FolderConfig folder)
     {
         var text = Path.GetFileName(folder.Name!.ToLocalPath());
-        var customIcon = folder.GetIcon();
+        var customIcon = folder.GetIcon(true);
         var icon = new NotifyIcon(components)
         {
             Icon = (customIcon == null || customIcon.Size.IsEmpty) ? Icon : Icon.FromHandle(customIcon.GetHicon()),
