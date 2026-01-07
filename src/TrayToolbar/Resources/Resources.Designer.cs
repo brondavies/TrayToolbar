@@ -99,6 +99,15 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to update to the latest version?.
+        /// </summary>
+        internal static string Are_you_sure_you_want_to_update_to_the_latest_version {
+            get {
+                return ResourceManager.GetString("Are you sure you want to update to the latest version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Browse Folder.
         /// </summary>
         internal static string Browse_Folder {
@@ -448,6 +457,33 @@ namespace TrayToolbar.Resources {
         internal static string TrayToolbar_Settings {
             get {
                 return ResourceManager.GetString("TrayToolbar Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update now.
+        /// </summary>
+        internal static string Update_now {
+            get {
+                return ResourceManager.GetString("Update now", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update TrayToolbar.
+        /// </summary>
+        internal static string Update_TrayToolbar {
+            get {
+                return ResourceManager.GetString("Update TrayToolbar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated to version {0}!.
+        /// </summary>
+        internal static string Updated_to_version {
+            get {
+                return ResourceManager.GetString("Updated to version", resourceCulture);
             }
         }
         

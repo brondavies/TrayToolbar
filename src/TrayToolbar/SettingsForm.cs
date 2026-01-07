@@ -11,13 +11,15 @@ public partial class SettingsForm : Form
 {
     internal TrayToolbarConfiguration Configuration = new();
 
-    public Dictionary<FolderConfig, MenuItemCollection> MenuItems = [];
+    internal Dictionary<FolderConfig, MenuItemCollection> MenuItems = [];
 
     internal List<NotifyIcon> TrayIcons = [];
 
     internal bool RightMouseClicked;
 
     internal readonly CultureInfo DefaultCulture = CultureInfo.CurrentCulture;
+
+    internal bool NewVersionMessage = false;
 
     private bool FirstTimeLoad = false;
 
@@ -59,6 +61,7 @@ public partial class SettingsForm : Form
 
     private void SetupUpdateCheckTimer()
     {
+        NotificationsHelper.Activate();
         var interval = TimeSpan.FromMinutes(Configuration.UpdateCheckInterval);
         UpdateCheckTimer = new System.Threading.Timer(
             callback: _ => CheckForUpdateAsync(),
@@ -99,10 +102,10 @@ public partial class SettingsForm : Form
     private void CreateIcons()
     {
         if (!IsHandleCreated) { return; }
-        if (InvokeRequired) 
-        { 
+        if (InvokeRequired)
+        {
             Invoke(CreateIcons);
-            return; 
+            return;
         }
         lock (this)
         {
@@ -149,6 +152,7 @@ public partial class SettingsForm : Form
         AddFolderButton.Text = R.Add_Folder;
         Text = $"{R.TrayToolbar_Settings} ({ConfigHelper.ApplicationVersion})";
         NewVersionLabel.Text = isPrerelease ? R.You_are_using_a_prerelease_version : R.A_new_version_is_available;
+        UpdateNowLabel.Text = R.Update_now;
         LanguageLabel.Text = R.Language;
         ShowFolderLinksAsSubMenusCheckbox.Text = R.Show_links_to_folders_as_submenus;
 
@@ -180,11 +184,13 @@ public partial class SettingsForm : Form
         NewVersionLabel.Text = prerelease
             ? R.You_are_using_a_prerelease_version
             : R.A_new_version_is_available;
+        var updateUrl = "https://github.com" + updateUri;
+        NewVersionLabel.Tag = updateUrl;
         NewVersionLabel.Visible = true;
-        NewVersionLabel.Tag = "https://github.com" + updateUri;
+        UpdateNowLabel.Visible = !prerelease;
         if (!prerelease && Configuration.NotifyOnUpdateAvailable)
         {
-            NotificationsHelper.Notify(R.A_new_version_is_available, "https://github.com" + updateUri);
+            NotificationsHelper.Notify(R.A_new_version_is_available, updateUrl, R.Update_now, NotificationsHelper.UPDATE_ACTION);
             UpdateCheckTimer?.Dispose();
             UpdateCheckTimer = null;
         }
@@ -457,7 +463,8 @@ public partial class SettingsForm : Form
         }
         if (InvokeRequired)
         {
-            return Invoke(() => {
+            return Invoke(() =>
+            {
                 return ShowLeftClickMenu(trayIcon, folder);
             });
         }
@@ -699,7 +706,9 @@ public partial class SettingsForm : Form
         }
         if (error)
         {
-            MessageBox.Show(R.The_folder_value_must_be_set, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, 
+                R.The_folder_value_must_be_set, R.Error,
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
 
@@ -709,7 +718,9 @@ public partial class SettingsForm : Form
         }
         if (error)
         {
-            MessageBox.Show(R.The_folder_does_not_exist, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(this, 
+                R.The_folder_does_not_exist, R.Error, 
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
         return true;
@@ -816,6 +827,13 @@ public partial class SettingsForm : Form
     private void SettingsForm_Shown(object sender, EventArgs e)
     {
         SettingsForm_SystemThemeChanged(sender, e);
+        if (NewVersionMessage)
+        {
+            NewVersionMessage = false;
+            MessageBox.Show(this, 
+                string.Format(R.Updated_to_version, ConfigHelper.ApplicationVersion),
+                R.Update_TrayToolbar, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
     }
 
     private void SettingsForm_SystemColorsChanged(object sender, EventArgs e)
@@ -833,5 +851,17 @@ public partial class SettingsForm : Form
         }
         Configuration.Language = code;
         LoadResources(code);
+    }
+
+    private void UpdateNowLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        var result = MessageBox.Show(this, 
+            R.Are_you_sure_you_want_to_update_to_the_latest_version, 
+            R.Update_TrayToolbar, 
+            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+        if (result == DialogResult.Yes)
+        {
+            ConfigHelper.UpdateToLatestVersion();
+        }
     }
 }

@@ -121,6 +121,24 @@
     <value>False</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="UpdateNowLabel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAHdElNRQfVCwoNNw+eKti/AAAAjHRFWHRDb21tZW50AE1l
+        bnUtc2l6ZWQgaWNvbgo9PT09PT09PT09CgooYykgMjAwMyBKYWt1YiAnamltbWFjJyBTdGVpbmVyLCAK
+        aHR0cDovL2ppbW1hYy5tdXNpY2hhbGwuY3oKCmNyZWF0ZWQgd2l0aCB0aGUgR0lNUCwKaHR0cDovL3d3
+        dy5naW1wLm9yZ2eKx0cAAAIpSURBVDhPnZHda1JhHMf9P/pHhBjRy9WgIOhiBHWxi6ydZdoa26JtdmGM
+        jI2EZG3Q6Sp1sywSh8ywfAH14PGlKY08SeoG6jk2X8A09RvPEx09rrroB5/zPPzO9/fhec5RTRvn7p1f
+        eLyk1phuqTWmR2qNaU+tMWHsxsPv43rDwcT8XaPqX3VGZ746adlduv8yeeUNfxhL5L4h9FnEpj+H66bn
+        vbPald7U8uUTo3NyMcsrlmv6GUzqZjF+04jTdzZwbp7FM98+PuxXcPGBExemFqHVMX/CoGL0WuQPBZAS
+        vmYQyQjQPnWDXGOby8O88xGXFjeRzh3QzO9qNptUoro9y6DX66FarUKSJOTyXzC3/poKFqxRrL3lMcas
+        wuENQJKqkEiuKqHRbPwSkEf3RxcVUaRDwxDBhPndsb4oimg0hgSdTgelUhnReJAG1n1Z6FmfzAz7Hpbd
+        T/TdE7sT5VIZ9Xp9IGi321RSLBYR4nyyhAwStsM52jO/cNAMuX+tVlMKyDcYlTi4AhWdZNbkYZIhWYWg
+        1WqhUCjIEgK/F8ap6VUq2njlor1ut0szJHt0dDQQ9Pt9xS8aLXJkQqVSoRwT8DyPSCSiIBQKKfajZDIZ
+        pYA0WZaF0+mE1+tFMBhEOBxGIpGA3W5HKpWSV4/Hg2g0OhDEYjEEAgFsbdnhcrng9/tlAcdxsFltSCaT
+        sFmtdN1xu5UCQRCQzWZl0uk0JR6P/5VhgYFs/hPDT19J2nqZzi4CAAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="NewVersionLabel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29m

@@ -1,6 +1,5 @@
 using System.Diagnostics;
 using System.Security.Principal;
-using System.Threading;
 using TrayToolbar.Extensions;
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -13,6 +12,12 @@ namespace TrayToolbar
         static void Main()
         {
             ApplicationConfiguration.Initialize();
+
+            // Handle automatic update
+            if (UpdateHelper.ProcessUpdate())
+            {
+                return;
+            }
 
             // Single-instance (per-user) enforcement
             if (!EnsureSingleInstance())
@@ -30,8 +35,10 @@ namespace TrayToolbar
             try
             {
                 var form = new SettingsForm();
-                if (Environment.GetCommandLineArgs().Contains("--show"))
+                var args = Environment.GetCommandLineArgs();
+                if (args.Contains("--show"))
                 {
+                    form.NewVersionMessage = args.Contains("--newversion");
                     form.Show();
                 }
                 Application.Run(form);
@@ -58,6 +65,7 @@ namespace TrayToolbar
 
         #region Single Instance
 
+        internal static readonly uint WM_EXITSETTINGSFORM = PInvoke.RegisterWindowMessage("TrayToolbar.ExitSettingsForm.241ba8ec-76fa-4b62-91ff-2f5d060f5db7");
         internal static readonly uint WM_SHOWSETTINGSFORM = PInvoke.RegisterWindowMessage("TrayToolbar.ShowSettingsForm.729a0e10-3131-4e69-ba45-23660c5a91bf");
         private static Mutex? _mutex;
 

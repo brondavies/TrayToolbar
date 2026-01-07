@@ -20,6 +20,11 @@ partial class SettingsForm
             ShowNormal();
             PInvoke.SetForegroundWindow(new HWND(Handle));
         }
+        // Exit request from an update that needs to replace the application
+        else if (m.Msg == Program.WM_EXITSETTINGSFORM)
+        {
+            Quit();
+        }
         else if (m.Msg == PInvoke.WM_SETTINGCHANGE)
         {
             string param = Marshal.PtrToStringUni(m.LParam) ?? "";

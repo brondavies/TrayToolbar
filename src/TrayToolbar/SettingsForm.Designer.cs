@@ -64,6 +64,7 @@
             RightClickMenu = new ContextMenuStrip(components);
             LeftClickMenu = new ContextMenuStrip(components);
             FolderDialog = new FolderBrowserDialog();
+            UpdateNowLabel = new LinkLabel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             flowLayoutPanel1.SuspendLayout();
             tableLayout.SuspendLayout();
@@ -77,6 +78,7 @@
             flowLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             flowLayoutPanel1.Controls.Add(CancelBtn);
             flowLayoutPanel1.Controls.Add(SaveButton);
+            flowLayoutPanel1.Controls.Add(UpdateNowLabel);
             flowLayoutPanel1.Controls.Add(NewVersionLabel);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
@@ -116,11 +118,11 @@
             // 
             NewVersionLabel.ActiveLinkColor = Color.RoyalBlue;
             NewVersionLabel.AutoSize = true;
+            NewVersionLabel.Cursor = Cursors.Hand;
             NewVersionLabel.Dock = DockStyle.Left;
             NewVersionLabel.Image = (Image)resources.GetObject("NewVersionLabel.Image");
             NewVersionLabel.ImageAlign = ContentAlignment.MiddleLeft;
-            NewVersionLabel.Location = new Point(104, 3);
-            NewVersionLabel.Margin = new Padding(3, 0, 30, 0);
+            NewVersionLabel.Location = new Point(9, 3);
             NewVersionLabel.Name = "NewVersionLabel";
             NewVersionLabel.Padding = new Padding(24, 0, 0, 0);
             NewVersionLabel.Size = new Size(168, 33);
@@ -494,6 +496,25 @@
             LeftClickMenu.Name = "leftClickMenu";
             LeftClickMenu.Size = new Size(61, 4);
             // 
+            // UpdateNowLabel
+            // 
+            UpdateNowLabel.AutoSize = true;
+            UpdateNowLabel.Cursor = Cursors.Hand;
+            UpdateNowLabel.Dock = DockStyle.Left;
+            UpdateNowLabel.Image = (Image)resources.GetObject("UpdateNowLabel.Image");
+            UpdateNowLabel.ImageAlign = ContentAlignment.MiddleLeft;
+            UpdateNowLabel.Location = new Point(183, 3);
+            UpdateNowLabel.Margin = new Padding(3, 0, 24, 0);
+            UpdateNowLabel.Name = "UpdateNowLabel";
+            UpdateNowLabel.Padding = new Padding(24, 0, 0, 0);
+            UpdateNowLabel.Size = new Size(95, 33);
+            UpdateNowLabel.TabIndex = 31;
+            UpdateNowLabel.TabStop = true;
+            UpdateNowLabel.Text = "Update now";
+            UpdateNowLabel.TextAlign = ContentAlignment.MiddleLeft;
+            UpdateNowLabel.Visible = false;
+            UpdateNowLabel.LinkClicked += UpdateNowLabel_LinkClicked;
+            // 
             // SettingsForm
             // 
             AcceptButton = SaveButton;
@@ -561,5 +582,6 @@
         private CheckBox ShowFolderLinksAsSubMenusCheckbox;
         private Label UpdatesLabel;
         private CheckBox NotifyOnUpdateAvailableCheckbox;
+        private LinkLabel UpdateNowLabel;
     }
 }

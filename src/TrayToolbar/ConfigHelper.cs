@@ -1,5 +1,8 @@
 ﻿using Microsoft.Win32;
+using System.Diagnostics;
+using System.IO.Compression;
 using System.Net.Http.Json;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 using TrayToolbar.Extensions;
 using TrayToolbar.Models;
@@ -191,6 +194,17 @@ namespace TrayToolbar
                     }
                 }
             }
+        }
+
+        internal static void UpdateToLatestVersion()
+        {
+            CheckForUpdate().ContinueWith(r =>
+            {
+                if (r.Result?.Name != null && r.Result.Name != "v" + ApplicationVersion)
+                {
+                    UpdateHelper.DownloadAndUpdate(r.Result.Name);
+                }
+            });
         }
     }
 }
