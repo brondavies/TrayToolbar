@@ -237,4 +237,16 @@
   <data name="TrayToolbar Location" xml:space="preserve">
     <value>Percorso di TrayToolbar</value>
   </data>
+  <data name="Are you sure you want to update to the latest version" xml:space="preserve">
+    <value>Sei sicuro di voler aggiornare all'ultima versione?</value>
+  </data>
+  <data name="Update now" xml:space="preserve">
+    <value>Aggiorna ora</value>
+  </data>
+  <data name="Update TrayToolbar" xml:space="preserve">
+    <value>Aggiorna TrayToolbar</value>
+  </data>
+  <data name="Updated to version" xml:space="preserve">
+    <value>Aggiornato alla versione {0}!</value>
+  </data>
 </root>

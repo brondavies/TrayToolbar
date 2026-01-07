@@ -237,4 +237,16 @@
   <data name="TrayToolbar Location" xml:space="preserve">
     <value>Расположение TrayToolbar</value>
   </data>
+  <data name="Are you sure you want to update to the latest version" xml:space="preserve">
+    <value>Вы уверены, что хотите обновить программу до последней версии?</value>
+  </data>
+  <data name="Update now" xml:space="preserve">
+    <value>Обновить сейчас</value>
+  </data>
+  <data name="Update TrayToolbar" xml:space="preserve">
+    <value>Обновить панель инструментов в трее</value>
+  </data>
+  <data name="Updated to version" xml:space="preserve">
+    <value>Обновлено до версии {0}!</value>
+  </data>
 </root>

@@ -237,4 +237,16 @@
   <data name="TrayToolbar Location" xml:space="preserve">
     <value>Emplacement de TrayToolbar</value>
   </data>
+  <data name="Are you sure you want to update to the latest version" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir effectuer la mise à jour vers la dernière version ?</value>
+  </data>
+  <data name="Update now" xml:space="preserve">
+    <value>Mettez à jour maintenant</value>
+  </data>
+  <data name="Update TrayToolbar" xml:space="preserve">
+    <value>Mettre à jour la barre d'outils de la zone de notification</value>
+  </data>
+  <data name="Updated to version" xml:space="preserve">
+    <value>Mise à jour vers la version {0} !</value>
+  </data>
 </root>

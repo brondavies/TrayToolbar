@@ -237,4 +237,16 @@
   <data name="TrayToolbar Location" xml:space="preserve">
     <value>トレイツールバー の保存場所</value>
   </data>
+  <data name="Are you sure you want to update to the latest version" xml:space="preserve">
+    <value>最新バージョンに更新してもよろしいですか?</value>
+  </data>
+  <data name="Update now" xml:space="preserve">
+    <value>今すぐ更新</value>
+  </data>
+  <data name="Update TrayToolbar" xml:space="preserve">
+    <value>トレイツールバーを更新</value>
+  </data>
+  <data name="Updated to version" xml:space="preserve">
+    <value>バージョン {0} に更新されました。</value>
+  </data>
 </root>

@@ -237,4 +237,16 @@
   <data name="TrayToolbar Location" xml:space="preserve">
     <value>托盘工具栏 位置</value>
   </data>
+  <data name="Are you sure you want to update to the latest version" xml:space="preserve">
+    <value>您确定要更新到最新版本吗？</value>
+  </data>
+  <data name="Update now" xml:space="preserve">
+    <value>立即更新</value>
+  </data>
+  <data name="Update TrayToolbar" xml:space="preserve">
+    <value>更新托盘工具栏</value>
+  </data>
+  <data name="Updated to version" xml:space="preserve">
+    <value>已更新至版本 {0}！</value>
+  </data>
 </root>
