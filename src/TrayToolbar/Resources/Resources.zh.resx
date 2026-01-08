@@ -127,7 +127,7 @@
     <value>排除文件</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>出口</value>
+    <value>退出</value>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>文件夹</value>
@@ -139,16 +139,16 @@
     <value>刷新</value>
   </data>
   <data name="Run on log in" xml:space="preserve">
-    <value>登录后运行</value>
+    <value>登录时运行</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>节省</value>
+    <value>保存</value>
   </data>
   <data name="The folder does not exist" xml:space="preserve">
     <value>该文件夹不存在。</value>
   </data>
   <data name="The folder value must be set" xml:space="preserve">
-    <value>必须设置文件夹值。</value>
+    <value>必须设置文件夹路径。</value>
   </data>
   <data name="TrayToolbar" xml:space="preserve">
     <value>托盘工具栏</value>
@@ -160,7 +160,7 @@
     <value>新版本已发布！</value>
   </data>
   <data name="Add Folder" xml:space="preserve">
-    <value>新增文件夹</value>
+    <value>添加文件夹</value>
   </data>
   <data name="Browse Folder" xml:space="preserve">
     <value>浏览文件夹</value>
@@ -175,13 +175,13 @@
     <value>移除文件夹</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>黑暗的</value>
+    <value>深色</value>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>光</value>
+    <value>浅色</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>系统</value>
+    <value>跟随系统</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>主题</value>
@@ -193,31 +193,31 @@
     <value>菜单字体大小</value>
   </data>
   <data name="Icon Size" xml:space="preserve">
-    <value>图标大小</value>
+    <value>菜单图标大小</value>
   </data>
   <data name="Small" xml:space="preserve">
-    <value>小的</value>
+    <value>小</value>
   </data>
   <data name="Large" xml:space="preserve">
-    <value>大的</value>
+    <value>大</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>清除</value>
   </data>
   <data name="OK" xml:space="preserve">
-    <value>好的</value>
+    <value>确定</value>
   </data>
   <data name="Press the keys to use as the shortcut key" xml:space="preserve">
-    <value>按下可用作快捷键的键</value>
+    <value>按下要用作快捷键的按键</value>
   </data>
   <data name="Set" xml:space="preserve">
-    <value>放</value>
+    <value>设置</value>
   </data>
   <data name="Shortcut Key" xml:space="preserve">
     <value>快捷键</value>
   </data>
   <data name="Include files" xml:space="preserve">
-    <value>包括文件类型</value>
+    <value>包含文件类型</value>
   </data>
   <data name="Language" xml:space="preserve">
     <value>语言</value>
@@ -232,10 +232,10 @@
     <value>您正在使用预发布版本</value>
   </data>
   <data name="Notify me when a new version is available" xml:space="preserve">
-    <value>当有新版本可用时通知我</value>
+    <value>有新版本时通知我</value>
   </data>
   <data name="TrayToolbar Location" xml:space="preserve">
-    <value>托盘工具栏 位置</value>
+    <value>托盘工具栏位置</value>
   </data>
   <data name="Are you sure you want to update to the latest version" xml:space="preserve">
     <value>您确定要更新到最新版本吗？</value>
@@ -249,4 +249,5 @@
   <data name="Updated to version" xml:space="preserve">
     <value>已更新至版本 {0}！</value>
   </data>
+
 </root>
