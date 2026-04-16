@@ -61,7 +61,6 @@ public partial class SettingsForm : Form
 
     private void SetupUpdateCheckTimer()
     {
-        NotificationsHelper.Activate();
         var interval = TimeSpan.FromMinutes(Configuration.UpdateCheckInterval);
         UpdateCheckTimer = new System.Threading.Timer(
             callback: _ => CheckForUpdateAsync(),
@@ -188,7 +187,7 @@ public partial class SettingsForm : Form
         NewVersionLabel.Tag = updateUrl;
         NewVersionLabel.Visible = true;
         UpdateNowLabel.Visible = !prerelease;
-        if (!prerelease && Configuration.NotifyOnUpdateAvailable)
+        if (!prerelease && Configuration.NotifyOnUpdateAvailable && ConfigHelper.SupportsToastNotifications)
         {
             NotificationsHelper.Notify(R.A_new_version_is_available, updateUrl, R.Update_now, NotificationsHelper.UPDATE_ACTION);
             UpdateCheckTimer?.Dispose();

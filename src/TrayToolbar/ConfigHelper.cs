@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO.Compression;
 using System.Net.Http.Json;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text.Json;
 using TrayToolbar.Extensions;
 using TrayToolbar.Models;
@@ -29,6 +30,9 @@ namespace TrayToolbar
         internal static string ConfigurationFile = Path.Combine(ProfileFolder, "TrayToolbarConfig.json");
         internal static string LegacyConfigurationFile = Path.Combine(ApplicationRoot, "TrayToolbar.json");
         internal static int WindowsMajorVersion = Environment.OSVersion.Version.Build >= 22000 ? 11 : 10;
+
+        [SupportedOSPlatformGuard("windows10.0.10240.0")]
+        internal static bool SupportsToastNotifications => OperatingSystem.IsWindowsVersionAtLeast(10, 0, 10240);
 
         internal static bool IsAutoStartupConfigured()
         {

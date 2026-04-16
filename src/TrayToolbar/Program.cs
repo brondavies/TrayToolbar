@@ -27,6 +27,10 @@ namespace TrayToolbar
                 return;
             }
 
+            if (ConfigHelper.SupportsToastNotifications)
+            {
+                NotificationsHelper.Activate();
+            }
             ConfigHelper.SetShowInTray();
             ConfigHelper.MigrateConfiguration();
             DropDownMenuScrollWheelHandler.Enable(true);
