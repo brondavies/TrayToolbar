@@ -1,0 +1,128 @@
+name: Bug report
+description: Report a reproducible problem in TrayToolbar.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem.
+
+        Please search existing issues first and include as much detail as you can.
+        For security-sensitive bugs, do **not** use this form; follow the private reporting instructions in `SECURITY.md` instead.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched existing issues for the same problem.
+          required: true
+        - label: I read the troubleshooting guidance in `docs/developer-guide.md` when it was relevant.
+          required: false
+        - label: This is not a security-sensitive report.
+          required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: TrayToolbar version
+      description: For example `v1.6.2`, or `main/local build` if you built from source.
+      placeholder: v1.6.2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: architecture
+    attributes:
+      label: Architecture
+      options:
+        - x64
+        - arm64
+        - Built from source / AnyCPU workflow
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: windows-version
+    attributes:
+      label: Windows version / build
+      description: For example `Windows 11 24H2 (build 26100.x)`.
+      placeholder: Windows 11 24H2 (build ...)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: install-source
+    attributes:
+      label: Install method or build source
+      options:
+        - GitHub release zip
+        - Built locally from this repository
+        - Copied from another machine/folder
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-behavior
+    attributes:
+      label: What happened?
+      description: Describe the problem and include any error text you saw.
+      placeholder: Tell us what you observed.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: What did you expect to happen?
+      placeholder: Tell us what you expected instead.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: A minimal, reliable repro is pure gold.
+      placeholder: |
+        1. Start TrayToolbar from ...
+        2. Open settings and ...
+        3. Click ...
+        4. Observe ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: config-details
+    attributes:
+      label: Relevant configuration details (sanitized)
+      description: If the bug depends on folder paths, filters, hotkeys, update settings, or language settings, paste only the relevant parts and remove personal information.
+      placeholder: |
+        - Folders: ...
+        - Recursive: true/false
+        - IgnoreFiles / IncludeFiles: ...
+        - Theme / Language: ...
+        - CheckForUpdates / NotifyOnUpdateAvailable: ...
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs, crash files, or screenshots
+      description: Paste relevant `Error-*.txt` content, console/test output, or drag screenshots/files into the issue after it is created.
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: code-of-conduct
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow this project's [Code of Conduct](https://github.com/brondavies/TrayToolbar/blob/master/CODE_OF_CONDUCT.md).
+      options:
+        - label: I agree to follow this project's Code of Conduct.
+          required: true

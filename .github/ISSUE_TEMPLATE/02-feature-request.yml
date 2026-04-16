@@ -1,0 +1,112 @@
+name: Feature request
+description: Suggest an improvement for TrayToolbar.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement.
+
+        TrayToolbar is a Windows desktop app, so the most helpful requests explain the user problem, the Windows context, and why the change fits the app's current scope.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched existing issues for similar requests.
+          required: true
+        - label: I checked the README and developer guide to make sure this is not already supported.
+          required: false
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      description: Describe the need or frustration behind the request.
+      placeholder: I'm trying to ... but TrayToolbar currently ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to happen?
+      description: Describe the feature or UX change you want.
+      placeholder: I would like TrayToolbar to ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you've considered
+      description: Workarounds, related apps, or why the current behavior is not enough.
+      placeholder: I tried ...
+    validations:
+      required: false
+
+  - type: input
+    id: version
+    attributes:
+      label: Current TrayToolbar version
+      description: Optional, but helpful when the request is tied to a recent release.
+      placeholder: v1.6.2
+    validations:
+      required: false
+
+  - type: dropdown
+    id: architecture
+    attributes:
+      label: Architecture
+      options:
+        - x64
+        - arm64
+        - Built from source / AnyCPU workflow
+        - Not sure
+    validations:
+      required: false
+
+  - type: input
+    id: windows-version
+    attributes:
+      label: Windows version / build
+      placeholder: Windows 11 24H2 (build ...)
+    validations:
+      required: false
+
+  - type: dropdown
+    id: scenario
+    attributes:
+      label: Which area does this request affect most?
+      options:
+        - Tray/menu behavior
+        - Settings UI
+        - Folder scanning or filters
+        - Hotkeys
+        - Updates
+        - Localization
+        - Accessibility
+        - Packaging / install experience
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra-context
+    attributes:
+      label: Extra context, mockups, or screenshots
+      description: You can paste examples here and attach images/files after the issue is created.
+      placeholder: Additional context...
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: code-of-conduct
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow this project's [Code of Conduct](https://github.com/brondavies/TrayToolbar/blob/master/CODE_OF_CONDUCT.md).
+      options:
+        - label: I agree to follow this project's Code of Conduct.
+          required: true

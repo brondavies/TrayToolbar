@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Troubleshooting and contributor guide
+    url: https://github.com/brondavies/TrayToolbar/blob/master/docs/developer-guide.md#faq-and-troubleshooting
+    about: Check common Windows, configuration, update, and launch troubleshooting steps before opening an issue.
+  - name: Security reports
+    url: https://github.com/brondavies/TrayToolbar/security
+    about: Please use the Security tab and SECURITY.md guidance for private vulnerability reporting instead of public issues.

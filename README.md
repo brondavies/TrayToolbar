@@ -37,4 +37,8 @@ This application is "portable" so there is no setup package, just extract and go
 
 For contributor-focused build steps, runtime expectations, localization notes, configuration schema details, and troubleshooting guidance, see [docs/developer-guide.md](docs/developer-guide.md).
 
+If you'd like to contribute, start with [CONTRIBUTING.md](CONTRIBUTING.md).
+
 For update-surface trust boundaries, release asset validation rules, and launch policy guidance, see [docs/update-security.md](docs/update-security.md).
+
+For private vulnerability reporting guidance, see [SECURITY.md](SECURITY.md).
