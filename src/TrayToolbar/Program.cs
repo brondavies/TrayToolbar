@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.Security.Principal;
+
 using TrayToolbar.Extensions;
+
 using Windows.Win32;
 using Windows.Win32.Foundation;
 

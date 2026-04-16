@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+
 using TrayToolbar.Extensions;
 
 namespace TrayToolbar.Models

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+
 using TrayToolbar.Extensions;
 
 namespace TrayToolbar.Controls

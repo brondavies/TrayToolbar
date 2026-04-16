@@ -1,7 +1,8 @@
-﻿using IWshRuntimeLibrary;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Text.RegularExpressions;
+
+using IWshRuntimeLibrary;
 
 namespace TrayToolbar.Extensions;
 

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
+
 using TrayToolbar.Models;
+
 using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar.Controls
@@ -48,7 +50,7 @@ namespace TrayToolbar.Controls
                 DarkRadioButton.Checked = value == ThemeToggleEnum.DARK_THEME;
                 LightRadioButton.Checked = value == ThemeToggleEnum.LIGHT_THEME;
                 SystemRadioButton.Checked = value != ThemeToggleEnum.DARK_THEME && value != ThemeToggleEnum.LIGHT_THEME;
-                if (trigger) 
+                if (trigger)
                 {
                     Changed(this, EventArgs.Empty);
                 }

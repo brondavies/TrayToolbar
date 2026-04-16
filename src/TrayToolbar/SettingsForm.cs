@@ -1,8 +1,10 @@
 using System.Collections.Concurrent;
 using System.Globalization;
+
 using TrayToolbar.Controls;
 using TrayToolbar.Extensions;
 using TrayToolbar.Models;
+
 using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar;
@@ -705,7 +707,7 @@ public partial class SettingsForm : Form
         }
         if (error)
         {
-            MessageBox.Show(this, 
+            MessageBox.Show(this,
                 R.The_folder_value_must_be_set, R.Error,
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
@@ -717,8 +719,8 @@ public partial class SettingsForm : Form
         }
         if (error)
         {
-            MessageBox.Show(this, 
-                R.The_folder_does_not_exist, R.Error, 
+            MessageBox.Show(this,
+                R.The_folder_does_not_exist, R.Error,
                 MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
@@ -829,7 +831,7 @@ public partial class SettingsForm : Form
         if (NewVersionMessage)
         {
             NewVersionMessage = false;
-            MessageBox.Show(this, 
+            MessageBox.Show(this,
                 string.Format(R.Updated_to_version, ConfigHelper.ApplicationVersion),
                 R.Update_TrayToolbar, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
@@ -854,9 +856,9 @@ public partial class SettingsForm : Form
 
     private void UpdateNowLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        var result = MessageBox.Show(this, 
-            R.Are_you_sure_you_want_to_update_to_the_latest_version, 
-            R.Update_TrayToolbar, 
+        var result = MessageBox.Show(this,
+            R.Are_you_sure_you_want_to_update_to_the_latest_version,
+            R.Update_TrayToolbar,
             MessageBoxButtons.YesNo, MessageBoxIcon.Question);
         if (result == DialogResult.Yes)
         {

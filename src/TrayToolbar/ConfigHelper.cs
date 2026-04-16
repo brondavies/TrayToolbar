@@ -1,12 +1,15 @@
-﻿using Microsoft.Win32;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO.Compression;
 using System.Net.Http.Json;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Text.Json;
+
+using Microsoft.Win32;
+
 using TrayToolbar.Extensions;
 using TrayToolbar.Models;
+
 using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar

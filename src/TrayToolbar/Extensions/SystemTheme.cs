@@ -1,6 +1,8 @@
 ﻿using TrayToolbar.Controls;
+
 using Windows.Win32.Foundation;
 using Windows.Win32.Graphics.Dwm;
+
 using static Windows.Win32.PInvoke;
 
 namespace TrayToolbar.Extensions
@@ -69,7 +71,7 @@ namespace TrayToolbar.Extensions
                     }
                     control.ForeColor = foreColor;
                 }
-                foreach(Control child in control.Controls)
+                foreach (Control child in control.Controls)
                 {
                     SetThemeColors(child, dark);
                 }

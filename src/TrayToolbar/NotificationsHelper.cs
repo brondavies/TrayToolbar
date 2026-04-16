@@ -1,9 +1,12 @@
-﻿using Microsoft.Win32;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security;
 using System.Threading;
+
+using Microsoft.Win32;
+
 using TrayToolbar.Extensions;
+
 using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar;

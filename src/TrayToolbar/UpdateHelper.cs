@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
-using R = TrayToolbar.Resources.Resources;
+
 using Windows.Win32;
 using Windows.Win32.Foundation;
+
+using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar;
 

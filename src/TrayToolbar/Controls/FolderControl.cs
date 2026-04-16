@@ -1,7 +1,9 @@
 ﻿using TrayToolbar.Extensions;
 using TrayToolbar.Models;
+
 using Windows.Win32;
 using Windows.Win32.Foundation;
+
 using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar;

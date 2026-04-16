@@ -24,7 +24,7 @@
         public Color ButtonBorderColor => Color.FromArgb(0xEE, 0xEE, 0xEE);
 
         public Color LinkColor => Color.FromArgb(0x88, 0x88, 0xFF);
-    
+
         public Color MenuItemBackColor => Color.FromArgb(0x20, 0x20, 0x20);
 
         public Color MenuStripBackColor => Color.FromArgb(0x20, 0x20, 0x20);

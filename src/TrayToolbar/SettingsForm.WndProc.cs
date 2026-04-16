@@ -1,5 +1,7 @@
 ﻿using System.Runtime.InteropServices;
+
 using TrayToolbar.Extensions;
+
 using Windows.Win32;
 using Windows.Win32.Foundation;
 
