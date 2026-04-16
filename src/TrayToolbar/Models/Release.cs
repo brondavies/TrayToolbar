@@ -2,14 +2,13 @@
 
 using System.Text.Json.Serialization;
 
-namespace TrayToolbar.Models
-{
-    internal class Release
-    {
-        [JsonPropertyName("update_url")]
-        public string UpdateUrl { get; set; }
+namespace TrayToolbar.Models;
 
-        [JsonPropertyName("tag_name")]
-        public string Name { get; set; }
-    }
+internal class Release
+{
+    [JsonPropertyName("update_url")]
+    public string UpdateUrl { get; set; }
+
+    [JsonPropertyName("tag_name")]
+    public string Name { get; set; }
 }

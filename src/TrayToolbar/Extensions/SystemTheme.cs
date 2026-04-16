@@ -5,104 +5,103 @@ using Windows.Win32.Graphics.Dwm;
 
 using static Windows.Win32.PInvoke;
 
-namespace TrayToolbar.Extensions
+namespace TrayToolbar.Extensions;
+
+internal class SystemTheme
 {
-    internal class SystemTheme
+    const string REGKEY_THEMES = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize";
+    public static bool? DarkModeEnabled = null;
+    public unsafe static bool UseImmersiveDarkMode(IntPtr handle, bool enabled)
     {
-        const string REGKEY_THEMES = @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize";
-        public static bool? DarkModeEnabled = null;
-        public unsafe static bool UseImmersiveDarkMode(IntPtr handle, bool enabled)
+        var form = Control.FromHandle(handle);
+        if (form == null) return false;
+        var attribute = DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE;
+        int useImmersiveDarkMode = enabled ? 1 : 0;
+        var result = DwmSetWindowAttribute((HWND)handle, attribute, &useImmersiveDarkMode, sizeof(int)) == 0;
+        if (IsDarkModeSupported() && DarkModeEnabled != enabled)
         {
-            var form = Control.FromHandle(handle);
-            if (form == null) return false;
-            var attribute = DWMWINDOWATTRIBUTE.DWMWA_USE_IMMERSIVE_DARK_MODE;
-            int useImmersiveDarkMode = enabled ? 1 : 0;
-            var result = DwmSetWindowAttribute((HWND)handle, attribute, &useImmersiveDarkMode, sizeof(int)) == 0;
-            if (IsDarkModeSupported() && DarkModeEnabled != enabled)
+            DarkModeEnabled = enabled;
+            ThemeColors.Current = enabled ? ThemeColors.Dark : ThemeColors.Light;
+            SetThemeColors(form, enabled);
+            return result;
+        }
+
+        return false;
+    }
+
+    public static void SetThemeColors(Control? control, bool dark)
+    {
+        if (control != null)
+        {
+            var backColor = ThemeColors.Current.DefaultBackColor;
+            var foreColor = ThemeColors.Current.DefaultForeColor;
+            if (control is CustomComboBox combo)
             {
-                DarkModeEnabled = enabled;
-                ThemeColors.Current = enabled ? ThemeColors.Dark : ThemeColors.Light;
-                SetThemeColors(form, enabled);
-                return result;
+                backColor = ThemeColors.Current.ControlBackColor;
+                combo.BorderColor = ThemeColors.Current.ComboBorderColor;
             }
-
-            return false;
-        }
-
-        public static void SetThemeColors(Control? control, bool dark)
-        {
-            if (control != null)
+            if (control is ComboBox)
             {
-                var backColor = ThemeColors.Current.DefaultBackColor;
-                var foreColor = ThemeColors.Current.DefaultForeColor;
-                if (control is CustomComboBox combo)
-                {
-                    backColor = ThemeColors.Current.ControlBackColor;
-                    combo.BorderColor = ThemeColors.Current.ComboBorderColor;
-                }
-                if (control is ComboBox)
-                {
-                    backColor = ThemeColors.Current.ControlBackColor;
-                }
-                else if (control is TextBox textBox)
-                {
-                    backColor = ThemeColors.Current.ControlBackColor;
-                    textBox.BorderStyle = ThemeColors.Current.TextBoxBorderStyle;
-                }
-                else if (control is Button button)
-                {
-                    backColor = ThemeColors.Current.ControlBackColor;
-                    button.FlatStyle = ThemeColors.Current.ButtonFlatStyle;
-                    button.FlatAppearance.BorderColor = ThemeColors.Current.ButtonBorderColor;
-                }
-                else if (control is LinkLabel label)
-                {
-                    label.LinkColor = ThemeColors.Current.LinkColor;
-                }
-                else if (control is ContextMenuStrip)
-                {
-                    backColor = ThemeColors.Current.MenuStripBackColor;
-                }
-                if (control is not PictureBox && control.AccessibleRole != AccessibleRole.Caret)
-                {
-                    if (control.BackColor != Color.Transparent)
-                    {
-                        control.BackColor = backColor;
-                    }
-                    control.ForeColor = foreColor;
-                }
-                foreach (Control child in control.Controls)
-                {
-                    SetThemeColors(child, dark);
-                }
-                control.GetType().GetMethod("OnThemeChanged")?.Invoke(control, [dark]);
+                backColor = ThemeColors.Current.ControlBackColor;
             }
-        }
-
-        public static bool IsColorLight(Color clr)
-        {
-            return (((5 * clr.G) + (2 * clr.R) + clr.B) > (8 * 128));
-        }
-
-        public static bool IsDarkModeEnabled()
-        {
-            if (IsDarkModeSupported())
+            else if (control is TextBox textBox)
             {
-                try
-                {
-                    var theme = (int?)Microsoft.Win32.Registry.GetValue(REGKEY_THEMES, "AppsUseLightTheme", null);
-                    return theme == 0;
-                }
-                catch { }
+                backColor = ThemeColors.Current.ControlBackColor;
+                textBox.BorderStyle = ThemeColors.Current.TextBoxBorderStyle;
             }
-            return false;
+            else if (control is Button button)
+            {
+                backColor = ThemeColors.Current.ControlBackColor;
+                button.FlatStyle = ThemeColors.Current.ButtonFlatStyle;
+                button.FlatAppearance.BorderColor = ThemeColors.Current.ButtonBorderColor;
+            }
+            else if (control is LinkLabel label)
+            {
+                label.LinkColor = ThemeColors.Current.LinkColor;
+            }
+            else if (control is ContextMenuStrip)
+            {
+                backColor = ThemeColors.Current.MenuStripBackColor;
+            }
+            if (control is not PictureBox && control.AccessibleRole != AccessibleRole.Caret)
+            {
+                if (control.BackColor != Color.Transparent)
+                {
+                    control.BackColor = backColor;
+                }
+                control.ForeColor = foreColor;
+            }
+            foreach (Control child in control.Controls)
+            {
+                SetThemeColors(child, dark);
+            }
+            control.GetType().GetMethod("OnThemeChanged")?.Invoke(control, [dark]);
         }
+    }
 
-        public static bool IsDarkModeSupported() => IsWindows10OrGreater(18985);
+    public static bool IsColorLight(Color clr)
+    {
+        return (((5 * clr.G) + (2 * clr.R) + clr.B) > (8 * 128));
+    }
 
-        private static bool IsWindows10OrGreater(int build = -1)
+    public static bool IsDarkModeEnabled()
+    {
+        if (IsDarkModeSupported())
         {
-            return Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= build;
+            try
+            {
+                var theme = (int?)Microsoft.Win32.Registry.GetValue(REGKEY_THEMES, "AppsUseLightTheme", null);
+                return theme == 0;
+            }
+            catch { }
         }
+        return false;
+    }
+
+    public static bool IsDarkModeSupported() => IsWindows10OrGreater(18985);
+
+    private static bool IsWindows10OrGreater(int build = -1)
+    {
+        return Environment.OSVersion.Version.Major >= 10 && Environment.OSVersion.Version.Build >= build;
     }
 }

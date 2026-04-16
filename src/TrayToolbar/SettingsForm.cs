@@ -76,10 +76,10 @@ public partial class SettingsForm : Form
     {
         ConfigHelper.CheckForUpdate().ContinueWith(r =>
         {
-            if (r.Result?.Name != null && r.Result.Name != "v" + ConfigHelper.ApplicationVersion)
+            if (UpdateLogic.TryGetAvailableUpdate(r.Result, ConfigHelper.ApplicationVersion, out var version, out var updateUrl))
             {
-                var prerelease = IsPrereleaseVersion(r.Result.Name[1..]);
-                ShowUpdateAvailable(r.Result.UpdateUrl, prerelease);
+                var prerelease = IsPrereleaseVersion(version);
+                ShowUpdateAvailable(updateUrl, prerelease);
             }
         });
     }
@@ -418,14 +418,7 @@ public partial class SettingsForm : Form
 
     static bool IsPrereleaseVersion(string version)
     {
-        try
-        {
-            return Version.Parse(ConfigHelper.ApplicationVersion).CompareTo(Version.Parse(version)) == 1;
-        }
-        catch
-        {
-            return false;
-        }
+        return UpdateLogic.IsPrereleaseVersion(ConfigHelper.ApplicationVersion, version);
     }
 
     private IEnumerable<FolderControl> FolderControls()

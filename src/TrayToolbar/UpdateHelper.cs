@@ -15,15 +15,14 @@ internal class UpdateHelper
 
     internal static void DownloadAndUpdate(string version)
     {
-        var latestVersion = new Version(version.TrimStart('v'));
         try
         {
-            var arch = RuntimeInformation.ProcessArchitecture switch
+            if (!UpdateLogic.TryParseReleaseVersion(version, out var latestVersion)
+                || !UpdateLogic.TryGetPortableDownloadUrl(version, RuntimeInformation.ProcessArchitecture, out var downloadUrl))
             {
-                Architecture.Arm64 => "arm64",
-                _ => "x64"
-            };
-            var downloadUrl = $"{DOWNLOAD_URL}/v{latestVersion}/TrayToolbar-win-{arch}-portable-{latestVersion}.zip";
+                return;
+            }
+
             var temp = Path.GetTempPath();
             var fileName = $"TrayToolbar-Update-{latestVersion}";
             var zipFileName = Path.Combine(temp, $"{fileName}.zip");

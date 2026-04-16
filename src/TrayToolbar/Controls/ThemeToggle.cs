@@ -4,65 +4,64 @@ using TrayToolbar.Models;
 
 using R = TrayToolbar.Resources.Resources;
 
-namespace TrayToolbar.Controls
+namespace TrayToolbar.Controls;
+
+public partial class ThemeToggle : UserControl
 {
-    public partial class ThemeToggle : UserControl
+
+    public ThemeToggle()
     {
+        InitializeComponent();
+        UpdateConfig();
 
-        public ThemeToggle()
+        SystemRadioButton.CheckedChanged += Changed;
+        LightRadioButton.CheckedChanged += Changed;
+        DarkRadioButton.CheckedChanged += Changed;
+    }
+
+    public void UpdateConfig()
+    {
+        SystemRadioButton.Text = R.System;
+        LightRadioButton.Text = R.Light;
+        DarkRadioButton.Text = R.Dark;
+    }
+
+    private void Changed(object? sender, EventArgs e)
+    {
+        ((EventHandler?)Events[nameof(ThemeChanged)])?.Invoke(this, EventArgs.Empty);
+    }
+
+    [DisplayName("Theme")]
+    [Category("Appearance")]
+    [Description("The selected theme")]
+    public ThemeToggleEnum Theme
+    {
+        get
         {
-            InitializeComponent();
-            UpdateConfig();
-
-            SystemRadioButton.CheckedChanged += Changed;
-            LightRadioButton.CheckedChanged += Changed;
-            DarkRadioButton.CheckedChanged += Changed;
+            return DarkRadioButton.Checked
+                ? ThemeToggleEnum.DARK_THEME
+                : LightRadioButton.Checked
+                    ? ThemeToggleEnum.LIGHT_THEME
+                    : ThemeToggleEnum.SYSTEM_THEME;
         }
-
-        public void UpdateConfig()
+        set
         {
-            SystemRadioButton.Text = R.System;
-            LightRadioButton.Text = R.Light;
-            DarkRadioButton.Text = R.Dark;
-        }
-
-        private void Changed(object? sender, EventArgs e)
-        {
-            ((EventHandler?)Events[nameof(ThemeChanged)])?.Invoke(this, EventArgs.Empty);
-        }
-
-        [DisplayName("Theme")]
-        [Category("Appearance")]
-        [Description("The selected theme")]
-        public ThemeToggleEnum Theme
-        {
-            get
+            var trigger = (Theme != value);
+            DarkRadioButton.Checked = value == ThemeToggleEnum.DARK_THEME;
+            LightRadioButton.Checked = value == ThemeToggleEnum.LIGHT_THEME;
+            SystemRadioButton.Checked = value != ThemeToggleEnum.DARK_THEME && value != ThemeToggleEnum.LIGHT_THEME;
+            if (trigger)
             {
-                return DarkRadioButton.Checked
-                    ? ThemeToggleEnum.DARK_THEME
-                    : LightRadioButton.Checked
-                        ? ThemeToggleEnum.LIGHT_THEME
-                        : ThemeToggleEnum.SYSTEM_THEME;
-            }
-            set
-            {
-                var trigger = (Theme != value);
-                DarkRadioButton.Checked = value == ThemeToggleEnum.DARK_THEME;
-                LightRadioButton.Checked = value == ThemeToggleEnum.LIGHT_THEME;
-                SystemRadioButton.Checked = value != ThemeToggleEnum.DARK_THEME && value != ThemeToggleEnum.LIGHT_THEME;
-                if (trigger)
-                {
-                    Changed(this, EventArgs.Empty);
-                }
+                Changed(this, EventArgs.Empty);
             }
         }
+    }
 
-        [Category("Property Changed")]
-        [Description("Occurs when the value of Theme is changed")]
-        public event EventHandler? ThemeChanged
-        {
-            add => Events.AddHandler(nameof(ThemeChanged), value);
-            remove => Events.RemoveHandler(nameof(ThemeChanged), value);
-        }
+    [Category("Property Changed")]
+    [Description("Occurs when the value of Theme is changed")]
+    public event EventHandler? ThemeChanged
+    {
+        add => Events.AddHandler(nameof(ThemeChanged), value);
+        remove => Events.RemoveHandler(nameof(ThemeChanged), value);
     }
 }

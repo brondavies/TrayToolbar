@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <Platforms>x64;ARM64</Platforms>
+    <PlatformTarget Condition="'$(Platform)' == 'x64'">x64</PlatformTarget>
+    <PlatformTarget Condition="'$(Platform)' == 'ARM64'">ARM64</PlatformTarget>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MSTest" Version="4.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrayToolbar\TrayToolbar.csproj" />
+  </ItemGroup>
+</Project>
