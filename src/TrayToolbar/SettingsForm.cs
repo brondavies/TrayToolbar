@@ -185,13 +185,12 @@ public partial class SettingsForm : Form
         NewVersionLabel.Text = prerelease
             ? R.You_are_using_a_prerelease_version
             : R.A_new_version_is_available;
-        var updateUrl = "https://github.com" + updateUri;
-        NewVersionLabel.Tag = updateUrl;
+        NewVersionLabel.Tag = updateUri;
         NewVersionLabel.Visible = true;
         UpdateNowLabel.Visible = !prerelease;
         if (!prerelease && Configuration.NotifyOnUpdateAvailable && ConfigHelper.SupportsToastNotifications)
         {
-            NotificationsHelper.Notify(R.A_new_version_is_available, updateUrl, R.Update_now, NotificationsHelper.UPDATE_ACTION);
+            NotificationsHelper.Notify(R.A_new_version_is_available, updateUri, R.Update_now, NotificationsHelper.UPDATE_ACTION);
             UpdateCheckTimer?.Dispose();
             UpdateCheckTimer = null;
         }
@@ -602,7 +601,6 @@ public partial class SettingsForm : Form
                 break;
             case Command_Exit:
                 Quit();
-                Application.Exit();
                 break;
         }
     }

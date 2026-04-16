@@ -1,9 +1,6 @@
 using System.Diagnostics;
-using System.IO.Compression;
-using System.Net.Http.Json;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Text.Json;
 
 using Microsoft.Win32;
 
@@ -22,7 +19,6 @@ internal class ConfigHelper
     const string REGKEY_SHOWINTRAY = @"Software\Microsoft\Windows\CurrentVersion\RunNotification"; //StartupTNotiTrayToolbar (DWORD) = 1
     const string REGKEY_SYSTEM_ENVIRONMENT = @"SYSTEM\CurrentControlSet\Control\Session Manager\Environment";
     const string REGKEY_USER_ENVIRONMENT = @"Environment";
-    const string UPDATE_URL = "https://github.com/brondavies/TrayToolbar/releases/latest";
     const string STARTUP_VALUE = "TrayToolbar";
     const string PathEnvVar = "Path";
     const string UsernameEnvVar = "username";
@@ -169,12 +165,13 @@ internal class ConfigHelper
     internal static async Task<bool> UpdateToLatestVersionAsync()
     {
         var release = await CheckForUpdate();
-        if (!UpdateLogic.TryGetAvailableUpdateVersion(release, ApplicationVersion, out var version))
+        if (!UpdateLogic.TryCreateUpdatePackage(release, ApplicationVersion, RuntimeInformation.ProcessArchitecture, out var package)
+            || package == null)
         {
             return false;
         }
 
-        UpdateInstaller.DownloadAndUpdate(version);
+        UpdateInstaller.DownloadAndUpdate(package);
         return true;
     }
 
@@ -183,4 +180,3 @@ internal class ConfigHelper
         _ = UpdateToLatestVersionAsync();
     }
 }
-

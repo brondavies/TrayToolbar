@@ -1,9 +1,11 @@
+using TrayToolbar.Models;
+
 namespace TrayToolbar.Services;
 
 internal sealed class UpdateHelperInstaller : IUpdateInstaller
 {
-    public void DownloadAndUpdate(string version)
+    public void DownloadAndUpdate(UpdatePackage package)
     {
-        UpdateHelper.DownloadAndUpdate(version);
+        UpdateHelper.DownloadAndUpdate(package);
     }
 }

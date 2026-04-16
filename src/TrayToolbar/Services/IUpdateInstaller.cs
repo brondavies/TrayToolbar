@@ -1,6 +1,8 @@
+using TrayToolbar.Models;
+
 namespace TrayToolbar.Services;
 
 internal interface IUpdateInstaller
 {
-    void DownloadAndUpdate(string version);
+    void DownloadAndUpdate(UpdatePackage package);
 }

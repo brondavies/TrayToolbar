@@ -12,11 +12,7 @@ public class UpdateLogicTests
     {
         using var scope = new ConfigHelperStateScope();
         var installer = new RecordingUpdateInstaller();
-        ConfigHelper.ReleaseClient = new FakeReleaseClient(new Release
-        {
-            Name = $"v{ConfigHelper.ApplicationVersion}",
-            UpdateUrl = "/brondavies/TrayToolbar/releases/tag/v" + ConfigHelper.ApplicationVersion
-        });
+        ConfigHelper.ReleaseClient = new FakeReleaseClient(CreateRelease($"v{ConfigHelper.ApplicationVersion}", RuntimeInformation.ProcessArchitecture));
         ConfigHelper.UpdateInstaller = installer;
 
         var updated = await ConfigHelper.UpdateToLatestVersionAsync();
@@ -30,11 +26,7 @@ public class UpdateLogicTests
     {
         using var scope = new ConfigHelperStateScope();
         var installer = new RecordingUpdateInstaller();
-        ConfigHelper.ReleaseClient = new FakeReleaseClient(new Release
-        {
-            Name = "v99.0.0",
-            UpdateUrl = "/brondavies/TrayToolbar/releases/tag/v99.0.0"
-        });
+        ConfigHelper.ReleaseClient = new FakeReleaseClient(CreateRelease("v99.0.0", RuntimeInformation.ProcessArchitecture));
         ConfigHelper.UpdateInstaller = installer;
 
         var updated = await ConfigHelper.UpdateToLatestVersionAsync();
@@ -68,13 +60,13 @@ public class UpdateLogicTests
     {
         using var scope = new ConfigHelperStateScope();
         var installer = new RecordingUpdateInstaller();
-        ConfigHelper.ReleaseClient = new FakeReleaseClient(new Release { Name = null, UpdateUrl = null });
+        ConfigHelper.ReleaseClient = new FakeReleaseClient(new Release { TagName = null, HtmlUrl = null });
         ConfigHelper.UpdateInstaller = installer;
 
         var missingReleaseUpdated = await ConfigHelper.UpdateToLatestVersionAsync();
         var invalidVersion = UpdateLogic.TryGetPortableDownloadUrl("definitely-not-a-version", Architecture.X64, out var ignoredDownloadUrl);
         var missingUpdate = UpdateLogic.TryGetAvailableUpdate(
-            new Release { Name = "v99.0.0", UpdateUrl = null },
+            new Release { TagName = "v99.0.0", HtmlUrl = null },
             ConfigHelper.ApplicationVersion,
             out var ignoredVersion,
             out var ignoredUpdateUrl);
@@ -83,6 +75,98 @@ public class UpdateLogicTests
         Assert.IsFalse(invalidVersion);
         Assert.IsFalse(missingUpdate);
         Assert.AreEqual(0, installer.RequestedVersions.Count);
+    }
+
+    [TestMethod]
+    public void TryCreateUpdatePackage_requires_expected_asset_contract()
+    {
+        var release = CreateRelease("v9.9.9", Architecture.X64);
+        release.Assets[0].Name = "totally-different.zip";
+
+        var canCreatePackage = UpdateLogic.TryCreateUpdatePackage(release, "1.0.0", Architecture.X64, out var package);
+
+        Assert.IsFalse(canCreatePackage);
+        Assert.IsNull(package);
+    }
+
+    [TestMethod]
+    public void TryCreateUpdatePackage_requires_sha256_digest()
+    {
+        var release = CreateRelease("v9.9.9", Architecture.X64);
+        release.Assets[0].Digest = null;
+
+        var canCreatePackage = UpdateLogic.TryCreateUpdatePackage(release, "1.0.0", Architecture.X64, out var package);
+
+        Assert.IsFalse(canCreatePackage);
+        Assert.IsNull(package);
+    }
+
+    [TestMethod]
+    public void TryGetAvailableUpdateVersion_rejects_prerelease_release_metadata()
+    {
+        var release = CreateRelease("v9.9.9", Architecture.X64, prerelease: true);
+
+        var hasUpdate = UpdateLogic.TryGetAvailableUpdateVersion(release, "1.0.0", out var version);
+
+        Assert.IsFalse(hasUpdate);
+        Assert.AreEqual(string.Empty, version);
+    }
+
+    [TestMethod]
+    public void TryGetAllowedRemoteLaunchUri_accepts_expected_release_url_only()
+    {
+        var expected = UpdateLogic.TryGetAllowedRemoteLaunchUri("https://github.com/brondavies/TrayToolbar/releases/tag/v1.2.3", out var releaseUri);
+        var unexpected = UpdateLogic.TryGetAllowedRemoteLaunchUri("https://example.com/update", out var ignoredUri);
+
+        Assert.IsTrue(expected);
+        Assert.AreEqual("https://github.com/brondavies/TrayToolbar/releases/tag/v1.2.3", releaseUri.AbsoluteUri);
+        Assert.IsFalse(unexpected);
+    }
+
+    [TestMethod]
+    public void TryGetUpdateTargetExe_requires_rooted_matching_executable_path()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), $"TrayToolbar-UpdateTarget-{Guid.NewGuid():N}");
+        var targetPath = Path.Combine(directory, "TrayToolbar.exe");
+        var args = new[] { "TrayToolbar.exe", "--update", targetPath };
+        Directory.CreateDirectory(directory);
+
+        try
+        {
+            var valid = UpdateHelper.TryGetUpdateTargetExe(args, "TrayToolbar.exe", out var targetExe);
+            var invalid = UpdateHelper.TryGetUpdateTargetExe(["TrayToolbar.exe", "--update", @"relative\TrayToolbar.exe"], "TrayToolbar.exe", out _);
+
+            Assert.IsTrue(valid);
+            Assert.AreEqual(targetPath, targetExe);
+            Assert.IsFalse(invalid);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    static Release CreateRelease(string version, Architecture architecture, bool prerelease = false)
+    {
+        UpdateLogic.TryGetPortableAssetName(version, architecture, out var assetName);
+        UpdateLogic.TryGetPortableDownloadUrl(version, architecture, out var downloadUrl);
+
+        return new Release
+        {
+            TagName = version,
+            Name = version,
+            HtmlUrl = $"https://github.com/brondavies/TrayToolbar/releases/tag/{version}",
+            Prerelease = prerelease,
+            Assets = [
+                new ReleaseAsset
+                {
+                    Name = assetName,
+                    BrowserDownloadUrl = downloadUrl,
+                    ContentType = "application/zip",
+                    Digest = "sha256:0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+                }
+            ]
+        };
     }
 
     sealed class FakeReleaseClient(Release? release) : IReleaseClient
@@ -94,9 +178,9 @@ public class UpdateLogicTests
     {
         public List<string> RequestedVersions { get; } = [];
 
-        public void DownloadAndUpdate(string version)
+        public void DownloadAndUpdate(UpdatePackage package)
         {
-            RequestedVersions.Add(version);
+            RequestedVersions.Add(package.Version);
         }
     }
 }

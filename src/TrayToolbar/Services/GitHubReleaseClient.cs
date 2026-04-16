@@ -1,3 +1,4 @@
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 using TrayToolbar.Models;
@@ -6,18 +7,19 @@ namespace TrayToolbar.Services;
 
 internal sealed class GitHubReleaseClient : IReleaseClient
 {
-    const string UpdateUrl = "https://github.com/brondavies/TrayToolbar/releases/latest";
+    const string LatestReleaseApiUrl = "https://api.github.com/repos/brondavies/TrayToolbar/releases/latest";
 
     public async Task<Release?> GetLatestReleaseAsync()
     {
-        Release? version = null;
-        var client = new HttpClient();
-        client.DefaultRequestHeaders.Accept.Add(new("application/json"));
+        Release? release = null;
+        using var client = new HttpClient();
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
+        client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("TrayToolbar", ConfigHelper.ApplicationVersion));
         try
         {
-            version = await client.GetFromJsonAsync<Release?>(UpdateUrl);
+            release = await client.GetFromJsonAsync<Release?>(LatestReleaseApiUrl);
         }
         catch { }
-        return version;
+        return release;
     }
 }

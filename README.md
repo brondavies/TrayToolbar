@@ -10,10 +10,8 @@
 - Quick access to this menu with configurable global shortcut keys
 - Custom icons for individual folders
 - Choose your preference for icon and font sizes
-- Windows 10/11 ["Dark mode"](https://support.microsoft.com/en-us/windows/change-colors-in-windows-d26ef4d6-819a-581c-1581-493cfcc005fe) support
+- Windows 11 ["Dark mode"](https://support.microsoft.com/en-us/windows/change-colors-in-windows-d26ef4d6-819a-581c-1581-493cfcc005fe) support
 - Includes support for English, Spanish, French, German, Portuguese, Italian, Japanese, Chinese, Russian, and Korean
-
-<p style="background:#f9f9f9">💡 Can also be used in Windows 10!</p>
 
 ## Download
 [Check the releases](https://github.com/brondavies/TrayToolbar/releases) or compile the source code in any modern version of Visual Studio.
@@ -34,3 +32,9 @@ This application is "portable" so there is no setup package, just extract and go
 - Select **Run on log in** to start the application every time
 - Click **Save**
 - If you don't see the icon in your system tray, open **Settings** → **Personalization** → **Taskbar** → **Other system tray icons** and turn on TrayToolbar
+
+## Developer guide
+
+For contributor-focused build steps, runtime expectations, localization notes, configuration schema details, and troubleshooting guidance, see [docs/developer-guide.md](docs/developer-guide.md).
+
+For update-surface trust boundaries, release asset validation rules, and launch policy guidance, see [docs/update-security.md](docs/update-security.md).

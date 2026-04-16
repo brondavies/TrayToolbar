@@ -59,7 +59,7 @@ internal static class Program
 
     internal static void Launch(string fileName)
     {
-        if (File.Exists(fileName) || Directory.Exists(fileName) || fileName.IsHttps())
+        if (CanLaunch(fileName))
         {
             Process.Start(
                 new ProcessStartInfo(fileName)
@@ -69,6 +69,13 @@ internal static class Program
         }
     }
 
+
+    internal static bool CanLaunch(string fileName)
+    {
+        return File.Exists(fileName)
+            || Directory.Exists(fileName)
+            || UpdateLogic.TryGetAllowedRemoteLaunchUri(fileName, out _);
+    }
     #region Single Instance
 
     internal static readonly uint WM_EXITSETTINGSFORM = PInvoke.RegisterWindowMessage("TrayToolbar.ExitSettingsForm.241ba8ec-76fa-4b62-91ff-2f5d060f5db7");
