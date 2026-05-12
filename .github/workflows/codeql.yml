@@ -46,6 +46,18 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
+    - name: Setup .NET SDK
+      if: matrix.build-mode == 'manual'
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Setup MSBuild
+      if: matrix.build-mode == 'manual'
+      uses: microsoft/setup-msbuild@v3
+      with:
+        msbuild-architecture: ${{ matrix.Platform }}
+
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3
@@ -65,12 +77,12 @@ jobs:
     # to build your code.
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 See https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsrun
-    - if: matrix.build-mode == 'manual'
+    - name: Build solution for CodeQL
+      if: matrix.build-mode == 'manual'
+      working-directory: src
       run: |
-        $env:PATH += ';C:\Program Files\Microsoft Visual Studio\2026\Enterprise\MSBuild\Current\Bin'
-        cd src
-        dotnet restore TrayToolbar.sln
-        msbuild TrayToolbar.sln /p:Configuration=Debug /p:Platform=x64
+        dotnet restore .\TrayToolbar.sln
+        msbuild .\TrayToolbar.sln /p:Configuration=Debug /p:Platform=${{ matrix.Platform }}
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v3
