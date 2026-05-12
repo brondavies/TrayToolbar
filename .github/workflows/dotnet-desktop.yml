@@ -15,7 +15,7 @@ permissions:
 jobs:
   build-test-package:
     name: Validate and package portable release
-    runs-on: windows-latest
+    runs-on: windows-2025-vs2026
     permissions:
       contents: write
 
