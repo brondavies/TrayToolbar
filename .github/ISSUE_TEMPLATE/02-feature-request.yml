@@ -1,7 +1,7 @@
 name: Feature request
 description: Suggest an improvement for TrayToolbar.
 title: "[Feature]: "
-labels: ["enhancement"]
+labels: ["enhancement", "triage"]
 body:
   - type: markdown
     attributes:
@@ -9,6 +9,7 @@ body:
         Thanks for suggesting an improvement.
 
         TrayToolbar is a Windows desktop app, so the most helpful requests explain the user problem, the Windows context, and why the change fits the app's current scope.
+        Label meanings are documented in `docs/labels.md`.
 
   - type: checkboxes
     id: checks
@@ -52,7 +53,7 @@ body:
     attributes:
       label: Current TrayToolbar version
       description: Optional, but helpful when the request is tied to a recent release.
-      placeholder: v1.6.2
+      placeholder: v1.7.0
     validations:
       required: false
 
@@ -86,6 +87,7 @@ body:
         - Folder scanning or filters
         - Hotkeys
         - Updates
+        - Launch policy / security boundary
         - Localization
         - Accessibility
         - Packaging / install experience

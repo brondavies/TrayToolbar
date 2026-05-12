@@ -4,6 +4,7 @@ using System.Globalization;
 using TrayToolbar.Controls;
 using TrayToolbar.Extensions;
 using TrayToolbar.Models;
+using TrayToolbar.Services;
 
 using R = TrayToolbar.Resources.Resources;
 
@@ -23,9 +24,9 @@ public partial class SettingsForm : Form
 
     internal bool NewVersionMessage = false;
 
-    private bool FirstTimeLoad = false;
+    private bool _firstTimeLoad = false;
 
-    private System.Threading.Timer? UpdateCheckTimer;
+    private System.Threading.Timer? _updateCheckTimer;
 
     internal readonly CultureInfo[] SupportedLanguages = [
         CultureInfo.GetCultureInfo("en"),
@@ -47,13 +48,13 @@ public partial class SettingsForm : Form
         PopulateConfig();
         LoadResources(Configuration.Language);
         HandleCreated += SettingsForm_HandleCreated;
-        if (ValidateFolderConfigurations() && !FirstTimeLoad)
+        if (ValidateFolderConfigurations() && !_firstTimeLoad)
         {
             CreateIcons();
         }
         else
         {
-            FirstTimeLoad = false;
+            _firstTimeLoad = false;
             ShowNormal();
         }
         SystemTheme.UseImmersiveDarkMode(0, UseDarkMode());
@@ -64,7 +65,7 @@ public partial class SettingsForm : Form
     private void SetupUpdateCheckTimer()
     {
         var interval = TimeSpan.FromMinutes(Configuration.UpdateCheckInterval);
-        UpdateCheckTimer = new System.Threading.Timer(
+        _updateCheckTimer = new System.Threading.Timer(
             callback: _ => CheckForUpdateAsync(),
             state: null,
             dueTime: interval,
@@ -191,8 +192,8 @@ public partial class SettingsForm : Form
         if (!prerelease && Configuration.NotifyOnUpdateAvailable && ConfigHelper.SupportsToastNotifications)
         {
             NotificationsHelper.Notify(R.A_new_version_is_available, updateUri, R.Update_now, NotificationsHelper.UPDATE_ACTION);
-            UpdateCheckTimer?.Dispose();
-            UpdateCheckTimer = null;
+            _updateCheckTimer?.Dispose();
+            _updateCheckTimer = null;
         }
     }
 
@@ -379,7 +380,7 @@ public partial class SettingsForm : Form
         var i = 0;
         if (Configuration.Folders.Count == 0)
         {
-            FirstTimeLoad = true;
+            _firstTimeLoad = true;
             Configuration.Folders.Add(new FolderConfig { Recursive = true, Name = @"%APPDATA%\Microsoft\Windows\Start Menu" });
         }
         Configuration.Folders.ForEach(f => AddFolder(f, i++));
@@ -563,7 +564,7 @@ public partial class SettingsForm : Form
         }
         else
         {
-            UpdateCheckTimer?.Dispose();
+            _updateCheckTimer?.Dispose();
         }
     }
 

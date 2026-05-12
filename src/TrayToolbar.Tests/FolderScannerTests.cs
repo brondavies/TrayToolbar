@@ -43,6 +43,51 @@ public class FolderScannerTests
     }
 
     [TestMethod]
+    public void EnumerateFiles_applies_include_and_ignore_filters_case_insensitively()
+    {
+        var fileSystem = new FakeFileSystem();
+        var root = @"C:\Root";
+        fileSystem.AddFile(Path.Combine(root, "APP.EXE"));
+        fileSystem.AddFile(Path.Combine(root, "notes.tmp"));
+        fileSystem.AddFile(Path.Combine(root, "README.MD"));
+        fileSystem.AddFile(Path.Combine(root, "manual.txt"));
+        var scanner = new FolderScanner(fileSystem);
+        var configuration = new TrayToolbarConfiguration
+        {
+            IgnoreFiles = [".tmp"],
+            IncludeFiles = ["*.exe", "readme.*"]
+        };
+
+        var files = scanner.EnumerateFiles(root, false, configuration).ToArray();
+
+        CollectionAssert.AreEquivalent(
+            new[] { Path.Combine(root, "APP.EXE"), Path.Combine(root, "README.MD") },
+            files);
+    }
+
+    [TestMethod]
+    public void EnumerateFiles_returns_case_insensitive_sorted_results()
+    {
+        var fileSystem = new FakeFileSystem();
+        var root = @"C:\Root";
+        fileSystem.AddFile(Path.Combine(root, "beta.exe"));
+        fileSystem.AddFile(Path.Combine(root, "Alpha.exe"));
+        fileSystem.AddFile(Path.Combine(root, "gamma.exe"));
+        var scanner = new FolderScanner(fileSystem);
+
+        var files = scanner.EnumerateFiles(root, false, new TrayToolbarConfiguration()).ToArray();
+
+        CollectionAssert.AreEqual(
+            new[]
+            {
+                Path.Combine(root, "Alpha.exe"),
+                Path.Combine(root, "beta.exe"),
+                Path.Combine(root, "gamma.exe")
+            },
+            files);
+    }
+
+    [TestMethod]
     public void EnumerateFiles_skips_ignored_folders_when_recursive()
     {
         var fileSystem = new FakeFileSystem();

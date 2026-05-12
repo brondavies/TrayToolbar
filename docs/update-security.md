@@ -1,6 +1,6 @@
 # Update and execution security
 
-This document describes the trust boundaries for TrayToolbar's self-update flow and direct URL launching.
+This document describes the trust boundaries for TrayToolbar's self-update flow and the current execution path TrayToolbar uses when it starts files, folders, shortcuts, URLs, or notification actions.
 
 It serves two purposes:
 
@@ -9,11 +9,11 @@ It serves two purposes:
 
 ## Trust model summary
 
-TrayToolbar treats these as separate trust decisions:
+TrayToolbar treats these as separate areas:
 
 1. **Release metadata trust**: determine whether a newer stable release exists
 2. **Release asset trust**: determine whether the downloaded archive matches the expected release contract
-3. **Execution trust**: determine what TrayToolbar is willing to launch directly
+3. **Execution behavior**: describe how TrayToolbar initiates launches from menus, shortcuts, and notifications
 
 ## Release metadata source
 
@@ -22,7 +22,7 @@ Release metadata is fetched from GitHub's machine-readable REST API endpoint:
 - `https://api.github.com/repos/brondavies/TrayToolbar/releases/latest`
 
 TrayToolbar expects the response to be a published **latest stable** release.
-GitHub documents this endpoint as returning the latest published full release, excluding drafts and prereleases.
+GitHub's `releases/latest` behavior excludes drafts and prereleases, which matches the app's current stable-only update model.
 
 Relevant implementation:
 
@@ -48,8 +48,8 @@ Current rules:
 - the release must contain a parseable `tag_name`
 - the release must **not** be marked `prerelease`
 - the release version must differ from the running app version
-- the release page URL must stay under:
-  - `https://github.com/brondavies/TrayToolbar/releases...`
+- the release page URL must be an HTTPS URL on `github.com`
+- the release path must be exactly `/brondavies/TrayToolbar/releases` or a descendant of that path
 
 TrayToolbar compares versions using `System.Version` after trimming a leading `v`.
 
@@ -57,6 +57,7 @@ This means:
 
 - `v1.6.2` and `1.6.2` are treated equivalently for comparison
 - malformed version strings are rejected
+- lookalike paths such as `/brondavies/TrayToolbar/releases-malicious/...` are rejected
 - prerelease behavior is explicit rather than inferred from a redirect or page shape
 
 ## Release asset contract
@@ -131,26 +132,27 @@ Relevant implementation:
 - `src/TrayToolbar/Program.cs`
 - `src/TrayToolbar/UpdateHelper.cs`
 
-## Direct launch policy
+## Launches initiated by TrayToolbar
 
-`Program.Launch(string fileName)` currently allows:
+`Program.Launch(...)` currently hands the supplied target to the Windows shell by starting a `ProcessStartInfo` with `UseShellExecute = true`.
 
-- an existing file path
-- an existing directory path
-- a direct HTTPS release URL that matches:
-  - host: `github.com`
-  - path prefix: `/brondavies/TrayToolbar/releases`
+In practice, TrayToolbar can forward launches for:
 
-This intentionally narrows direct remote launching to TrayToolbar release pages.
+- file paths
+- directory paths
+- shortcut files such as `.lnk` and `.url`
+- URLs, including GitHub Releases links surfaced by the update UX
 
-Important nuance:
+### Toast activation boundary
 
-- TrayToolbar can still launch local files the user explicitly selected or placed in monitored folders, including Windows shortcut and internet shortcut files, because those are launched as local files rather than as arbitrary raw URL strings.
+Windows toast body clicks and action buttons route back through TrayToolbar foreground activation before `Program.Launch(...)` is called.
+
+That means update and release links shown in notifications are initiated by TrayToolbar rather than by embedding a direct protocol launch in the toast payload.
 
 Relevant implementation:
 
+- `src/TrayToolbar/NotificationsHelper.cs`
 - `src/TrayToolbar/Program.cs`
-- `src/TrayToolbar/UpdateLogic.cs`
 
 ## Code signing status
 
@@ -165,16 +167,20 @@ Recommended future step:
 
 - if the project adopts code signing, add Authenticode validation for the staged updater executable before execution
 
-## Contributor checklist when release packaging changes
+## Contributor checklist when release packaging or execution behavior changes
 
-If release packaging changes, contributors must update **all** of the following together:
+If release packaging or execution behavior changes, contributors must update **all** of the following together:
 
 - `build.ps1` release artifact output
+- `.github/workflows/dotnet-desktop.yml`
 - `src/TrayToolbar/UpdateLogic.cs`
 - `src/TrayToolbar/UpdateHelper.cs`
-- update-related tests in `src/TrayToolbar.Tests/`
+- `src/TrayToolbar/Program.cs`
+- any affected files in `src/TrayToolbar/Services/`
+- update-related and execution-related tests in `src/TrayToolbar.Tests/`
+- `CHANGELOG.md`
 - this document
-- any user-facing release/update notes in `README.md` or `docs/developer-guide.md`
+- any related user-facing notes in `README.md`, `docs/release-notes.md`, or `docs/developer-guide.md`
 
 At minimum, re-check:
 
@@ -182,6 +188,7 @@ At minimum, re-check:
 - architecture mapping
 - whether the archive still contains a root `TrayToolbar.exe`
 - whether GitHub still provides the required digest field for the published asset
+- whether execution-behavior documentation still matches the code paths used by menu clicks, notifications, and update links
 
 ## Known limits
 
@@ -191,13 +198,12 @@ What is enforced now:
 
 - explicit GitHub API metadata source
 - explicit stable-release eligibility rules
+- release-path validation that rejects lookalike prefixes
 - asset naming and URL contract validation
 - SHA-256 verification against GitHub asset metadata
 - isolated temp staging
-- narrow direct remote launch policy
 
 What is not enforced yet:
 
 - Authenticode validation
 - a separate published checksum manifest in the repository release assets
-- trust decisions for arbitrary remote URLs outside the TrayToolbar GitHub Releases surface

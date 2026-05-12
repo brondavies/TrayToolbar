@@ -2,6 +2,8 @@ using System.Diagnostics;
 using System.Security.Principal;
 
 using TrayToolbar.Extensions;
+using TrayToolbar.Models;
+using TrayToolbar.Services;
 
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -57,25 +59,33 @@ internal static class Program
         HotKeys.UnregisterAll();
     }
 
-    internal static void Launch(string fileName)
+    internal static bool Launch(string fileName)
     {
-        if (CanLaunch(fileName))
+        if (ShortcutTargetResolver.TryCreateShortcutStartInfo(fileName, out var shortcutStartInfo)
+            && TryLaunch(shortcutStartInfo))
         {
-            Process.Start(
-                new ProcessStartInfo(fileName)
-                {
-                    UseShellExecute = true,
-                });
+            return true;
+        }
+
+        return TryLaunch(new ProcessStartInfo(fileName)
+        {
+            UseShellExecute = true,
+        });
+    }
+
+    static bool TryLaunch(ProcessStartInfo startInfo)
+    {
+        try
+        {
+            ConfigHelper.ProcessLauncher.Start(startInfo);
+            return true;
+        }
+        catch
+        {
+            return false;
         }
     }
 
-
-    internal static bool CanLaunch(string fileName)
-    {
-        return File.Exists(fileName)
-            || Directory.Exists(fileName)
-            || UpdateLogic.TryGetAllowedRemoteLaunchUri(fileName, out _);
-    }
     #region Single Instance
 
     internal static readonly uint WM_EXITSETTINGSFORM = PInvoke.RegisterWindowMessage("TrayToolbar.ExitSettingsForm.241ba8ec-76fa-4b62-91ff-2f5d060f5db7");

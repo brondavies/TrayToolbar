@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 using Windows.Win32;
 using Windows.Win32.UI.Controls;
@@ -84,12 +85,13 @@ public static class ShellIcons
     static readonly int SETTINGS_ICON_INDEX = ConfigHelper.WindowsMajorVersion == 11 ? 314 : 316;
     public static readonly string Shell32Dll = Path.Combine(Environment.SystemDirectory, "SHELL32.dll");
     static readonly uint SizeOfSHGetFileInfo = (uint)Unsafe.SizeOf<SHFILEINFOW>();
+
     private static unsafe Icon ExtractFromPath(string path, bool large = false)
     {
         var shinfo = new SHFILEINFOW();
-        var himl = PInvoke.SHGetFileInfo(
+        var himl = SHGetFileInfo(
             path,
-            0, &shinfo, SizeOfSHGetFileInfo,
+            0, ref shinfo, SizeOfSHGetFileInfo,
             SHGFI_FLAGS.SHGFI_SYSICONINDEX | (large ? SHGFI_FLAGS.SHGFI_LARGEICON : SHGFI_FLAGS.SHGFI_SMALLICON));
 
         Icon? icon = null;
@@ -99,5 +101,27 @@ public static class ShellIcons
             icon = Icon.FromHandle(iconHandle);
         }
         return icon ?? SystemIcons.Application;
+    }
+
+    [DllImport("shell32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+    static extern nint SHGetFileInfo(
+        string pszPath,
+        uint dwFileAttributes,
+        ref SHFILEINFOW psfi,
+        uint cbFileInfo,
+        SHGFI_FLAGS uFlags);
+
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+    struct SHFILEINFOW
+    {
+        public nint hIcon;
+        public int iIcon;
+        public uint dwAttributes;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+        public string szDisplayName;
+
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 80)]
+        public string szTypeName;
     }
 }

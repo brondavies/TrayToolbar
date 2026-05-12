@@ -1,7 +1,7 @@
 # TrayToolbar
  Creates a menu with all your favorite shortcuts within easy reach just by putting them in a local folder.
 
-[![CodeQL](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml/badge.svg?branch=master&event=push)](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml) [![Download](https://img.shields.io/github/v/release/brondavies/TrayToolbar?label=Version&labelColor=%23222&color=%233a4)](https://github.com/brondavies/TrayToolbar/releases)
+[![CodeQL](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml/badge.svg?branch=master&event=push)](https://github.com/brondavies/TrayToolbar/actions/workflows/codeql.yml) [![GitRated](https://gitrated.com/brondavies/TrayToolbar/badge?theme=dark)](https://gitrated.com/brondavies/TrayToolbar) [![Download](https://img.shields.io/github/v/release/brondavies/TrayToolbar?label=Version&labelColor=%23222&color=%233a4)](https://github.com/brondavies/TrayToolbar/releases)
 
 - Replaces the feature removed from Windows 11 for custom toolbars on the taskbar
 - Choose the folder(s) and customize the file filter
@@ -14,7 +14,11 @@
 - Includes support for English, Spanish, French, German, Portuguese, Italian, Japanese, Chinese, Russian, and Korean
 
 ## Download
+
 [Check the releases](https://github.com/brondavies/TrayToolbar/releases) or compile the source code in any modern version of Visual Studio.
+
+For the canonical release history, see [CHANGELOG.md](CHANGELOG.md).
+For supplemental narrative release notes, packaging callouts, and rollout context, see [docs/release-notes.md](docs/release-notes.md).
 
 ## Requirements
 This application runs on .NET Desktop Runtime 8.  Download and install the runtime here:
@@ -33,12 +37,20 @@ This application is "portable" so there is no setup package, just extract and go
 - Click **Save**
 - If you don't see the icon in your system tray, open **Settings** → **Personalization** → **Taskbar** → **Other system tray icons** and turn on TrayToolbar
 
-## Developer guide
+## Configuration and launch policy
 
-For contributor-focused build steps, runtime expectations, localization notes, configuration schema details, and troubleshooting guidance, see [docs/developer-guide.md](docs/developer-guide.md).
+TrayToolbar stores its current configuration in `%LOCALAPPDATA%\TrayToolbar\TrayToolbarConfig.json`.
 
-If you'd like to contribute, start with [CONTRIBUTING.md](CONTRIBUTING.md).
+The default launch policy trusts items that originate from your configured folders and always allows TrayToolbar GitHub Releases URLs for update flows.
 
-For update-surface trust boundaries, release asset validation rules, and launch policy guidance, see [docs/update-security.md](docs/update-security.md).
+For the full configuration schema, command-line reference, and launch-policy details, see [docs/developer-guide.md](docs/developer-guide.md).
 
-For private vulnerability reporting guidance, see [SECURITY.md](SECURITY.md).
+## More docs
+
+- Contributor workflow, release tagging, labels, and PR guidance: [CONTRIBUTING.md](CONTRIBUTING.md)
+- Build, packaging, CLI, configuration, localization, and troubleshooting details: [docs/developer-guide.md](docs/developer-guide.md)
+- Release history: [CHANGELOG.md](CHANGELOG.md)
+- Supplemental release notes: [docs/release-notes.md](docs/release-notes.md)
+- Update and launch trust boundaries: [docs/update-security.md](docs/update-security.md)
+- Private vulnerability reporting: [SECURITY.md](SECURITY.md)
+

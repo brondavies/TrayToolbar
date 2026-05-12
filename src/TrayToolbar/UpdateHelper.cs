@@ -90,12 +90,7 @@ internal class UpdateHelper
                 return true;
             }
 
-            Process.Start(new ProcessStartInfo
-            {
-                FileName = targetExe,
-                UseShellExecute = false,
-                ArgumentList = { "--show", "--newversion" },
-            });
+            ConfigHelper.ProcessLauncher.Start(CreateRestartStartInfo(targetExe));
             return true;
         }
         return false;
@@ -127,6 +122,28 @@ internal class UpdateHelper
 
         targetExe = fullPath;
         return true;
+    }
+
+    internal static ProcessStartInfo CreateRestartStartInfo(string targetExe)
+    {
+        return new ProcessStartInfo
+        {
+            FileName = targetExe,
+            UseShellExecute = false,
+            ArgumentList = { "--show", "--newversion" },
+        };
+    }
+
+    internal static ProcessStartInfo CreateUpdaterStartInfo(string updaterPath, string targetExe)
+    {
+        var startInfo = new ProcessStartInfo
+        {
+            FileName = updaterPath,
+            UseShellExecute = true
+        };
+        startInfo.ArgumentList.Add("--update");
+        startInfo.ArgumentList.Add(targetExe);
+        return startInfo;
     }
 
     static string CreateOperationDirectory(Version version)
@@ -192,14 +209,7 @@ internal class UpdateHelper
 
     static void StartUpdater(string updaterPath, string targetExe)
     {
-        var startInfo = new ProcessStartInfo
-        {
-            FileName = updaterPath,
-            UseShellExecute = true
-        };
-        startInfo.ArgumentList.Add("--update");
-        startInfo.ArgumentList.Add(targetExe);
-        Process.Start(startInfo);
+        ConfigHelper.ProcessLauncher.Start(CreateUpdaterStartInfo(updaterPath, targetExe));
     }
 
     static void CleanupDirectory(string? operationDirectory)

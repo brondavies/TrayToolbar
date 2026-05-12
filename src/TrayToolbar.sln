@@ -6,6 +6,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrayToolbar", "TrayToolbar\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrayToolbar.Tests", "TrayToolbar.Tests\TrayToolbar.Tests.csproj", "{7F5F1D15-41E7-4D2B-A5EF-0F4BA7DF6F88}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrayToolbar.Benchmarks", "TrayToolbar.Benchmarks\TrayToolbar.Benchmarks.csproj", "{CC5B7A6E-0D7C-4A5F-B689-0FB3DD87A50E}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workflows", "Workflows", "{34D161FE-5AFE-47FA-833C-EF4455E6067E}"
 	ProjectSection(SolutionItems) = preProject
 		..\.gitignore = ..\.gitignore
@@ -38,6 +40,14 @@ Global
 		{7F5F1D15-41E7-4D2B-A5EF-0F4BA7DF6F88}.Release|x64.Build.0 = Release|x64
 		{7F5F1D15-41E7-4D2B-A5EF-0F4BA7DF6F88}.Release|ARM64.ActiveCfg = Release|ARM64
 		{7F5F1D15-41E7-4D2B-A5EF-0F4BA7DF6F88}.Release|ARM64.Build.0 = Release|ARM64
+		{CC5B7A6E-0D7C-4A5F-B689-0FB3DD87A50E}.Debug|x64.ActiveCfg = Debug|x64
+		{CC5B7A6E-0D7C-4A5F-B689-0FB3DD87A50E}.Debug|x64.Build.0 = Debug|x64
+		{CC5B7A6E-0D7C-4A5F-B689-0FB3DD87A50E}.Debug|ARM64.ActiveCfg = Debug|ARM64
+		{CC5B7A6E-0D7C-4A5F-B689-0FB3DD87A50E}.Debug|ARM64.Build.0 = Debug|ARM64
+		{CC5B7A6E-0D7C-4A5F-B689-0FB3DD87A50E}.Release|x64.ActiveCfg = Release|x64
+		{CC5B7A6E-0D7C-4A5F-B689-0FB3DD87A50E}.Release|x64.Build.0 = Release|x64
+		{CC5B7A6E-0D7C-4A5F-B689-0FB3DD87A50E}.Release|ARM64.ActiveCfg = Release|ARM64
+		{CC5B7A6E-0D7C-4A5F-B689-0FB3DD87A50E}.Release|ARM64.Build.0 = Release|ARM64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

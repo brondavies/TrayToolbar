@@ -1,14 +1,21 @@
-# 1.7.0 Pre-release
+# Release notes
+
+`CHANGELOG.md` is the canonical, Keep a Changelog-style release history for this repository.
+This file stays as the supplemental narrative release summary for highlights, rollout notes, and packaging context that are easier to read in prose.
+
+- Canonical history: [`../CHANGELOG.md`](../CHANGELOG.md)
+- GitHub release assets: <https://github.com/brondavies/TrayToolbar/releases>
+- Update and packaging trust boundary: [`update-security.md`](update-security.md)
+
+## 1.7.1 Pre-release
 
 ## Highlights
 
-- Added a built-in Windows toast notification implementation for update alerts without the previous notification dependency for a smaller bundle.
-- Added one-click updating from update notifications and the **Update now** action in Settings.
-- Hardened the self-update flow by validating release metadata, asset names, download URLs, content types, and SHA-256 digests before launching the staged updater.
-- Added automated test coverage for configuration handling, folder scanning, startup behavior, and update logic.
-- Added contributor-facing documentation, security guidance, and GitHub issue templates to support future development.
-
-- **Full Changelog**: https://github.com/brondavies/TrayToolbar/compare/v1.6.2...v1.7.0
+- Better Windows shortcut launching. `.lnk` app shortcuts now keep their saved arguments and working directory, while safe non-app targets open directly.
+- Safer update and release links. Toast actions now go back through TrayToolbar, and only real GitHub Releases URLs are accepted.
+- Simpler release packaging. Local builds now produce the same portable `win-arm64` and `win-x64` zip assets used for releases.
+- Also included a benchmark project plus contributor docs and templates to support future maintenance.
+- **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
 
 ## Features
 

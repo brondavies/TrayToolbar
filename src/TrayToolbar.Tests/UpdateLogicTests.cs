@@ -102,6 +102,24 @@ public class UpdateLogicTests
     }
 
     [TestMethod]
+    public void TryCreateUpdatePackage_rejects_duplicate_expected_assets()
+    {
+        var release = CreateRelease("v9.9.9", Architecture.X64);
+        release.Assets.Add(new ReleaseAsset
+        {
+            Name = release.Assets[0].Name,
+            BrowserDownloadUrl = release.Assets[0].BrowserDownloadUrl,
+            ContentType = release.Assets[0].ContentType,
+            Digest = release.Assets[0].Digest
+        });
+
+        var canCreatePackage = UpdateLogic.TryCreateUpdatePackage(release, "1.0.0", Architecture.X64, out var package);
+
+        Assert.IsFalse(canCreatePackage);
+        Assert.IsNull(package);
+    }
+
+    [TestMethod]
     public void TryGetAvailableUpdateVersion_rejects_prerelease_release_metadata()
     {
         var release = CreateRelease("v9.9.9", Architecture.X64, prerelease: true);
@@ -117,10 +135,25 @@ public class UpdateLogicTests
     {
         var expected = UpdateLogic.TryGetAllowedRemoteLaunchUri("https://github.com/brondavies/TrayToolbar/releases/tag/v1.2.3", out var releaseUri);
         var unexpected = UpdateLogic.TryGetAllowedRemoteLaunchUri("https://example.com/update", out var ignoredUri);
+        var lookalike = UpdateLogic.TryGetAllowedRemoteLaunchUri("https://github.com/brondavies/TrayToolbar/releases-malicious/tag/v1.2.3", out _);
 
         Assert.IsTrue(expected);
         Assert.AreEqual("https://github.com/brondavies/TrayToolbar/releases/tag/v1.2.3", releaseUri.AbsoluteUri);
         Assert.IsFalse(unexpected);
+        Assert.IsFalse(lookalike);
+    }
+
+    [TestMethod]
+    public void TryGetSha256Digest_normalizes_valid_values_and_rejects_invalid_ones()
+    {
+        var valid = UpdateLogic.TryGetSha256Digest("sha256:abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd", out var normalized);
+        var invalidPrefix = UpdateLogic.TryGetSha256Digest("sha1:abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd", out _);
+        var invalidLength = UpdateLogic.TryGetSha256Digest("sha256:abcd", out _);
+
+        Assert.IsTrue(valid);
+        Assert.AreEqual("ABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCD", normalized);
+        Assert.IsFalse(invalidPrefix);
+        Assert.IsFalse(invalidLength);
     }
 
     [TestMethod]

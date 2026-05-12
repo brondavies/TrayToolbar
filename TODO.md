@@ -20,3 +20,6 @@
 - [ ] Refresh icons lazily or retry icon resolution later when shortcut targets were unavailable at startup. (#52)
 - [ ] Add popup appearance options for rounded corners, darker backgrounds, and rounded hover highlights. (#70)
 - [ ] Investigate and, if technically possible on stock Windows 11, support hosting the toolbar directly in the taskbar near Start. (#72)
+
+## Feature Ideas
+- Add a configurable `LaunchPolicy` setting with documented `ConfiguredSources`, `NetworkBlocked`, and `LocalOnly` modes for launch-boundary hardening.

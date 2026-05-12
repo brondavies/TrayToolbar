@@ -1,7 +1,7 @@
 name: Bug report
 description: Report a reproducible problem in TrayToolbar.
 title: "[Bug]: "
-labels: ["bug"]
+labels: ["bug", "triage"]
 body:
   - type: markdown
     attributes:
@@ -10,6 +10,7 @@ body:
 
         Please search existing issues first and include as much detail as you can.
         For security-sensitive bugs, do **not** use this form; follow the private reporting instructions in `SECURITY.md` instead.
+        Label meanings are documented in `docs/labels.md`.
 
   - type: checkboxes
     id: checks
@@ -27,8 +28,8 @@ body:
     id: version
     attributes:
       label: TrayToolbar version
-      description: For example `v1.6.2`, or `main/local build` if you built from source.
-      placeholder: v1.6.2
+      description: For example `v1.7.0`, or `main/local build` if you built from source.
+      placeholder: v1.7.0
     validations:
       required: true
 
@@ -99,11 +100,12 @@ body:
     id: config-details
     attributes:
       label: Relevant configuration details (sanitized)
-      description: If the bug depends on folder paths, filters, hotkeys, update settings, or language settings, paste only the relevant parts and remove personal information.
+      description: If the bug depends on folder paths, filters, hotkeys, update settings, language settings, or `LaunchPolicy`, paste only the relevant parts and remove personal information.
       placeholder: |
         - Folders: ...
         - Recursive: true/false
         - IgnoreFiles / IncludeFiles: ...
+        - LaunchPolicy: ConfiguredSources / NetworkBlocked / LocalOnly
         - Theme / Language: ...
         - CheckForUpdates / NotifyOnUpdateAvailable: ...
     validations:

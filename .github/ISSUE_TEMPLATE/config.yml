@@ -3,6 +3,9 @@ contact_links:
   - name: Troubleshooting and contributor guide
     url: https://github.com/brondavies/TrayToolbar/blob/master/docs/developer-guide.md#faq-and-troubleshooting
     about: Check common Windows, configuration, update, and launch troubleshooting steps before opening an issue.
+  - name: Contributing workflow and labels
+    url: https://github.com/brondavies/TrayToolbar/blob/master/CONTRIBUTING.md
+    about: Review the command matrix, release workflow, PR expectations, and label guidance before contributing.
   - name: Security reports
     url: https://github.com/brondavies/TrayToolbar/security
     about: Please use the Security tab and SECURITY.md guidance for private vulnerability reporting instead of public issues.

@@ -23,21 +23,13 @@ internal sealed class FolderScanner(IFileSystem fileSystem)
             return false;
         }
 
-        try
-        {
-            var resolvedPath = (shortcutResolver ?? (path => path.ResolveShortcutTarget()))(fullPath);
-            if (!fileSystem.DirectoryExists(resolvedPath))
-            {
-                return false;
-            }
-
-            targetPath = resolvedPath;
-            return true;
-        }
-        catch
+        if (!ShortcutTargetResolver.TryResolveFileShortcutTarget(fullPath, out targetPath, shortcutResolver)
+            || !fileSystem.DirectoryExists(targetPath))
         {
             return false;
         }
+
+        return true;
     }
 
     IEnumerable<string> EnumerateFilesCore(string path, bool recursive, TrayToolbarConfiguration config)

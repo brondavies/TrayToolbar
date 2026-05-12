@@ -139,13 +139,19 @@ internal static class UpdateLogic
         if (!Uri.TryCreate(value, UriKind.Absolute, out var parsedUri)
             || !parsedUri.Scheme.Is(Uri.UriSchemeHttps)
             || !parsedUri.Host.Is(ReleaseHost)
-            || !parsedUri.AbsolutePath.StartsWith(ReleasePathPrefix, StringComparison.OrdinalIgnoreCase))
+            || !IsAllowedReleasePath(parsedUri.AbsolutePath))
         {
             return false;
         }
 
         uri = parsedUri;
         return true;
+    }
+
+    static bool IsAllowedReleasePath(string absolutePath)
+    {
+        return absolutePath.Is(ReleasePathPrefix)
+            || absolutePath.StartsWith(ReleasePathPrefix + "/", StringComparison.OrdinalIgnoreCase);
     }
 
     internal static bool TryGetSha256Digest(string? digest, out string normalizedDigest)

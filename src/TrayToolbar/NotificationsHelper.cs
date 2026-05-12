@@ -14,6 +14,7 @@ namespace TrayToolbar;
 internal partial class NotificationsHelper
 {
     public const string UPDATE_ACTION = "update";
+    public const string LAUNCH_ACTION = "launch";
     private const string AppUserModelId = "Brontech.TrayToolbar";
     private const string ToastActivatedLaunchArgument = "--toast-activated";
     private const string AppUserModelRegistryPath = @"Software\Classes\AppUserModelId\" + AppUserModelId;
@@ -176,6 +177,14 @@ internal partial class NotificationsHelper
         if (parsedArguments.TryGetValue("action", out var action) && action.Is(UPDATE_ACTION))
         {
             ConfigHelper.UpdateToLatestVersion();
+            return;
+        }
+
+        if (parsedArguments.TryGetValue("action", out action)
+            && action.Is(LAUNCH_ACTION)
+            && parsedArguments.TryGetValue("target", out var target))
+        {
+            Program.Launch(target);
         }
     }
 
@@ -223,7 +232,8 @@ internal partial class NotificationsHelper
             return string.Empty;
         }
 
-        return $" activationType='protocol' launch='{EscapeXml(uri.ToString())}'";
+        var arguments = EscapeXml($"action={Uri.EscapeDataString(LAUNCH_ACTION)}&target={Uri.EscapeDataString(uri.ToString())}");
+        return $" activationType='foreground' launch='{arguments}'";
     }
 
     private static string EscapeXml(string? value)
