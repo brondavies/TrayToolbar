@@ -69,6 +69,7 @@ Current workflow behavior:
 
 If a release is intended to be update-visible, publish it as a stable GitHub Release with the expected portable asset names.
 `UpdateLogic` validates those names and the GitHub Releases URL surface.
+If the signing certificate subject changes, or if thumbprint pinning is added or rotated, update `UpdateSignerPolicy.Default` in `src/TrayToolbar/Services/AuthenticodeUpdateSignatureVerifier.cs` before publishing the next release.
 
 ## Reproducible-build note
 

@@ -89,14 +89,10 @@ jobs:
           $isTagBuild = '${{ github.ref_type }}' -eq 'tag'
           $isPullRequest = '${{ github.event_name }}' -eq 'pull_request'
 
-          if ($isPullRequest) {
-            Write-Host 'SignPath signing is skipped for pull_request runs to avoid exposing signing credentials to untrusted changes.'
-            'enabled=false' >> $env:GITHUB_OUTPUT
-            'signing_policy_slug=' >> $env:GITHUB_OUTPUT
-            exit 0
+          $signingPolicy = if ($isPullRequest) {
+            'test-signing'
           }
-
-          $signingPolicy = if ($isTagBuild -and -not [string]::IsNullOrWhiteSpace($env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG)) {
+          elseif ($isTagBuild -and -not [string]::IsNullOrWhiteSpace($env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG)) {
             $env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG
           }
           elseif (-not [string]::IsNullOrWhiteSpace($env:SIGNPATH_CI_SIGNING_POLICY_SLUG)) {
@@ -238,8 +234,10 @@ jobs:
         if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v3
         with:
+          body_path: ${{ github.workspace }}/docs/release-notes.md
           fail_on_unmatched_files: true
           generate_release_notes: true
+          prerelease: true
           files: |
             ${{ steps.final-assets.outputs.arm64_path }}
             ${{ steps.final-assets.outputs.x64_path }}

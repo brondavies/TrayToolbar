@@ -89,8 +89,12 @@ Workflow behavior:
 - the workflow uploads each portable zip with `archive: false`, so SignPath receives the real file name such as `TrayToolbar-win-arm64-portable-<version>.zip` or `TrayToolbar-win-x64-portable-<version>.zip`
 - the uploaded artifact is treated as a `<zip-file>` in SignPath
 - the root `TrayToolbar.exe` inside the zip is Authenticode-signed
+- runtime update installation also validates that staged `TrayToolbar.exe` with `WinVerifyTrust` and requires the signer identity to match `UpdateSignerPolicy.Default` in `src/TrayToolbar/Services/AuthenticodeUpdateSignatureVerifier.cs`
+- if the signing certificate subject changes, or if you add or rotate pinned thumbprints, update `UpdateSignerPolicy.Default` before the next release so the new signer is update-valid
 - the release-signing GitHub policy requires GitHub-hosted runners, rejects workflow reruns, and expects a GitHub branch ruleset that blocks force pushes and requires reviewed pull requests on the default branch
 - in the SignPath `release-signing` policy itself, enable **Verify origin** and set **Allowed branch names** to `master`
+
+Unsigned PR workflow artifacts and local `build.ps1` outputs are useful for testing, but they are not valid automatic-update artifacts unless they are signed with the allowed TrayToolbar publisher identity.
 
 ### Reproducible-build note
 

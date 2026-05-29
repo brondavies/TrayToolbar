@@ -12,12 +12,14 @@ This file stays as the supplemental narrative release summary for highlights, ro
 ## Highlights
 
 - Signed portable release builds in GitHub CI. Tagged releases now publish the SignPath-signed `win-arm64` and `win-x64` zip assets built by GitHub Actions.
+- Runtime update signature enforcement. Automatic updates now validate the staged `TrayToolbar.exe` with Windows Authenticode trust checks and reject unsigned, tampered, or unexpected-publisher update binaries.
 - Safer signing boundaries in CI. `pull_request` validation builds still package the app, but they intentionally skip SignPath signing so signing credentials are never exposed to untrusted pull-request code.
 - Better Windows shortcut launching. `.lnk` app shortcuts now keep their saved arguments and working directory, while safe non-app targets open directly.
 - Safer update and release links. Toast actions now go back through TrayToolbar, and only real GitHub Releases URLs are accepted.
 - Simpler release packaging. Local builds now produce the same portable `win-arm64` and `win-x64` zip assets used for releases.
 - More reliable local packaging parity. `build.ps1` now works on machines that rely on the .NET SDK's `dotnet msbuild` fallback instead of a standalone `msbuild.exe` on `PATH`.
 - Also included a benchmark project plus contributor docs and templates to support future maintenance.
+- Unsigned PR or local portable builds are no longer considered valid automatic-update artifacts unless they are signed with the allowed TrayToolbar publisher identity.
 - **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
 
 ## Features

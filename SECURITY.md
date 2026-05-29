@@ -57,10 +57,24 @@ TrayToolbar currently validates GitHub release metadata and asset digests as par
 That contract is documented in [`docs/update-security.md`](docs/update-security.md).
 
 TrayToolbar's GitHub CI workflow can publish SignPath-signed portable release assets when the repository SignPath configuration is present.
-TrayToolbar does **not** currently enforce Authenticode code-signing validation during update.
+TrayToolbar now also enforces runtime Authenticode validation for the staged `TrayToolbar.exe` before it is launched or copied over the installed executable.
+
+Current runtime trust model for automatic updates:
+
+- GitHub release metadata and asset SHA-256 digests must match the expected release contract
+- the staged updater executable must pass `WinVerifyTrust` with trust UI disabled
+- the signer identity must match `UpdateSignerPolicy.Default` in `src/TrayToolbar/Services/AuthenticodeUpdateSignatureVerifier.cs`
+
+Practical notes:
+
+- tagged GitHub CI releases can publish update-valid SignPath-signed portable assets
+- `pull_request` workflow artifacts remain intentionally unsigned and are not valid automatic-update artifacts
+- local portable outputs are not automatic-update-valid unless they are signed with the allowed TrayToolbar publisher identity
+- if the signing certificate subject changes, or if thumbprint pinning is introduced or rotated, update `UpdateSignerPolicy.Default` before the next release
+
 Reports that demonstrate a practical integrity or impersonation weakness are welcome.
 Reports showing that a published tagged release bypassed the intended CI signing path are in scope.
-A request to add additional runtime signature enforcement by itself may still be treated as future hardening work unless it demonstrates a concrete weakness.
+A request to further tighten signer policy (for example by adding thumbprint pinning) may still be treated as future hardening work unless it demonstrates a concrete weakness.
 
 ## Disclosure and response expectations
 

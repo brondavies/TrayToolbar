@@ -19,6 +19,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 ### Security
 
 - Tagged GitHub Releases now publish the SignPath-signed portable assets produced by CI instead of the unsigned packaging outputs.
+- TrayToolbar now refuses to launch or install a staged automatic update unless the extracted `TrayToolbar.exe` passes Windows Authenticode validation and matches the configured TrayToolbar signer policy.
 
 ### Fixed
 

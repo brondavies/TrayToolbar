@@ -27,6 +27,7 @@ internal class ConfigHelper
     internal static IReleaseClient ReleaseClient { get; set; } = new GitHubReleaseClient();
     internal static IUpdateInstaller UpdateInstaller { get; set; } = new UpdateHelperInstaller();
     internal static IProcessLauncher ProcessLauncher { get; set; } = new SystemProcessLauncher();
+    internal static IUpdateSignatureVerifier UpdateSignatureVerifier { get; set; } = new AuthenticodeUpdateSignatureVerifier();
     internal static IFileSystemWatcherFactory FileSystemWatcherFactory { get; set; } = new SystemFileSystemWatcherFactory();
 
     internal static string ApplicationExe => Environment.ProcessPath!;
