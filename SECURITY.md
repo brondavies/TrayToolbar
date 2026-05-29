@@ -56,9 +56,11 @@ Examples that are usually **not** security reports:
 TrayToolbar currently validates GitHub release metadata and asset digests as part of its update flow.
 That contract is documented in [`docs/update-security.md`](docs/update-security.md).
 
+TrayToolbar's GitHub CI workflow can publish SignPath-signed portable release assets when the repository SignPath configuration is present.
 TrayToolbar does **not** currently enforce Authenticode code-signing validation during update.
 Reports that demonstrate a practical integrity or impersonation weakness are welcome.
-A request to add code signing by itself may be treated as future hardening work rather than an active vulnerability.
+Reports showing that a published tagged release bypassed the intended CI signing path are in scope.
+A request to add additional runtime signature enforcement by itself may still be treated as future hardening work unless it demonstrates a concrete weakness.
 
 ## Disclosure and response expectations
 

@@ -62,9 +62,10 @@ Expected portable release outputs from `build.ps1` and CI:
 
 Current workflow behavior:
 
-- `push` / `pull_request` on `master`: restore, test, format verification, and build portable zip artifacts as workflow artifacts
-- `workflow_dispatch`: same packaging flow for branch or tag dry runs
-- `push` of `v*.*.*` tags: same packaging flow plus GitHub Release asset publication
+- `push` on `master`: restore, test, format verification, build portable zip artifacts, and SignPath-sign them when the repository SignPath configuration is present
+- `pull_request` on `master`: the same validation and packaging flow, but signing is intentionally skipped so signing credentials are not exposed to untrusted pull-request code
+- `workflow_dispatch`: same validation and packaging flow for branch or tag dry runs, with signing when SignPath is configured and the run is not a pull request
+- `push` of `v*.*.*` tags: same packaging flow plus GitHub Release asset publication from the SignPath-signed assets; tag builds require SignPath configuration
 
 If a release is intended to be update-visible, publish it as a stable GitHub Release with the expected portable asset names.
 `UpdateLogic` validates those names and the GitHub Releases URL surface.

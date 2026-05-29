@@ -156,16 +156,20 @@ Relevant implementation:
 
 ## Code signing status
 
-TrayToolbar does **not** currently enforce Authenticode signature validation during update.
+TrayToolbar's GitHub CI workflow submits the portable release archives to SignPath and publishes signed artifacts.
+
+TrayToolbar still does **not** currently enforce Authenticode signature validation during update.
 
 Current position:
 
 - GitHub release metadata and asset SHA-256 digests are verified
+- tagged GitHub CI builds can publish SignPath-signed portable release archives
+- `pull_request` validation builds intentionally skip signing so signing credentials are not exposed to untrusted changes
 - Authenticode verification is **not yet implemented**
 
 Recommended future step:
 
-- if the project adopts code signing, add Authenticode validation for the staged updater executable before execution
+- add Authenticode validation for the staged updater executable before execution so the runtime trust decision also consumes the published signature
 
 ## Contributor checklist when release packaging or execution behavior changes
 

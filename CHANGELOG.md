@@ -8,6 +8,22 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+### Added
+
+- Added SignPath GitHub Actions integration hooks so CI can submit the portable `win-arm64` and `win-x64` zip artifacts for code signing and download signed replacements before publishing.
+
+### Changed
+
+- GitHub CI now skips signing on `pull_request` runs, signs non-PR portable artifacts when the repository SignPath configuration is present, and requires SignPath configuration before publishing tagged releases.
+
+### Security
+
+- Tagged GitHub Releases now publish the SignPath-signed portable assets produced by CI instead of the unsigned packaging outputs.
+
+### Fixed
+
+- Fixed `build.ps1`'s `dotnet msbuild` fallback so the local portable packaging parity script works on machines where standalone `msbuild.exe` is not on `PATH`.
+
 ## [1.7.1] - 2026-04-22
 
 ### Added
@@ -65,6 +81,6 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...HEAD
 [1.7.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/brondavies/TrayToolbar/compare/v1.6.2...v1.7.0
