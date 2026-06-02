@@ -142,6 +142,7 @@ jobs:
           archive: false
           if-no-files-found: error
           retention-days: 1
+          overwrite: true
 
       - name: Upload x64 unsigned portable zip for SignPath
         if: steps.signpath.outputs.enabled == 'true'
@@ -152,6 +153,7 @@ jobs:
           archive: false
           if-no-files-found: error
           retention-days: 1
+          overwrite: true
 
       - name: Sign arm64 portable zip
         if: steps.signpath.outputs.enabled == 'true'
@@ -197,7 +199,7 @@ jobs:
           archive: false
           if-no-files-found: error
           retention-days: 14
-          overwrite: ${{ steps.signpath.outputs.enabled == 'true' }}
+          overwrite: true
 
       - name: Upload x64 portable zip
         uses: actions/upload-artifact@v7
@@ -206,7 +208,7 @@ jobs:
           archive: false
           if-no-files-found: error
           retention-days: 14
-          overwrite: ${{ steps.signpath.outputs.enabled == 'true' }}
+          overwrite: true
 
       - name: Publish GitHub Release assets
         if: github.ref_type == 'tag'
