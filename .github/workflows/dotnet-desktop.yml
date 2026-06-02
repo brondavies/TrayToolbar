@@ -184,33 +184,11 @@ jobs:
       - name: Resolve final asset paths
         id: final-assets
         shell: pwsh
-        env:
-          SIGNPATH_ENABLED: ${{ steps.signpath.outputs.enabled }}
-          ARM64_ASSET: ${{ steps.version.outputs.arm64_asset }}
-          X64_ASSET: ${{ steps.version.outputs.x64_asset }}
         run: |
-          $arm64RelativePath = if ($env:SIGNPATH_ENABLED -eq 'true') {
-            "signpath/arm64/$($env:ARM64_ASSET)"
-          }
-          else {
-            $env:ARM64_ASSET
-          }
-
-          $x64RelativePath = if ($env:SIGNPATH_ENABLED -eq 'true') {
-            "signpath/x64/$($env:X64_ASSET)"
-          }
-          else {
-            $env:X64_ASSET
-          }
-
-          foreach ($relativePath in @($arm64RelativePath, $x64RelativePath)) {
-            if (-not (Test-Path (Join-Path $PWD $relativePath))) {
-              throw "Expected final asset not found: $relativePath"
-            }
-          }
-
-          "arm64_path=$arm64RelativePath" >> $env:GITHUB_OUTPUT
-          "x64_path=$x64RelativePath" >> $env:GITHUB_OUTPUT
+          ./.github/scripts/Resolve-FinalAssetPaths.ps1 `
+            -SignPathEnabled '${{ steps.signpath.outputs.enabled }}' `
+            -Arm64Asset '${{ steps.version.outputs.arm64_asset }}' `
+            -X64Asset '${{ steps.version.outputs.x64_asset }}'
 
       - name: Upload arm64 portable zip
         uses: actions/upload-artifact@v7
