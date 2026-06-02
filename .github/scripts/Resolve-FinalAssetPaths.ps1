@@ -84,6 +84,14 @@ function Resolve-FinalAssetPath
     if ($discoveredZipFiles.Count -eq 1)
     {
         $resolvedRelativePath = Convert-ToRelativeArtifactPath -RelativeDirectory $RelativeDirectory -AbsoluteDirectory $absoluteDirectory -AbsoluteFilePath $discoveredZipFiles[0].FullName
+
+        if ($resolvedRelativePath.Equals("$expectedRelativePath.zip", [System.StringComparison]::OrdinalIgnoreCase))
+        {
+            Move-Item -LiteralPath $discoveredZipFiles[0].FullName -Destination $expectedAbsolutePath -Force
+            Write-Host "Normalized SignPath artifact name from '$resolvedRelativePath' to '$expectedRelativePath'."
+            return $expectedRelativePath
+        }
+
         Write-Warning "Expected signed asset '$expectedRelativePath' was not found. Using discovered ZIP artifact '$resolvedRelativePath' instead."
         return $resolvedRelativePath
     }
