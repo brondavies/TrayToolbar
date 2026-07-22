@@ -8,9 +8,9 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
-## [1.7.7] - 2026-07-22
+## [1.7.8] - 2026-07-22
 
-`v1.7.2` through `v1.7.6` were tagged but never published. Their release builds failed in turn on SignPath policy loading, on the repository having no GitHub rulesets, on no ruleset applying to the release tag ref, and on the signing request submission. Branch builds sign normally throughout, so the remaining failure is specific to tag refs. 1.7.7 carries the same changes plus those fixes.
+`v1.7.2` through `v1.7.7` were tagged but never published. Their release builds failed in turn on SignPath policy loading, on the repository having no GitHub rulesets, on no ruleset applying to the release tag ref, and on the signing request submission returning `400 Bad Request` while a concurrent master push build held the same artifact name. 1.7.8 carries the same changes plus those fixes.
 
 ### Added
 
@@ -32,6 +32,9 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 - Removed the unsupported `allow_bypass_actors` key from the SignPath GitHub policy, which the SignPath policy loader rejected and which failed the `v1.7.2` release signing step.
 - Reduced the SignPath branch ruleset policy to the force-push protection that both the `master` branch ruleset and the release tag ruleset can enforce, because release builds run on tag refs and GitHub tag rulesets cannot enforce pull request rules.
 - Raised the SignPath signing request wait timeout from the ten minute default to one hour, so release builds do not time out while the signing request waits for manual approval.
+- Disabled SignPath signing on `pull_request` builds entirely, so pull request validation no longer submits test signing requests.
+- Serialized the builds that submit signing requests, so a release tag build no longer submits while the master push build for the same commit is still signing identically named artifacts.
+- Named the final portable release artifacts explicitly, so uploading them no longer conflicts with the unsigned artifacts uploaded for SignPath earlier in the same run.
 
 ## [1.7.1] - 2026-04-22
 
@@ -90,7 +93,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.7...HEAD
-[1.7.7]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.7.7
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.8...HEAD
+[1.7.8]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.7.8
 [1.7.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/brondavies/TrayToolbar/compare/v1.6.2...v1.7.0
