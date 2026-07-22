@@ -54,7 +54,7 @@ Expected portable release outputs from `build.ps1` and CI:
 ## Release and versioning discipline
 
 - The version source of truth is `<Version>` in `src/TrayToolbar/TrayToolbar.csproj`.
-- Release tags should use `v<Version>` and match the project version exactly.
+- Release tags should use `v<Version>` and match the project version exactly. The release workflow creates the tag from the project version, so it is not pushed by hand.
 - `CHANGELOG.md` is the canonical release history.
 - `docs/release-notes.md` remains the supplemental narrative release summary.
 - The GitHub Actions workflow in `.github/workflows/dotnet-desktop.yml` is the canonical producer of release artifacts.
@@ -64,8 +64,10 @@ Current workflow behavior:
 
 - `push` on `master`: restore, test, format verification, build portable zip artifacts, and SignPath-sign them when the repository SignPath configuration is present
 - `pull_request` on `master`: the same validation and packaging flow, but signing is intentionally skipped so signing credentials are not exposed to untrusted pull-request code
-- `workflow_dispatch`: same validation and packaging flow for branch or tag dry runs, with signing when SignPath is configured and the run is not a pull request
-- `push` of `v*.*.*` tags: same packaging flow plus GitHub Release asset publication from the SignPath-signed assets; tag builds require SignPath configuration
+- `workflow_dispatch` with `publish` unset: same validation and packaging flow as a branch dry run, with signing when SignPath is configured
+- `workflow_dispatch` with `publish` set: same packaging flow plus GitHub Release asset publication from the SignPath-signed assets, creating tag `v<Version>` from the project version; release runs require SignPath configuration
+
+Releases are published from a branch run rather than a tag push. SignPath rejects signing requests submitted from a tag ref with `400 Bad Request`, while the same artifact and signing policy succeed from a branch ref, so the release path never builds from a tag.
 
 If a release is intended to be update-visible, publish it as a stable GitHub Release with the expected portable asset names.
 `UpdateLogic` validates those names and the GitHub Releases URL surface.
