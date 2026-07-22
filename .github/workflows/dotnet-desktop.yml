@@ -213,16 +213,16 @@ jobs:
             -Arm64Asset '${{ steps.version.outputs.arm64_asset }}' `
             -X64Asset '${{ steps.version.outputs.x64_asset }}'
 
-      # These artifacts are named explicitly because upload-artifact derives the
-      # artifact name from the file name when archive is false, which collides
-      # with the unsigned artifacts uploaded for SignPath earlier in this run.
-      # The published release assets come from the paths below, not these names.
+      # These artifacts are archived and named explicitly. With archive false,
+      # upload-artifact names the artifact after the file, which collides with
+      # the unsigned artifacts uploaded for SignPath earlier in this run, and
+      # the explicit name is not applied. The published release assets come from
+      # the paths below, so these artifact names are only used on the run page.
       - name: Upload arm64 portable zip
         uses: actions/upload-artifact@v7
         with:
-          name: release-${{ steps.version.outputs.arm64_asset }}
+          name: release-win-arm64-portable-${{ steps.version.outputs.version }}
           path: ${{ steps.final-assets.outputs.arm64_path }}
-          archive: false
           if-no-files-found: error
           retention-days: 14
           overwrite: true
@@ -230,9 +230,8 @@ jobs:
       - name: Upload x64 portable zip
         uses: actions/upload-artifact@v7
         with:
-          name: release-${{ steps.version.outputs.x64_asset }}
+          name: release-win-x64-portable-${{ steps.version.outputs.version }}
           path: ${{ steps.final-assets.outputs.x64_path }}
-          archive: false
           if-no-files-found: error
           retention-days: 14
           overwrite: true
