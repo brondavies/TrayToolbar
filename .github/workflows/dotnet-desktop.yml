@@ -1,11 +1,17 @@
 name: Portable Release
 
 on:
+  # Releases are published from a branch run rather than a tag push, because
+  # SignPath rejects signing requests submitted from a tag ref with 400 Bad
+  # Request while the same artifact signs normally from a branch ref.
   workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Publish a GitHub Release for the version in TrayToolbar.csproj'
+        type: boolean
+        default: false
   push:
     branches: [ "master" ]
-    tags:
-      - "v*.*.*"
   pull_request:
     branches: [ "master" ]
 
@@ -97,7 +103,7 @@ jobs:
           SIGNPATH_CI_SIGNING_POLICY_SLUG: ${{ vars.SIGNPATH_CI_SIGNING_POLICY_SLUG }}
           SIGNPATH_RELEASE_SIGNING_POLICY_SLUG: ${{ vars.SIGNPATH_RELEASE_SIGNING_POLICY_SLUG }}
         run: |
-          $isTagBuild = '${{ github.ref_type }}' -eq 'tag'
+          $isReleasePublish = '${{ github.event_name == 'workflow_dispatch' && inputs.publish }}' -eq 'true'
           $isPullRequest = '${{ github.event_name }}' -eq 'pull_request'
 
           if ($isPullRequest) {
@@ -107,7 +113,7 @@ jobs:
             exit 0
           }
 
-          $signingPolicy = if ($isTagBuild -and -not [string]::IsNullOrWhiteSpace($env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG)) {
+          $signingPolicy = if ($isReleasePublish -and -not [string]::IsNullOrWhiteSpace($env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG)) {
             $env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG
           }
           elseif (-not [string]::IsNullOrWhiteSpace($env:SIGNPATH_CI_SIGNING_POLICY_SLUG)) {
@@ -135,8 +141,8 @@ jobs:
           )
 
           if ($missing.Count -gt 0) {
-            if ($isTagBuild) {
-              throw "SignPath signing is required for tag builds. Missing configuration: $($missing -join ', ')."
+            if ($isReleasePublish) {
+              throw "SignPath signing is required for release builds. Missing configuration: $($missing -join ', ')."
             }
 
             Write-Warning "SignPath signing is disabled because the following GitHub secrets/variables are missing: $($missing -join ', ')."
@@ -237,9 +243,10 @@ jobs:
           overwrite: true
 
       - name: Publish GitHub Release assets
-        if: github.ref_type == 'tag'
+        if: github.event_name == 'workflow_dispatch' && inputs.publish
         uses: softprops/action-gh-release@v3
         with:
+          tag_name: v${{ steps.version.outputs.version }}
           body_path: ${{ github.workspace }}/docs/release-notes.md
           fail_on_unmatched_files: true
           generate_release_notes: true

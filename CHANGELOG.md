@@ -33,6 +33,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 - Reduced the SignPath branch ruleset policy to the force-push protection that both the `master` branch ruleset and the release tag ruleset can enforce, because release builds run on tag refs and GitHub tag rulesets cannot enforce pull request rules.
 - Raised the SignPath signing request wait timeout from the ten minute default to one hour, so release builds do not time out while the signing request waits for manual approval.
 - Disabled SignPath signing on `pull_request` builds entirely, so pull request validation no longer submits test signing requests.
+- Moved release publication from a tag push to a `workflow_dispatch` run with the `publish` input, which creates tag `v<Version>` from the project version. SignPath rejects signing requests submitted from a tag ref with `400 Bad Request`, while the same artifact and signing policy succeed from a branch ref.
 - Serialized the builds that submit signing requests, so a release tag build no longer submits while the master push build for the same commit is still signing identically named artifacts.
 - Archived and explicitly named the final portable release artifacts, so uploading them no longer conflicts with the unsigned artifacts uploaded for SignPath earlier in the same run. With `archive: false`, `actions/upload-artifact` names the artifact after the file and ignores the explicit name, which made both uploads claim the same artifact name.
 
