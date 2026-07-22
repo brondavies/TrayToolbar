@@ -166,6 +166,9 @@ jobs:
           artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG }}
           github-artifact-id: ${{ steps.upload-unsigned-arm64.outputs.artifact-id }}
           wait-for-completion: true
+          # The release signing policy requires manual approval in SignPath,
+          # so allow an hour instead of the ten minute default.
+          wait-for-completion-timeout-in-seconds: 3600
           output-artifact-directory: signpath/arm64
           skip-decompress: true
 
@@ -180,6 +183,9 @@ jobs:
           artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG }}
           github-artifact-id: ${{ steps.upload-unsigned-x64.outputs.artifact-id }}
           wait-for-completion: true
+          # The release signing policy requires manual approval in SignPath,
+          # so allow an hour instead of the ten minute default.
+          wait-for-completion-timeout-in-seconds: 3600
           output-artifact-directory: signpath/x64
           skip-decompress: true
 
