@@ -8,9 +8,9 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
-## [1.7.6] - 2026-07-22
+## [1.7.7] - 2026-07-22
 
-`v1.7.2` through `v1.7.5` were tagged but never published. Their release builds failed in turn on SignPath policy loading, on the repository having no GitHub rulesets, on no ruleset applying to the release tag ref, and on the signing request itself. 1.7.6 carries the same changes plus those fixes.
+`v1.7.2` through `v1.7.6` were tagged but never published. Their release builds failed in turn on SignPath policy loading, on the repository having no GitHub rulesets, on no ruleset applying to the release tag ref, and on the signing request submission. Branch builds sign normally throughout, so the remaining failure is specific to tag refs. 1.7.7 carries the same changes plus those fixes.
 
 ### Added
 
@@ -90,7 +90,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.6...HEAD
-[1.7.6]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.7.6
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.7...HEAD
+[1.7.7]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.7.7
 [1.7.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/brondavies/TrayToolbar/compare/v1.6.2...v1.7.0
