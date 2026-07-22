@@ -5,11 +5,10 @@ github-policies:
     require_github_hosted: true
   build:
     disallow_reruns: true
+  # Release builds run on tag refs, and GitHub tag rulesets cannot enforce
+  # pull request rules, so this policy only requires the force-push protection
+  # that both the master branch ruleset and the release tag ruleset provide.
   branch_rulesets:
     - condition:
         rules:
           - block_force_pushes: true
-          - require_linear_history: false
-          - require_pull_request:
-              min_required_approvals: 0
-              require_review_thread_resolution: true

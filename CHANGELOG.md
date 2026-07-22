@@ -8,9 +8,9 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
-## [1.7.4] - 2026-07-22
+## [1.7.5] - 2026-07-22
 
-`v1.7.2` and `v1.7.3` were tagged but never published. The `v1.7.2` release build failed while loading the SignPath GitHub policy, and the `v1.7.3` build failed SignPath CI system validation because the repository had no GitHub rulesets. 1.7.4 carries the same changes plus both fixes.
+`v1.7.2`, `v1.7.3`, and `v1.7.4` were tagged but never published. Their release builds failed in turn on SignPath policy loading, on the repository having no GitHub rulesets, and on no ruleset applying to the release tag ref. 1.7.5 carries the same changes plus all three fixes.
 
 ### Added
 
@@ -30,7 +30,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - Fixed `build.ps1`'s `dotnet msbuild` fallback so the local portable packaging parity script works on machines where standalone `msbuild.exe` is not on `PATH`.
 - Removed the unsupported `allow_bypass_actors` key from the SignPath GitHub policy, which the SignPath policy loader rejected and which failed the `v1.7.2` release signing step.
-- Relaxed the SignPath branch ruleset policy to require a pull request and review-thread resolution without a minimum approval count, so a GitHub ruleset on `master` can satisfy origin verification on a solo-maintained repository.
+- Reduced the SignPath branch ruleset policy to the force-push protection that both the `master` branch ruleset and the release tag ruleset can enforce, because release builds run on tag refs and GitHub tag rulesets cannot enforce pull request rules.
 
 ## [1.7.1] - 2026-04-22
 
@@ -89,7 +89,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.4...HEAD
-[1.7.4]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.7.4
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.5...HEAD
+[1.7.5]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.7.5
 [1.7.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/brondavies/TrayToolbar/compare/v1.6.2...v1.7.0
