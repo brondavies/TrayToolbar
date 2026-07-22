@@ -7,7 +7,7 @@ This file stays as the supplemental narrative release summary for highlights, ro
 - GitHub release assets: <https://github.com/brondavies/TrayToolbar/releases>
 - Update and packaging trust boundary: [`update-security.md`](update-security.md)
 
-## 1.7.3
+## 1.7.4
 
 ## Highlights
 
@@ -20,7 +20,7 @@ This file stays as the supplemental narrative release summary for highlights, ro
 - More reliable local packaging parity. `build.ps1` now works on machines that rely on the .NET SDK's `dotnet msbuild` fallback instead of a standalone `msbuild.exe` on `PATH`.
 - Also included a benchmark project plus contributor docs and templates to support future maintenance.
 - Unsigned PR or local portable builds are no longer considered valid automatic-update artifacts unless they are signed with the allowed TrayToolbar publisher identity.
-- Note on 1.7.2: that tag was pushed but never published, because its release build failed while loading the SignPath GitHub policy. 1.7.3 is the first release of this work.
+- Note on 1.7.2 and 1.7.3: both tags were pushed but never published, because their release builds failed SignPath policy loading and CI system validation respectively. 1.7.4 is the first release of this work.
 - **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
 
 ## Features
