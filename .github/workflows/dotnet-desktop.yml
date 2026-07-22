@@ -10,6 +10,7 @@ on:
     branches: [ "master" ]
 
 permissions:
+  actions: read
   contents: read
 
 jobs:
@@ -17,6 +18,7 @@ jobs:
     name: Validate and package portable release
     runs-on: windows-2025-vs2026
     permissions:
+      actions: read
       contents: write
 
     env:
@@ -73,30 +75,149 @@ jobs:
           "arm64_asset=TrayToolbar-win-arm64-portable-$version.zip" >> $env:GITHUB_OUTPUT
           "x64_asset=TrayToolbar-win-x64-portable-$version.zip" >> $env:GITHUB_OUTPUT
 
+      - name: Resolve SignPath settings
+        id: signpath
+        shell: pwsh
+        env:
+          SIGNPATH_API_TOKEN: ${{ secrets.SIGNPATH_API_TOKEN }}
+          SIGNPATH_ORGANIZATION_ID: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          SIGNPATH_PROJECT_SLUG: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          SIGNPATH_ARTIFACT_CONFIGURATION_SLUG: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG }}
+          SIGNPATH_CI_SIGNING_POLICY_SLUG: ${{ vars.SIGNPATH_CI_SIGNING_POLICY_SLUG }}
+          SIGNPATH_RELEASE_SIGNING_POLICY_SLUG: ${{ vars.SIGNPATH_RELEASE_SIGNING_POLICY_SLUG }}
+        run: |
+          $isTagBuild = '${{ github.ref_type }}' -eq 'tag'
+          $isPullRequest = '${{ github.event_name }}' -eq 'pull_request'
+
+          $signingPolicy = if ($isPullRequest) {
+            'test-signing'
+          }
+          elseif ($isTagBuild -and -not [string]::IsNullOrWhiteSpace($env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG)) {
+            $env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG
+          }
+          elseif (-not [string]::IsNullOrWhiteSpace($env:SIGNPATH_CI_SIGNING_POLICY_SLUG)) {
+            $env:SIGNPATH_CI_SIGNING_POLICY_SLUG
+          }
+          elseif (-not [string]::IsNullOrWhiteSpace($env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG)) {
+            $env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG
+          }
+          else {
+            ''
+          }
+
+          $required = @{
+            SIGNPATH_API_TOKEN = $env:SIGNPATH_API_TOKEN
+            SIGNPATH_ORGANIZATION_ID = $env:SIGNPATH_ORGANIZATION_ID
+            SIGNPATH_PROJECT_SLUG = $env:SIGNPATH_PROJECT_SLUG
+            SIGNPATH_ARTIFACT_CONFIGURATION_SLUG = $env:SIGNPATH_ARTIFACT_CONFIGURATION_SLUG
+            SIGNPATH_SIGNING_POLICY_SLUG = $signingPolicy
+          }
+
+          $missing = @(
+            $required.GetEnumerator() |
+              Where-Object { [string]::IsNullOrWhiteSpace([string]$_.Value) } |
+              ForEach-Object Key
+          )
+
+          if ($missing.Count -gt 0) {
+            if ($isTagBuild) {
+              throw "SignPath signing is required for tag builds. Missing configuration: $($missing -join ', ')."
+            }
+
+            Write-Warning "SignPath signing is disabled because the following GitHub secrets/variables are missing: $($missing -join ', ')."
+            'enabled=false' >> $env:GITHUB_OUTPUT
+            'signing_policy_slug=' >> $env:GITHUB_OUTPUT
+            exit 0
+          }
+
+          'enabled=true' >> $env:GITHUB_OUTPUT
+          "signing_policy_slug=$signingPolicy" >> $env:GITHUB_OUTPUT
+
+      - name: Upload arm64 unsigned portable zip for SignPath
+        if: steps.signpath.outputs.enabled == 'true'
+        id: upload-unsigned-arm64
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ steps.version.outputs.arm64_asset }}
+          archive: false
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true
+
+      - name: Upload x64 unsigned portable zip for SignPath
+        if: steps.signpath.outputs.enabled == 'true'
+        id: upload-unsigned-x64
+        uses: actions/upload-artifact@v7
+        with:
+          path: ${{ steps.version.outputs.x64_asset }}
+          archive: false
+          if-no-files-found: error
+          retention-days: 1
+          overwrite: true
+
+      - name: Sign arm64 portable zip
+        if: steps.signpath.outputs.enabled == 'true'
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ steps.signpath.outputs.signing_policy_slug }}
+          artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG }}
+          github-artifact-id: ${{ steps.upload-unsigned-arm64.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signpath/arm64
+          skip-decompress: true
+
+      - name: Sign x64 portable zip
+        if: steps.signpath.outputs.enabled == 'true'
+        uses: signpath/github-action-submit-signing-request@v2
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+          signing-policy-slug: ${{ steps.signpath.outputs.signing_policy_slug }}
+          artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG }}
+          github-artifact-id: ${{ steps.upload-unsigned-x64.outputs.artifact-id }}
+          wait-for-completion: true
+          output-artifact-directory: signpath/x64
+          skip-decompress: true
+
+      - name: Resolve final asset paths
+        id: final-assets
+        shell: pwsh
+        run: |
+          ./.github/scripts/Resolve-FinalAssetPaths.ps1 `
+            -SignPathEnabled '${{ steps.signpath.outputs.enabled }}' `
+            -Arm64Asset '${{ steps.version.outputs.arm64_asset }}' `
+            -X64Asset '${{ steps.version.outputs.x64_asset }}'
+
       - name: Upload arm64 portable zip
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ steps.version.outputs.arm64_asset }}
-          path: ${{ steps.version.outputs.arm64_asset }}
+          path: ${{ steps.final-assets.outputs.arm64_path }}
+          archive: false
           if-no-files-found: error
           retention-days: 14
-          compression-level: 0
+          overwrite: true
 
       - name: Upload x64 portable zip
         uses: actions/upload-artifact@v7
         with:
-          name: ${{ steps.version.outputs.x64_asset }}
-          path: ${{ steps.version.outputs.x64_asset }}
+          path: ${{ steps.final-assets.outputs.x64_path }}
+          archive: false
           if-no-files-found: error
           retention-days: 14
-          compression-level: 0
+          overwrite: true
 
       - name: Publish GitHub Release assets
         if: github.ref_type == 'tag'
         uses: softprops/action-gh-release@v3
         with:
+          body_path: ${{ github.workspace }}/docs/release-notes.md
           fail_on_unmatched_files: true
           generate_release_notes: true
+          prerelease: true
           files: |
-            ${{ steps.version.outputs.arm64_asset }}
-            ${{ steps.version.outputs.x64_asset }}
+            ${{ steps.final-assets.outputs.arm64_path }}
+            ${{ steps.final-assets.outputs.x64_path }}

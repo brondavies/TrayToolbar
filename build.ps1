@@ -18,16 +18,6 @@ else
 	$buildToolPrefix = @("msbuild")
 }
 
-function Invoke-BuildTool
-{
-	param(
-		[Parameter(ValueFromRemainingArguments = $true)]
-		[string[]] $Arguments
-	)
-
-	& $buildTool @buildToolPrefix @Arguments
-}
-
 function Reset-PublishDirectory
 {
 	if (Test-Path $publishDir)
@@ -40,32 +30,28 @@ function Reset-PublishDirectory
 	}
 }
 
-Invoke-BuildTool @('-t:restore', $csproj)
+& $buildTool @buildToolPrefix $csproj '-t:restore'
 
 Reset-PublishDirectory
-Invoke-BuildTool @(
-	'-t:Publish',
-	'-p:RuntimeIdentifier=win-arm64',
-	$csproj,
-	"-p:PublishDir=$publishDir",
-	'-p:Configuration=Release',
-	'-p:PublishSingleFile=true',
-	'-p:PublishReadyToRun=false',
-	'-p:SelfContained=false',
+& $buildTool @buildToolPrefix $csproj `
+	'-t:Publish' `
+	'-p:RuntimeIdentifier=win-arm64' `
+	"-p:PublishDir=$publishDir" `
+	'-p:Configuration=Release' `
+	'-p:PublishSingleFile=true' `
+	'-p:PublishReadyToRun=false' `
+	'-p:SelfContained=false' `
 	'-p:PublishProtocol=FileSystem'
-)
 Compress-Archive "$root\publish\*.exe" "$root\TrayToolbar-win-arm64-portable-$version.zip" -Force
 
 Reset-PublishDirectory
-Invoke-BuildTool @(
-	'-t:Publish',
-	'-p:RuntimeIdentifier=win-x64',
-	$csproj,
-	"-p:PublishDir=$publishDir",
-	'-p:Configuration=Release',
-	'-p:PublishSingleFile=true',
-	'-p:PublishReadyToRun=false',
-	'-p:SelfContained=false',
+& $buildTool @buildToolPrefix $csproj `
+	'-t:Publish' `
+	'-p:RuntimeIdentifier=win-x64' `
+	"-p:PublishDir=$publishDir" `
+	'-p:Configuration=Release' `
+	'-p:PublishSingleFile=true' `
+	'-p:PublishReadyToRun=false' `
+	'-p:SelfContained=false' `
 	'-p:PublishProtocol=FileSystem'
-)
 Compress-Archive "$root\publish\*.exe" "$root\TrayToolbar-win-x64-portable-$version.zip" -Force

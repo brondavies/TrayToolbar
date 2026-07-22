@@ -45,6 +45,12 @@ The default launch policy trusts items that originate from your configured folde
 
 For the full configuration schema, command-line reference, and launch-policy details, see [docs/developer-guide.md](docs/developer-guide.md).
 
+## Sponsors
+
+|   |   |
+| - | - |
+| <img src="docs/images/signpath.png" alt="SignPath" width="30" height="30"> | Free code signing on Windows provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/) |
+
 ## More docs
 
 - Contributor workflow, release tagging, labels, and PR guidance: [CONTRIBUTING.md](CONTRIBUTING.md)

@@ -8,6 +8,7 @@ internal sealed class ConfigHelperStateScope : IDisposable
     readonly IReleaseClient releaseClient = ConfigHelper.ReleaseClient;
     readonly IUpdateInstaller updateInstaller = ConfigHelper.UpdateInstaller;
     readonly IProcessLauncher processLauncher = ConfigHelper.ProcessLauncher;
+    readonly IUpdateSignatureVerifier updateSignatureVerifier = ConfigHelper.UpdateSignatureVerifier;
     readonly IFileSystemWatcherFactory fileSystemWatcherFactory = ConfigHelper.FileSystemWatcherFactory;
     readonly string localAppData = ConfigHelper.LocalAppData;
     readonly string profileFolder = ConfigHelper.ProfileFolder;
@@ -20,6 +21,7 @@ internal sealed class ConfigHelperStateScope : IDisposable
         ConfigHelper.ReleaseClient = releaseClient;
         ConfigHelper.UpdateInstaller = updateInstaller;
         ConfigHelper.ProcessLauncher = processLauncher;
+        ConfigHelper.UpdateSignatureVerifier = updateSignatureVerifier;
         ConfigHelper.FileSystemWatcherFactory = fileSystemWatcherFactory;
         ConfigHelper.LocalAppData = localAppData;
         ConfigHelper.ProfileFolder = profileFolder;

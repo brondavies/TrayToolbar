@@ -1,10 +1,10 @@
 ﻿using System.Diagnostics;
 using System.IO.Compression;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 
 using TrayToolbar.Extensions;
 using TrayToolbar.Models;
+using TrayToolbar.Services;
 
 using Windows.Win32;
 using Windows.Win32.Foundation;
@@ -18,6 +18,7 @@ internal class UpdateHelper
     const string ExpectedUpdaterFileName = "TrayToolbar.exe";
     const int MaxArchiveEntries = 32;
     const long MaxArchiveBytes = 512L * 1024 * 1024;
+    const string UpdateVerificationFailureMessage = "The downloaded update could not be verified and was not installed.";
 
     internal static void DownloadAndUpdate(UpdatePackage package)
     {
@@ -53,10 +54,11 @@ internal class UpdateHelper
 
             VerifyDownloadedArchive(zipFileName, package);
             var updaterPath = ExtractUpdaterExecutable(zipFileName, extractionDirectory);
-            StartUpdater(updaterPath, ConfigHelper.ApplicationExe);
+            StartVerifiedUpdater(updaterPath, ConfigHelper.ApplicationExe, operationDirectory);
         }
         catch (Exception ex)
         {
+            Debug.WriteLine($"TrayToolbar update failed: {ex}");
             CleanupDirectory(operationDirectory);
             MessageBox.Show(ex.Message, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
@@ -67,30 +69,22 @@ internal class UpdateHelper
         var args = Environment.GetCommandLineArgs();
         if (TryGetUpdateTargetExe(args, Path.GetFileName(ConfigHelper.ApplicationExe), out var targetExe))
         {
-            var currentExe = ConfigHelper.ApplicationExe;
-            var retries = 3;
-            var success = false;
-
-            while (0 < retries && !success)
+            try
             {
-                try
-                {
-                    PInvoke.PostMessage(HWND.HWND_BROADCAST, Program.WM_EXITSETTINGSFORM, 0, 0);
-                    Thread.Sleep(2000); //wait for existing process to exit
-                    File.Copy(currentExe, targetExe, true);
-                    success = true;
-                }
-                catch
-                {
-                    retries--;
-                }
+                _ = ApplyVerifiedUpdate(
+                    ConfigHelper.ApplicationExe,
+                    targetExe,
+                    () =>
+                    {
+                        PInvoke.PostMessage(HWND.HWND_BROADCAST, Program.WM_EXITSETTINGSFORM, 0, 0);
+                        Thread.Sleep(2000); //wait for existing process to exit
+                    });
             }
-            if (!success)
+            catch (Exception ex)
             {
-                return true;
+                Debug.WriteLine($"TrayToolbar staged update failed: {ex}");
+                MessageBox.Show(ex.Message, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            ConfigHelper.ProcessLauncher.Start(CreateRestartStartInfo(targetExe));
             return true;
         }
         return false;
@@ -144,6 +138,55 @@ internal class UpdateHelper
         startInfo.ArgumentList.Add("--update");
         startInfo.ArgumentList.Add(targetExe);
         return startInfo;
+    }
+
+    internal static void StartVerifiedUpdater(string updaterPath, string targetExe, string? operationDirectory = null)
+    {
+        try
+        {
+            EnsureTrustedUpdater(updaterPath);
+            StartUpdater(updaterPath, targetExe);
+        }
+        catch
+        {
+            CleanupDirectory(operationDirectory);
+            throw;
+        }
+    }
+
+    internal static bool ApplyVerifiedUpdate(string currentExe, string targetExe, Action beforeCopyAttempt)
+    {
+        EnsureTrustedUpdater(currentExe);
+
+        var retries = 3;
+        var success = false;
+
+        while (0 < retries && !success)
+        {
+            try
+            {
+                beforeCopyAttempt();
+                File.Copy(currentExe, targetExe, true);
+                success = true;
+            }
+            catch
+            {
+                retries--;
+            }
+        }
+
+        if (!success)
+        {
+            return false;
+        }
+
+        ConfigHelper.ProcessLauncher.Start(CreateRestartStartInfo(targetExe));
+        return true;
+    }
+
+    internal static string CreateUpdateVerificationErrorMessage(UpdateSignatureVerificationResult result)
+    {
+        return $"{UpdateVerificationFailureMessage}{Environment.NewLine}{Environment.NewLine}Reason: {result.UserMessage}";
     }
 
     static string CreateOperationDirectory(Version version)
@@ -210,6 +253,18 @@ internal class UpdateHelper
     static void StartUpdater(string updaterPath, string targetExe)
     {
         ConfigHelper.ProcessLauncher.Start(CreateUpdaterStartInfo(updaterPath, targetExe));
+    }
+
+    static void EnsureTrustedUpdater(string updaterPath)
+    {
+        var result = ConfigHelper.UpdateSignatureVerifier.VerifyForUpdate(updaterPath);
+        if (result.IsSuccess)
+        {
+            return;
+        }
+
+        Debug.WriteLine($"TrayToolbar update signature validation failed for '{updaterPath}'. Reason: {result.FailureReason}. {result.DiagnosticMessage}");
+        throw new InvalidDataException(CreateUpdateVerificationErrorMessage(result));
     }
 
     static void CleanupDirectory(string? operationDirectory)

@@ -1,0 +1,17 @@
+# SignPath GitHub policy for the TrayToolbar release-signing policy.
+
+github-policies:
+  runners:
+    require_github_hosted: true
+  build:
+    disallow_reruns: true
+  branch_rulesets:
+    - condition:
+        rules:
+          - block_force_pushes: true
+          - require_linear_history: false
+          - require_pull_request:
+              min_required_approvals: 1
+              require_last_push_approval: true
+              require_review_thread_resolution: true
+      allow_bypass_actors: false

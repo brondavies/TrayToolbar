@@ -8,6 +8,26 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+## [1.7.2] - 2026-07-22
+
+### Added
+
+- Added a Sponsors section to `README.md` crediting SignPath.io for free Windows code signing and SignPath Foundation for the certificate.
+- Added SignPath GitHub Actions integration hooks so CI can submit the portable `win-arm64` and `win-x64` zip artifacts for code signing and download signed replacements before publishing.
+
+### Changed
+
+- GitHub CI now skips signing on `pull_request` runs, signs non-PR portable artifacts when the repository SignPath configuration is present, and requires SignPath configuration before publishing tagged releases.
+
+### Security
+
+- Tagged GitHub Releases now publish the SignPath-signed portable assets produced by CI instead of the unsigned packaging outputs.
+- TrayToolbar now refuses to launch or install a staged automatic update unless the extracted `TrayToolbar.exe` passes Windows Authenticode validation and matches the configured TrayToolbar signer policy.
+
+### Fixed
+
+- Fixed `build.ps1`'s `dotnet msbuild` fallback so the local portable packaging parity script works on machines where standalone `msbuild.exe` is not on `PATH`.
+
 ## [1.7.1] - 2026-04-22
 
 ### Added
@@ -65,6 +85,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.2...HEAD
+[1.7.2]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.7.2
 [1.7.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/brondavies/TrayToolbar/compare/v1.6.2...v1.7.0

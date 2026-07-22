@@ -15,6 +15,11 @@ TrayToolbar treats these as separate areas:
 2. **Release asset trust**: determine whether the downloaded archive matches the expected release contract
 3. **Execution behavior**: describe how TrayToolbar initiates launches from menus, shortcuts, and notifications
 
+For automatic updates, release asset trust now has two fail-closed stages:
+
+- GitHub release metadata plus SHA-256 archive validation
+- Authenticode validation of the staged `TrayToolbar.exe` against the configured TrayToolbar signer policy
+
 ## Release metadata source
 
 Release metadata is fetched from GitHub's machine-readable REST API endpoint:
@@ -97,11 +102,13 @@ Current behavior:
 4. open the archive and validate basic archive bounds
 5. extract only the expected root updater executable:
    - `TrayToolbar.exe`
-6. start that extracted executable with:
+6. run Windows Authenticode validation (`WinVerifyTrust`) on the staged `TrayToolbar.exe` with trust UI disabled
+7. require the signer identity to match TrayToolbar's configured publisher allow-list
+8. start that extracted executable with:
    - `--update <path to installed TrayToolbar.exe>`
 
 TrayToolbar intentionally does **not** trust arbitrary extracted file names for execution.
-It only executes the expected updater executable after digest verification.
+It only executes the expected updater executable after digest verification and Authenticode verification both succeed.
 
 Relevant implementation:
 
@@ -117,11 +124,37 @@ TrayToolbar currently applies these lightweight safety checks before extraction:
 
 Failure paths attempt to delete the staged temp directory when practical.
 
+### Authenticode validation policy
+
+The staged updater executable must pass Windows code-signing trust evaluation and match TrayToolbar's signer policy.
+
+Current runtime requirements:
+
+- `WinVerifyTrust` must succeed for the staged `TrayToolbar.exe`
+- trust UI is disabled so update verification stays non-interactive
+- the signer certificate identity must match `UpdateSignerPolicy.Default` in `src/TrayToolbar/Services/AuthenticodeUpdateSignatureVerifier.cs`
+- thumbprint pinning is supported by that policy object but is currently left empty so the initial runtime policy is publisher-based
+
+Current allow-list shape:
+
+- accepted publisher name: `SignPath Foundation`
+- accepted subject distinguished names: none pinned yet
+- accepted signer thumbprints: none pinned yet
+
+If the signing certificate changes in a way that affects the signer subject or if thumbprint pinning is introduced, update `UpdateSignerPolicy.Default` before publishing the next release.
+
+Practical consequences:
+
+- tagged GitHub CI releases that publish SignPath-signed portable zips remain valid update artifacts
+- `pull_request` workflow artifacts are intentionally unsigned and are therefore **not** valid automatic-update artifacts
+- local `build.ps1` outputs are also not valid automatic-update artifacts unless they are signed with an allowed TrayToolbar publisher identity
+
 ## Update application behavior
 
 When the staged updater starts with `--update`, it:
 
 - validates the target executable path shape
+- re-runs Authenticode validation on the running staged updater executable before installation
 - broadcasts the settings-form exit message
 - retries copying the staged updater executable over the target executable
 - restarts the target executable with:
@@ -156,16 +189,17 @@ Relevant implementation:
 
 ## Code signing status
 
-TrayToolbar does **not** currently enforce Authenticode signature validation during update.
+TrayToolbar's GitHub CI workflow submits the portable release archives to SignPath and publishes signed artifacts.
+
+TrayToolbar enforces Authenticode signature validation during update in addition to the existing GitHub metadata and SHA-256 checks.
 
 Current position:
 
 - GitHub release metadata and asset SHA-256 digests are verified
-- Authenticode verification is **not yet implemented**
-
-Recommended future step:
-
-- if the project adopts code signing, add Authenticode validation for the staged updater executable before execution
+- tagged GitHub CI builds can publish SignPath-signed portable release archives
+- the staged `TrayToolbar.exe` must pass `WinVerifyTrust` and match the configured TrayToolbar publisher allow-list before TrayToolbar launches or installs it
+- `pull_request` validation builds intentionally skip signing so signing credentials are not exposed to untrusted changes, and those unsigned artifacts are not update-valid
+- local unsigned portable builds are also not update-valid
 
 ## Contributor checklist when release packaging or execution behavior changes
 
@@ -176,7 +210,7 @@ If release packaging or execution behavior changes, contributors must update **a
 - `src/TrayToolbar/UpdateLogic.cs`
 - `src/TrayToolbar/UpdateHelper.cs`
 - `src/TrayToolbar/Program.cs`
-- any affected files in `src/TrayToolbar/Services/`
+- any affected files in `src/TrayToolbar/Services/`, especially `AuthenticodeUpdateSignatureVerifier.cs`
 - update-related and execution-related tests in `src/TrayToolbar.Tests/`
 - `CHANGELOG.md`
 - this document
@@ -188,6 +222,8 @@ At minimum, re-check:
 - architecture mapping
 - whether the archive still contains a root `TrayToolbar.exe`
 - whether GitHub still provides the required digest field for the published asset
+- whether the signer identity in `UpdateSignerPolicy.Default` still matches the certificate used by SignPath
+- whether any pinned thumbprints in `UpdateSignerPolicy.Default` need rotation before the next release
 - whether execution-behavior documentation still matches the code paths used by menu clicks, notifications, and update links
 
 ## Known limits
@@ -201,9 +237,9 @@ What is enforced now:
 - release-path validation that rejects lookalike prefixes
 - asset naming and URL contract validation
 - SHA-256 verification against GitHub asset metadata
+- Authenticode validation of the staged updater executable before launch and before copy-over-install
 - isolated temp staging
 
 What is not enforced yet:
 
-- Authenticode validation
 - a separate published checksum manifest in the repository release assets

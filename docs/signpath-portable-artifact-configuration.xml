@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<artifact-configuration
+  xmlns="http://signpath.io/artifact-configuration/v1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://signpath.io/artifact-configuration/v1 https://app.signpath.io/Web/artifact-configuration/v1.xsd">
+  <!--
+    TrayToolbar GitHub CI uploads each portable ZIP directly with actions/upload-artifact
+    using archive: false, so SignPath receives the actual file name, for example:
+      - TrayToolbar-win-arm64-portable-1.7.2.zip
+      - TrayToolbar-win-x64-portable-1.7.2.zip
+
+    This configuration treats the uploaded artifact as a ZIP archive and
+    Authenticode-signs the root TrayToolbar.exe inside that archive.
+  -->
+  <zip-file path="TrayToolbar-win-*-portable-*.zip">
+    <pe-file path="TrayToolbar.exe">
+      <authenticode-sign />
+    </pe-file>
+  </zip-file>
+</artifact-configuration>
