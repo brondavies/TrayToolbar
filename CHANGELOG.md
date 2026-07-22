@@ -8,9 +8,9 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
-## [1.7.8] - 2026-07-22
+## [1.8.0] - 2026-07-22
 
-`v1.7.2` through `v1.7.7` were tagged but never published. Their release builds failed in turn on SignPath policy loading, on the repository having no GitHub rulesets, on no ruleset applying to the release tag ref, and on the signing request submission returning `400 Bad Request` while a concurrent master push build held the same artifact name. 1.7.8 carries the same changes plus those fixes.
+`v1.7.2` through `v1.7.8` were tagged but never published. Their release builds failed in turn on SignPath policy loading, on the repository having no GitHub rulesets, on no ruleset applying to the release tag ref, on the signing request submission returning `400 Bad Request` while a concurrent master push build held the same artifact name, and on the signed artifact upload colliding with the unsigned artifact uploaded for SignPath. 1.8.0 is the first published release of this work.
 
 ### Added
 
@@ -93,7 +93,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.8...HEAD
-[1.7.8]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.7.8
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.8.0
 [1.7.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/brondavies/TrayToolbar/compare/v1.6.2...v1.7.0
