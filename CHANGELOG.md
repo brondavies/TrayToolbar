@@ -8,7 +8,9 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
-## [1.7.2] - 2026-07-22
+## [1.7.3] - 2026-07-22
+
+`v1.7.2` was tagged but never published: its release build failed while loading the SignPath GitHub policy, so no signed assets were produced. 1.7.3 carries the same changes plus the policy fix.
 
 ### Added
 
@@ -27,6 +29,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 ### Fixed
 
 - Fixed `build.ps1`'s `dotnet msbuild` fallback so the local portable packaging parity script works on machines where standalone `msbuild.exe` is not on `PATH`.
+- Removed the unsupported `allow_bypass_actors` key from the SignPath GitHub policy, which the SignPath policy loader rejected and which failed the `v1.7.2` release signing step.
 
 ## [1.7.1] - 2026-04-22
 
@@ -85,7 +88,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.2...HEAD
-[1.7.2]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.7.2
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.7.3...HEAD
+[1.7.3]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.7.3
 [1.7.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/brondavies/TrayToolbar/compare/v1.6.2...v1.7.0
