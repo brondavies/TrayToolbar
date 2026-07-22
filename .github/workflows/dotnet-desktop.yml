@@ -13,6 +13,17 @@ permissions:
   actions: read
   contents: read
 
+# Runs that submit signing requests share one queue, because a master push and
+# the release tag push that follows it produce identically named artifacts and
+# SignPath rejects the second submission while the first is still in flight.
+# Pull request builds do not sign, so they queue per ref and stay parallel.
+concurrency:
+  group: >-
+    ${{ github.event_name == 'pull_request'
+        && format('portable-release-pr-{0}', github.ref)
+        || 'portable-release-signing' }}
+  cancel-in-progress: false
+
 jobs:
   build-test-package:
     name: Validate and package portable release
@@ -89,10 +100,14 @@ jobs:
           $isTagBuild = '${{ github.ref_type }}' -eq 'tag'
           $isPullRequest = '${{ github.event_name }}' -eq 'pull_request'
 
-          $signingPolicy = if ($isPullRequest) {
-            'test-signing'
+          if ($isPullRequest) {
+            Write-Host 'SignPath signing is skipped for pull request builds.'
+            'enabled=false' >> $env:GITHUB_OUTPUT
+            'signing_policy_slug=' >> $env:GITHUB_OUTPUT
+            exit 0
           }
-          elseif ($isTagBuild -and -not [string]::IsNullOrWhiteSpace($env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG)) {
+
+          $signingPolicy = if ($isTagBuild -and -not [string]::IsNullOrWhiteSpace($env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG)) {
             $env:SIGNPATH_RELEASE_SIGNING_POLICY_SLUG
           }
           elseif (-not [string]::IsNullOrWhiteSpace($env:SIGNPATH_CI_SIGNING_POLICY_SLUG)) {
@@ -198,9 +213,14 @@ jobs:
             -Arm64Asset '${{ steps.version.outputs.arm64_asset }}' `
             -X64Asset '${{ steps.version.outputs.x64_asset }}'
 
+      # These artifacts are named explicitly because upload-artifact derives the
+      # artifact name from the file name when archive is false, which collides
+      # with the unsigned artifacts uploaded for SignPath earlier in this run.
+      # The published release assets come from the paths below, not these names.
       - name: Upload arm64 portable zip
         uses: actions/upload-artifact@v7
         with:
+          name: release-${{ steps.version.outputs.arm64_asset }}
           path: ${{ steps.final-assets.outputs.arm64_path }}
           archive: false
           if-no-files-found: error
@@ -210,6 +230,7 @@ jobs:
       - name: Upload x64 portable zip
         uses: actions/upload-artifact@v7
         with:
+          name: release-${{ steps.version.outputs.x64_asset }}
           path: ${{ steps.final-assets.outputs.x64_path }}
           archive: false
           if-no-files-found: error
