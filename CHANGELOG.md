@@ -8,9 +8,9 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
-## [1.8.0] - 2026-07-22
+## [1.8.1] - 2026-07-22
 
-`v1.7.2` through `v1.7.8` were tagged but never published. Their release builds failed in turn on SignPath policy loading, on the repository having no GitHub rulesets, on no ruleset applying to the release tag ref, on the signing request submission returning `400 Bad Request` while a concurrent master push build held the same artifact name, and on the signed artifact upload colliding with the unsigned artifact uploaded for SignPath. 1.8.0 is the first published release of this work.
+`v1.7.2` through `v1.8.0` were tagged but never published. Their release builds failed in turn on SignPath policy loading, on the repository having no GitHub rulesets, on no ruleset applying to the release tag ref, on the signed artifact upload colliding with the unsigned artifact uploaded for SignPath, and finally on SignPath rejecting every signing request submitted from a tag ref with `400 Bad Request`. 1.8.1 is the first published release of this work, and the first published by a branch run.
 
 ### Added
 
@@ -34,7 +34,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 - Raised the SignPath signing request wait timeout from the ten minute default to one hour, so release builds do not time out while the signing request waits for manual approval.
 - Disabled SignPath signing on `pull_request` builds entirely, so pull request validation no longer submits test signing requests.
 - Moved release publication from a tag push to a `workflow_dispatch` run with the `publish` input, which creates tag `v<Version>` from the project version. SignPath rejects signing requests submitted from a tag ref with `400 Bad Request`, while the same artifact and signing policy succeed from a branch ref.
-- Serialized the builds that submit signing requests, so a release tag build no longer submits while the master push build for the same commit is still signing identically named artifacts.
+- Serialized the builds that submit signing requests, so two runs for the same commit no longer sign identically named artifacts at the same time.
 - Archived and explicitly named the final portable release artifacts, so uploading them no longer conflicts with the unsigned artifacts uploaded for SignPath earlier in the same run. With `archive: false`, `actions/upload-artifact` names the artifact after the file and ignores the explicit name, which made both uploads claim the same artifact name.
 
 ## [1.7.1] - 2026-04-22
@@ -94,7 +94,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.8.0...HEAD
-[1.8.0]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.8.0
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.8.1...HEAD
+[1.8.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.8.1
 [1.7.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/brondavies/TrayToolbar/compare/v1.6.2...v1.7.0
