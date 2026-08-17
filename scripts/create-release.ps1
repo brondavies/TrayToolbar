@@ -82,13 +82,31 @@ function Invoke-Native
         [string]$ErrorMessage
     )
 
-    $output = & $Executable @Arguments 2>&1
-    if ($LASTEXITCODE -ne 0)
+    # Windows PowerShell wraps a native command's stderr in ErrorRecord objects when it is
+    # redirected with 2>&1, and under $ErrorActionPreference = 'Stop' those raise a terminating
+    # error even when the command exits 0. Git writes routine progress to stderr, so 'checkout',
+    # 'push', 'pull', and 'fetch' all trip that. Relax the preference for the call itself and let
+    # the exit code decide, which is what PowerShell 7 does with the same redirection.
+    $previousPreference = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try
+    {
+        $output = & $Executable @Arguments 2>&1 | ForEach-Object {
+            if ($_ -is [System.Management.Automation.ErrorRecord]) { $_.ToString() } else { $_ }
+        }
+        $exitCode = $LASTEXITCODE
+    }
+    finally
+    {
+        $ErrorActionPreference = $previousPreference
+    }
+
+    if ($exitCode -ne 0)
     {
         $joined = ($output | Out-String).Trim()
         $message = if ([string]::IsNullOrWhiteSpace($ErrorMessage))
         {
-            "$Executable $($Arguments -join ' ') failed with exit code $LASTEXITCODE."
+            "$Executable $($Arguments -join ' ') failed with exit code $exitCode."
         }
         else
         {
