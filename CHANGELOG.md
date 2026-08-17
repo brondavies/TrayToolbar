@@ -8,6 +8,8 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+## [1.8.2] - 2026-08-17
+
 ### Fixed
 
 - Fixed the `WinVerifyTrust` interop declaration in `src/TrayToolbar/Services/AuthenticodeUpdateSignatureVerifier.cs`, which made every automatic update fail verification. `[MarshalAs(UnmanagedType.LPStruct)]` on the already-by-ref `in Guid actionId` parameter passed a pointer to a pointer, so `WinVerifyTrust` could not resolve `WINTRUST_ACTION_GENERIC_VERIFY_V2` and returned `TRUST_E_PROVIDER_UNKNOWN` (`0x800B0001`) for every file, signed or not ([#101](https://github.com/brondavies/TrayToolbar/issues/101)).
@@ -103,7 +105,8 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.8.1...HEAD
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.8.2...HEAD
+[1.8.2]: https://github.com/brondavies/TrayToolbar/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.8.1
 [1.7.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/brondavies/TrayToolbar/compare/v1.6.2...v1.7.0

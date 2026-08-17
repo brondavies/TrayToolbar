@@ -7,7 +7,7 @@ This file stays as the supplemental narrative release summary for highlights, ro
 - GitHub release assets: <https://github.com/brondavies/TrayToolbar/releases>
 - Update and packaging trust boundary: [`update-security.md`](update-security.md)
 
-## 1.8.1
+## 1.8.2
 
 ## Highlights
 
