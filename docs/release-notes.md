@@ -11,17 +11,16 @@ This file stays as the supplemental narrative release summary for highlights, ro
 
 ## Highlights
 
-- Signed portable release builds in GitHub CI. Tagged releases now publish the SignPath-signed `win-arm64` and `win-x64` zip assets built by GitHub Actions.
-- Runtime update signature enforcement. Automatic updates now validate the staged `TrayToolbar.exe` with Windows Authenticode trust checks and reject unsigned, tampered, or unexpected-publisher update binaries.
-- Safer signing boundaries in CI. `pull_request` validation builds still package the app, but they intentionally skip SignPath signing so signing credentials are never exposed to untrusted pull-request code.
-- Better Windows shortcut launching. `.lnk` app shortcuts now keep their saved arguments and working directory, while safe non-app targets open directly.
-- Safer update and release links. Toast actions now go back through TrayToolbar, and only real GitHub Releases URLs are accepted.
-- Simpler release packaging. Local builds now produce the same portable `win-arm64` and `win-x64` zip assets used for releases.
-- More reliable local packaging parity. `build.ps1` now works on machines that rely on the .NET SDK's `dotnet msbuild` fallback instead of a standalone `msbuild.exe` on `PATH`.
-- Also included a benchmark project plus contributor docs and templates to support future maintenance.
-- Unsigned PR or local portable builds are no longer considered valid automatic-update artifacts unless they are signed with the allowed TrayToolbar publisher identity.
-- Note on 1.7.2 through 1.8.0: those tags were pushed but never published, because their release builds failed SignPath policy loading, CI system validation, signing request submission, and signed artifact upload. SignPath rejects signing requests submitted from a tag ref, so releases are now published from a branch run that creates the tag. 1.8.1 is the first published release of this work.
+- Automatic updates work again. The Authenticode check added in 1.8.1 rejected every update, signed or not, because of a `WinVerifyTrust` interop mistake. Applying `[MarshalAs(UnmanagedType.LPStruct)]` to the already-by-ref `in Guid actionId` parameter passed a pointer to a pointer, so Windows never resolved the verification action and returned `TRUST_E_PROVIDER_UNKNOWN` (`0x800B0001`) for every file it was handed.
+- Clearer failure messages. A trust status meaning "the check could not be performed" now says so instead of reporting an unverifiable signature, and any status the app does not recognize now carries its `WinVerifyTrust` code in the message shown to you.
+- Regression coverage. The update signature verifier now has tests that exercise the real Windows trust call rather than a stand-in, so a broken interop declaration fails the build instead of shipping.
 - **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
+
+## Upgrading from 1.8.1
+
+1.8.1 checks the staged updater with its own broken verifier before launching it, so a 1.8.1 install cannot update itself to 1.8.2 automatically. Download the portable zip for your architecture from the release assets and replace `TrayToolbar.exe` once. Automatic updates work normally from 1.8.2 onward.
+
+Installs on 1.7.1 or earlier hit the same wall from the other side. 1.7.1 shipped no verifier, but the staged 1.8.1 executable failed its own self-check before copying itself over the target, which is why the 1.7.1 to 1.8.1 upgrade also appeared to do nothing.
 
 ## Features
 
