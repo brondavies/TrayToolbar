@@ -251,9 +251,16 @@ internal sealed class AuthenticodeUpdateSignatureVerifier(UpdateSignerPolicy? po
                     "Windows could not validate the staged update's code-signing certificate.",
                     $"WinVerifyTrust rejected the signer trust chain for '{filePath}' ({statusHex}: {DescribeTrustStatus(status)})."),
 
+            TrustErrorProviderUnknown
+                or TrustErrorActionUnknown
+                or TrustErrorSubjectFormUnknown => UpdateSignatureVerificationResult.Failure(
+                    UpdateSignatureFailureReason.UnknownError,
+                    $"Windows could not run the update signature check on this system ({statusHex}).",
+                    $"WinVerifyTrust could not evaluate '{filePath}' ({statusHex}: {DescribeTrustStatus(status)})."),
+
             _ => UpdateSignatureVerificationResult.Failure(
                 UpdateSignatureFailureReason.UnknownError,
-                "Windows could not verify the staged update signature.",
+                $"Windows could not verify the staged update signature ({statusHex}).",
                 $"WinVerifyTrust rejected '{filePath}' with status {statusHex}: {DescribeTrustStatus(status)}.")
         };
     }
@@ -326,7 +333,7 @@ internal sealed class AuthenticodeUpdateSignatureVerifier(UpdateSignerPolicy? po
     }
 
     [DllImport("wintrust.dll", ExactSpelling = true, CharSet = CharSet.Unicode, SetLastError = true)]
-    static extern int WinVerifyTrust(IntPtr hwnd, [MarshalAs(UnmanagedType.LPStruct)] in Guid actionId, ref WinTrustData trustData);
+    static extern int WinVerifyTrust(IntPtr hwnd, in Guid actionId, ref WinTrustData trustData);
 
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
     struct WinTrustFileInfo

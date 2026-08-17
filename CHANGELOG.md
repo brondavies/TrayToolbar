@@ -8,6 +8,15 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed the `WinVerifyTrust` interop declaration in `src/TrayToolbar/Services/AuthenticodeUpdateSignatureVerifier.cs`, which made every automatic update fail verification. `[MarshalAs(UnmanagedType.LPStruct)]` on the already-by-ref `in Guid actionId` parameter passed a pointer to a pointer, so `WinVerifyTrust` could not resolve `WINTRUST_ACTION_GENERIC_VERIFY_V2` and returned `TRUST_E_PROVIDER_UNKNOWN` (`0x800B0001`) for every file, signed or not ([#101](https://github.com/brondavies/TrayToolbar/issues/101)).
+- Update signature failures that mean the check could not be performed (`TRUST_E_PROVIDER_UNKNOWN`, `TRUST_E_ACTION_UNKNOWN`, `TRUST_E_SUBJECT_FORM_UNKNOWN`) now report a distinct message, and unmapped statuses now include the `WinVerifyTrust` status code in the user-visible reason.
+
+### Notes
+
+- Because 1.8.1 validates the staged updater with the broken check, 1.8.1 installs cannot automatically update to this release. Install it manually from the release assets once, after which automatic updates work again.
+
 ## [1.8.1] - 2026-07-22
 
 `v1.7.2` through `v1.8.0` were tagged but never published. Their release builds failed in turn on SignPath policy loading, on the repository having no GitHub rulesets, on no ruleset applying to the release tag ref, on the signed artifact upload colliding with the unsigned artifact uploaded for SignPath, and finally on SignPath rejecting every signing request submitted from a tag ref with `400 Bad Request`. 1.8.1 is the first published release of this work, and the first published by a branch run.

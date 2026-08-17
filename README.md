@@ -47,9 +47,16 @@ For the full configuration schema, command-line reference, and launch-policy det
 
 ## Sponsors
 
-|   |   |
-| - | - |
-| <img src="docs/images/signpath.png" alt="SignPath" width="30" height="30"> | Free code signing on Windows provided by [SignPath.io](https://signpath.io/), certificate by [SignPath Foundation](https://signpath.org/) |
+<table style="border: none; border-collapse: collapse;">
+  <tr style="border: none;">
+    <td style="border: none; padding: 8px;">
+      <img src="docs/images/signpath.png" alt="SignPath" width="30" height="30">
+    </td>
+    <td style="border: none; padding: 8px;">
+      Free code signing on Windows provided by <a href="https://signpath.io/" target="_blank">SignPath.io</a>, certificate by <a href="https://signpath.org/" target="_blank">SignPath Foundation</a>
+    </td>
+  </tr>
+</table>
 
 ## More docs
 
