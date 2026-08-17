@@ -411,7 +411,12 @@ function Get-WorkflowRuns
         return @()
     }
 
-    return @($json | ConvertFrom-Json | Where-Object { $_.name -eq $WorkflowName })
+    # Windows PowerShell's ConvertFrom-Json emits a JSON array as a single Object[] pipeline item
+    # instead of enumerating it, so piping it straight into Where-Object filters the whole array as
+    # one object and every downstream Select-Object -First 1 hands back the entire collection.
+    # Assigning first and piping the variable enumerates in both Windows PowerShell and PowerShell 7.
+    $runs = $json | ConvertFrom-Json
+    return @($runs | Where-Object { $_.name -eq $WorkflowName })
 }
 
 function Stop-ValidationRun
@@ -479,7 +484,9 @@ function Wait-ForRun
         }
 
         $stepsJson = Invoke-Gh 'api' "repos/{owner}/{repo}/actions/runs/$RunId/jobs" '--jq' '[.jobs[0].steps[] | select(.status == "in_progress") | .name]'
-        $steps = @($stepsJson | ConvertFrom-Json)
+        # Same Windows PowerShell array-enumeration caveat as Get-WorkflowRuns.
+        $parsedSteps = $stepsJson | ConvertFrom-Json
+        $steps = @($parsedSteps)
         if ($steps.Count -gt 0 -and $steps[0] -ne $lastStep)
         {
             $lastStep = $steps[0]
