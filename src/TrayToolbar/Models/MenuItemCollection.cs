@@ -21,11 +21,13 @@ public class MenuItemCollection : ObservableCollection<ToolStripMenuItem>
     public TrayToolbarConfiguration Configuration { get; set; }
     public ToolStripItemClickedEventHandler ClickHandler { get; set; }
     public MouseEventHandler MouseDownHandler { get; set; }
+    internal Func<string, string>? ShortcutResolver { get; set; }
 
     internal void CreateMenuItem(
         string file,
         FolderConfig folder,
-        string menuPath = "")
+        string menuPath = "",
+        HashSet<string>? expandedTargets = null)
     {
         if (menuPath.Length > Configuration.MaxMenuPath) return; //guard against long paths or infinite loops
         var parentPath = Path.GetDirectoryName(file);
@@ -40,16 +42,25 @@ public class MenuItemCollection : ObservableCollection<ToolStripMenuItem>
         var relativePath = Path.GetRelativePath(folderPath, parentPath ?? folderPath);
         if (relativePath == ".") relativePath = "";
         var scanner = new FolderScanner(ConfigHelper.FileSystem);
-        if (scanner.TryResolveFolderLinkTarget(file, Configuration, out var targetPath))
+        if (scanner.TryResolveFolderLinkTarget(file, Configuration, out var targetPath, ShortcutResolver))
         {
-            var submenuName = Path.GetFileNameWithoutExtension(file);
-            var subfolder = folder.WithPath(targetPath);
-            var newRoot = Path.Combine(menuPath, relativePath, submenuName);
-            foreach (var f in EnumerateFiles(targetPath, folder.Recursive, Configuration))
+            // Track the chain of expanded link targets so a link pointing back at the
+            // scanned folder (or an already-expanded target) can't recurse forever
+            expandedTargets ??= new HashSet<string>(StringComparer.OrdinalIgnoreCase) { NormalizeFolderPath(folderPath) };
+            var normalizedTarget = NormalizeFolderPath(targetPath);
+            if (!expandedTargets.Contains(normalizedTarget))
             {
-                CreateMenuItem(f, subfolder, newRoot);
+                var submenuName = Path.GetFileNameWithoutExtension(file);
+                var subfolder = folder.WithPath(targetPath);
+                var newRoot = Path.Combine(menuPath, relativePath, submenuName);
+                var childTargets = new HashSet<string>(expandedTargets, StringComparer.OrdinalIgnoreCase) { normalizedTarget };
+                foreach (var f in EnumerateFiles(targetPath, folder.Recursive, Configuration))
+                {
+                    CreateMenuItem(f, subfolder, newRoot, childTargets);
+                }
+                return; // Skip adding the link itself, as it's now a submenu
             }
-            return; // Skip adding the link itself, as it's now a submenu
+            // Cyclic link: fall through and show it as a regular menu item
         }
         var menuName = (Configuration.HideFileExtensions || file.FileExtension().IsOneOf(".lnk", ".url"))
             ? Path.GetFileNameWithoutExtension(file)
@@ -174,6 +185,18 @@ public class MenuItemCollection : ObservableCollection<ToolStripMenuItem>
     {
         var eventArgs = new ToolStripItemClickedEventArgs(menu);
         return (s, e) => ClickHandler.Invoke(s, eventArgs);
+    }
+
+    private static string NormalizeFolderPath(string path)
+    {
+        try
+        {
+            return Path.TrimEndingDirectorySeparator(Path.GetFullPath(path));
+        }
+        catch
+        {
+            return path;
+        }
     }
 
     internal static IEnumerable<string> EnumerateFiles(string path, bool recursive, TrayToolbarConfiguration config)

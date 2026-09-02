@@ -57,6 +57,7 @@ internal static class Program
             File.WriteAllText(Path.Combine(ConfigHelper.ApplicationRoot, $"Error-{DateTime.Now:yyyyMMddHHmmss}.txt"), $"{e}");
         }
         HotKeys.UnregisterAll();
+        LaunchLogger.Flush();
     }
 
     internal static bool Launch(string fileName)

@@ -206,6 +206,9 @@ Serialization uses `System.Text.Json` with indented output.
 | `NotifyOnUpdateAvailable` | `bool` | `false` | Yes | Requires `CheckForUpdates = true`; also enables the periodic update timer. |
 | `UpdateCheckInterval` | `double` | `1440` | Yes | Minutes between background update checks. Default is 1 day. |
 | `ShowToolTips` | `bool` | `false` | Yes | Shows full file or folder paths as tooltips on menu items. |
+| `LaunchLogEnabled` | `bool` | `false` | Yes | Enables launch logging. JSON-config only; not exposed in the settings UI. |
+| `LaunchLogFile` | `string?` | `null` | Yes | Launch log path. Environment variables are expanded. Defaults to `launch.log` in the profile folder. |
+| `LaunchLogFormat` | `string?` | `null` | Yes | `csv` (default), `tsv`, `jsonl`, `syslog`, or `cef`. Timestamps are ISO-8601 in every format. |
 | `Folders` | `FolderConfig[]` | `[]` | Yes | Folder list displayed as tray icons and menus. In practice the first-run UI seeds one default folder before save. |
 
 ### Launch policy modes
@@ -217,6 +220,31 @@ Serialization uses `System.Text.Json` with indented output.
 | `LocalOnly` | Local files and folders whose resolved targets stay within approved roots, plus trusted TrayToolbar GitHub Releases URLs. | UNC paths, non-release remote URLs, and local shortcut targets that resolve outside approved roots. |
 
 Approved roots are the application root plus configured folder paths.
+
+### Launch logging
+
+Optional and off by default; configured only in the JSON file (no settings UI). When `LaunchLogEnabled`
+is `true`, every menu item launch appends one entry capturing the timestamp (ISO-8601 with UTC offset),
+username, menu item name, and target path.
+
+```json
+{
+  "LaunchLogEnabled": true,
+  "LaunchLogFile": "%LOCALAPPDATA%\\TrayToolbar\\launch.log",
+  "LaunchLogFormat": "jsonl"
+}
+```
+
+| Format | Entry style |
+| --- | --- |
+| `csv` (default) | RFC 4180-style fields; a header row is written when the file is created. |
+| `tsv` | Tab-separated with a header row; tabs and newlines in values become spaces. |
+| `jsonl` | One JSON object per line: `{"timestamp": ..., "user": ..., "name": ..., "target": ...}`. |
+| `syslog` | RFC 5424 lines (`<14>1 ...`) with `user`, `name`, and `target` in the message. |
+| `cef` | Common Event Format with `rt`, `suser`, `fname`, and `filePath` extensions. |
+
+Unknown format values fall back to `csv`. Logging failures are swallowed, so a bad path or an
+unwritable file never blocks a launch.
 
 ### Folder entries
 

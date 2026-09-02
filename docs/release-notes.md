@@ -7,6 +7,17 @@ This file stays as the supplemental narrative release summary for highlights, ro
 - GitHub release assets: <https://github.com/brondavies/TrayToolbar/releases>
 - Update and packaging trust boundary: [`update-security.md`](update-security.md)
 
+## 1.8.3
+
+## Highlights
+
+- Advertised shortcuts launch again. Shortcuts written by MSI installers (Microsoft Office, CorelDRAW, and similar) report a stub target path instead of the real application, so TrayToolbar now launches the shortcut itself and lets Windows resolve the target.
+- "Show links to folders as submenus" no longer hangs. A folder link pointing back into the folder being scanned recursed until the app froze; cyclic links now appear as regular menu items.
+- Loading feedback. A tray icon shows a spinner overlay while its menu is being built, and a click during loading opens the menu as soon as it is ready instead of being ignored.
+- Stuck submenus fixed. Right-clicking inside a submenu that opened toward the left could leave submenus orphaned on screen until restart; every suspended menu is now restored no matter which item receives the click.
+- Optional launch logging. Set `LaunchLogEnabled` in the configuration file to record which items are launched, by whom, and when — in `csv`, `tsv`, `jsonl`, `syslog`, or `cef` format with ISO-8601 timestamps, written off the launching thread. Off by default; see [`developer-guide.md`](developer-guide.md) for the settings.
+- **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
+
 ## 1.8.2
 
 ## Highlights

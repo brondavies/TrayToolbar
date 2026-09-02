@@ -7,6 +7,7 @@ internal interface IFileSystem
     void CreateDirectory(string path);
     string ReadAllText(string path);
     void WriteAllText(string path, string contents);
+    void AppendAllText(string path, string contents);
     void DeleteFile(string path);
     void MoveFile(string sourceFileName, string destFileName);
     IEnumerable<string> EnumerateFileSystemEntries(string path);

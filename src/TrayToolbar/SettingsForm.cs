@@ -44,6 +44,7 @@ public partial class SettingsForm : Form
     public SettingsForm()
     {
         InitializeComponent();
+        LeftClickMenu.Closed += LeftClickMenu_Closed;
         SetupMenu();
         PopulateConfig();
         LoadResources(Configuration.Language);
@@ -351,6 +352,88 @@ public partial class SettingsForm : Form
         return icon;
     }
 
+    #region Tray icon loading spinner
+
+    private System.Windows.Forms.Timer? _spinnerTimer;
+    private int _spinnerFrame;
+    private readonly Dictionary<NotifyIcon, Icon> _spinnerBaseIcons = [];
+    private readonly Dictionary<NotifyIcon, Icon> _spinnerFrameIcons = [];
+
+    /// <summary>
+    /// Animates a spinner overlay on every tray icon whose menu is loading so it is
+    /// clear the icon is not ready to be clicked yet
+    /// </summary>
+    private void StartTrayIconSpinner()
+    {
+        if (InvokeRequired)
+        {
+            BeginInvoke(StartTrayIconSpinner);
+            return;
+        }
+        if (_spinnerTimer == null)
+        {
+            _spinnerTimer = new System.Windows.Forms.Timer(components) { Interval = 100 };
+            _spinnerTimer.Tick += SpinnerTimer_Tick;
+        }
+        _spinnerTimer.Start();
+    }
+
+    private void SpinnerTimer_Tick(object? sender, EventArgs e)
+    {
+        _spinnerFrame = (_spinnerFrame + 1) % SpinnerIconRenderer.FrameCount;
+        var anyLoading = false;
+        foreach (var trayIcon in TrayIcons)
+        {
+            var loading = trayIcon.Tag is FolderConfig folder
+                && MenuItems.TryGetValue(folder, out var menu)
+                && menu.NeedsRefresh;
+            if (loading && trayIcon.Icon != null)
+            {
+                anyLoading = true;
+                if (!_spinnerBaseIcons.ContainsKey(trayIcon))
+                {
+                    _spinnerBaseIcons[trayIcon] = trayIcon.Icon;
+                }
+                var frame = SpinnerIconRenderer.RenderFrame(_spinnerBaseIcons[trayIcon], _spinnerFrame);
+                trayIcon.Icon = frame;
+                if (_spinnerFrameIcons.TryGetValue(trayIcon, out var previousFrame))
+                {
+                    previousFrame.Dispose();
+                }
+                _spinnerFrameIcons[trayIcon] = frame;
+            }
+            else
+            {
+                RestoreTrayIcon(trayIcon);
+            }
+        }
+        // clean up icons that were replaced while spinning (e.g. settings were saved)
+        foreach (var stale in _spinnerBaseIcons.Keys.Where(i => !TrayIcons.Contains(i)).ToArray())
+        {
+            RestoreTrayIcon(stale);
+        }
+        if (!anyLoading)
+        {
+            _spinnerTimer!.Stop();
+        }
+    }
+
+    private void RestoreTrayIcon(NotifyIcon trayIcon)
+    {
+        if (_spinnerBaseIcons.TryGetValue(trayIcon, out var baseIcon))
+        {
+            trayIcon.Icon = baseIcon;
+            _spinnerBaseIcons.Remove(trayIcon);
+        }
+        if (_spinnerFrameIcons.TryGetValue(trayIcon, out var frameIcon))
+        {
+            frameIcon.Dispose();
+            _spinnerFrameIcons.Remove(trayIcon);
+        }
+    }
+
+    #endregion
+
     readonly ConcurrentDictionary<FolderConfig, CancellationTokenSource> refreshCancellation = [];
     private void RefreshMenu(FolderConfig folder)
     {
@@ -361,6 +444,7 @@ public partial class SettingsForm : Form
         if (MenuItems.TryGetValue(folder, out var menu))
         {
             menu.NeedsRefresh = true;
+            StartTrayIconSpinner();
             var cancellation = new CancellationTokenSource();
             refreshCancellation[folder] = cancellation;
             Task.Run(() =>
@@ -444,9 +528,36 @@ public partial class SettingsForm : Form
         }
         else
         {
+            if (MenuItems.TryGetValue(folder, out var menu) && menu.NeedsRefresh)
+            {
+                // The menu is still loading; pop it up automatically once it is
+                // ready instead of ignoring the click
+                _pendingTrayIconClick = trayIcon;
+                _pendingTrayIconClickTime = DateTime.UtcNow;
+                return;
+            }
+            _pendingTrayIconClick = null;
             if (!ShowLeftClickMenu(trayIcon, folder)) return;
         }
         trayIcon.ShowContextMenu();
+    }
+
+    private NotifyIcon? _pendingTrayIconClick;
+    private DateTime _pendingTrayIconClickTime;
+    private static readonly TimeSpan PendingTrayIconClickTimeout = TimeSpan.FromSeconds(10);
+
+    private void ShowPendingTrayIconClick(MenuItemCollection menu)
+    {
+        var trayIcon = _pendingTrayIconClick;
+        if (trayIcon?.Tag is not FolderConfig folder) return;
+        _pendingTrayIconClick = null;
+        if (DateTime.UtcNow - _pendingTrayIconClickTime > PendingTrayIconClickTimeout) return;
+        if (MenuItems.TryGetValue(folder, out var pendingMenu)
+            && pendingMenu == menu
+            && ShowLeftClickMenu(trayIcon, folder))
+        {
+            trayIcon.ShowContextMenu();
+        }
     }
 
     private bool ShowLeftClickMenu(NotifyIcon trayIcon, FolderConfig folder)
@@ -498,14 +609,43 @@ public partial class SettingsForm : Form
         }
     }
 
+    private readonly List<ToolStripDropDown> _suspendedDropDowns = [];
+
     private void LeftClickMenuEntry_MouseDown(object? sender, MouseEventArgs e)
     {
         RightMouseClicked = e.Button == MouseButtons.Right;
         if (RightMouseClicked && sender is ToolStripMenuItem menu)
         {
-            menu.DropDown.SetAutoClose(false);
+            RestoreSuspendedDropDowns(close: false);
+            _suspendedDropDowns.AddRange(menu.DropDown.SetAutoClose(false));
         }
         LeftClickMenu.AutoClose = !RightMouseClicked;
+    }
+
+    /// <summary>
+    /// Re-enables AutoClose on every dropdown that was suspended for a right-click, no matter
+    /// which menu item ends up receiving the click; a left-opening submenu can overlap its
+    /// parent so mouse-down and click may land on different items, which used to leave the
+    /// deepest submenu stuck open
+    /// </summary>
+    private void RestoreSuspendedDropDowns(bool close)
+    {
+        if (_suspendedDropDowns.Count == 0) return;
+        var suspended = _suspendedDropDowns.ToArray();
+        _suspendedDropDowns.Clear();
+        foreach (var dropDown in suspended)
+        {
+            dropDown.AutoClose = true;
+            if (close && dropDown.Visible)
+            {
+                dropDown.Close();
+            }
+        }
+    }
+
+    private void LeftClickMenu_Closed(object? sender, ToolStripDropDownClosedEventArgs e)
+    {
+        RestoreSuspendedDropDowns(close: true);
     }
 
     private void SetupLeftClickMenu(MenuItemCollection menu)
@@ -521,6 +661,7 @@ public partial class SettingsForm : Form
         LeftClickMenu.Items.AddRange(menu.ToArray());
 #pragma warning restore IDE0305
         menu.NeedsRefresh = false;
+        ShowPendingTrayIconClick(menu);
     }
 
     private IEnumerable<string> EnumerateFiles(string path, bool recursive)
@@ -581,6 +722,7 @@ public partial class SettingsForm : Form
     {
         LeftClickMenu.Hide();
         RightClickMenu.Hide();
+        RestoreSuspendedDropDowns(close: true);
     }
 
     private void RightClickMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -615,10 +757,8 @@ public partial class SettingsForm : Form
             {
                 ShowContextMenu(filename);
                 LeftClickMenu.AutoClose = true;
-                if (sender is ToolStripMenuItem menu)
-                {
-                    menu.DropDown.SetAutoClose(true);
-                }
+                RestoreSuspendedDropDowns(close: false);
+                RightMouseClicked = false;
             }
             else if (e.ClickedItem.AccessibleRole != AccessibleRole.MenuPopup)
             {
@@ -627,6 +767,7 @@ public partial class SettingsForm : Form
                     Program.Launch(filename);
                 }
                 catch { }
+                LaunchLogger.Log(Configuration, e.ClickedItem.Name.Or(Path.GetFileName(filename)) ?? "", filename);
                 LeftClickMenu.Close(ToolStripDropDownCloseReason.ItemClicked);
                 if (Visible)
                 {

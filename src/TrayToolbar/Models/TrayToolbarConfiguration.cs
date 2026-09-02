@@ -100,6 +100,23 @@ public class TrayToolbarConfiguration
     /// </summary>
     public bool ShowToolTips { get; set; }
 
+    /// <summary>
+    /// Whether menu item launches are logged. Off by default. Configuration-file only; no UI.
+    /// </summary>
+    public bool LaunchLogEnabled { get; set; }
+
+    /// <summary>
+    /// Full path of the launch log file. Environment variables are expanded.
+    /// Defaults to launch.log in the TrayToolbar profile folder.
+    /// </summary>
+    public string? LaunchLogFile { get; set; }
+
+    /// <summary>
+    /// Launch log format: csv (default), tsv, jsonl, syslog, or cef.
+    /// Timestamps are ISO-8601 in every format.
+    /// </summary>
+    public string? LaunchLogFormat { get; set; }
+
     [Obsolete("Folder is obsolete", true)]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string? Folder
