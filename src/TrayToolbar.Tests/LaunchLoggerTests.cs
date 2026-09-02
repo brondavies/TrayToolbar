@@ -154,7 +154,7 @@ public class LaunchLoggerTests
         var lines = fileSystem.GetFileContents(DefaultLogFile)
             .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
         Assert.AreEqual(1, lines.Length);
-        StringAssert.StartsWith(lines[0], "CEF:0|brondavies|TrayToolbar|");
+        StringAssert.StartsWith(lines[0], "CEF:0|brontech|TrayToolbar|");
         StringAssert.Contains(lines[0], $"rt={TestTimestamp}");
         StringAssert.Contains(lines[0], "suser=testuser");
         StringAssert.Contains(lines[0], @"fname=Name\=Equals");

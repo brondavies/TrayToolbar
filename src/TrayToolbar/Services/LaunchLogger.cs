@@ -128,7 +128,7 @@ internal static class LaunchLogger
                 $"<14>1 {timestamp} {Environment.MachineName} TrayToolbar {Environment.ProcessId} LAUNCH - " +
                 $"user=\"{SingleLine(user)}\" name=\"{SingleLine(name)}\" target=\"{SingleLine(target)}\"",
             LogFormat.Cef =>
-                $"CEF:0|brondavies|TrayToolbar|{ConfigHelper.ApplicationVersion}|launch|Item launched|3|" +
+                $"CEF:0|brontech|TrayToolbar|{ConfigHelper.ApplicationVersion}|launch|Item launched|3|" +
                 $"rt={CefField(timestamp)} suser={CefField(user)} fname={CefField(name)} filePath={CefField(target)}",
             _ => string.Join(',',
                 CsvField(timestamp), CsvField(user), CsvField(name), CsvField(target)),
