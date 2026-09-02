@@ -8,6 +8,21 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+### Added
+
+- Added optional launch logging, configured only in the JSON file and off by default: `LaunchLogEnabled`, `LaunchLogFile`, and `LaunchLogFormat` with `csv` (default), `tsv`, `jsonl`, `syslog`, and `cef` formats. Every format uses ISO-8601 timestamps and captures the timestamp, username, menu item name, and target path ([#85](https://github.com/brondavies/TrayToolbar/issues/85)).
+- Added a spinner overlay that animates on a tray icon while its menu is loading, and a click during loading now opens the menu automatically once it is ready ([#82](https://github.com/brondavies/TrayToolbar/issues/82)).
+
+### Changed
+
+- Updated the CodeQL workflow to `github/codeql-action` v4 ahead of the v3 deprecation in December 2026.
+
+### Fixed
+
+- "Show links to folders as submenus" no longer hangs when a folder link points back at the scanned folder or an already-expanded target; cyclic links now appear as regular menu items ([#78](https://github.com/brondavies/TrayToolbar/issues/78)).
+- Right-clicking an item in a submenu that opened to the left no longer leaves submenus stuck open on screen; every dropdown suspended for a right-click is restored no matter which item receives the click ([#86](https://github.com/brondavies/TrayToolbar/issues/86)).
+- Advertised (MSI) shortcuts, such as those created by Office and CorelDRAW installers, launch correctly again. TrayToolbar now shell-executes the `.lnk` itself instead of the stub target path these shortcuts report ([#100](https://github.com/brondavies/TrayToolbar/issues/100)).
+
 ## [1.8.2] - 2026-08-17
 
 ### Fixed

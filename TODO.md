@@ -2,7 +2,6 @@
 
 ## Open GitHub feature requests
 
-- [ ] Add optional launch logging with a simple file format and configurable log path/name; capture item name, target path, timestamp, and username. (#85)
 - [ ] Add a clickable link to the project's GitHub releases page from Settings or a new About dialog. (#84)
 - [ ] Expand drag-and-drop support:
 	- [ ] Allow dragging files and folders out of TrayToolbar menus into Explorer and other app windows. (#79, #8)
