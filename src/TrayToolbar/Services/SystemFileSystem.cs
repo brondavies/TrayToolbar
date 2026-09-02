@@ -12,6 +12,16 @@ internal sealed class SystemFileSystem : IFileSystem
 
     public void WriteAllText(string path, string contents) => File.WriteAllText(path, contents);
 
+    public void AppendAllText(string path, string contents)
+    {
+        var directory = Path.GetDirectoryName(path);
+        if (!string.IsNullOrEmpty(directory))
+        {
+            Directory.CreateDirectory(directory);
+        }
+        File.AppendAllText(path, contents);
+    }
+
     public void DeleteFile(string path) => File.Delete(path);
 
     public void MoveFile(string sourceFileName, string destFileName) => File.Move(sourceFileName, destFileName);

@@ -71,6 +71,19 @@ internal sealed class FakeFileSystem : IFileSystem
         files[normalizedPath] = contents;
     }
 
+    public void AppendAllText(string path, string contents)
+    {
+        var normalizedPath = Normalize(path);
+        var directory = Path.GetDirectoryName(normalizedPath);
+        if (!string.IsNullOrEmpty(directory))
+        {
+            CreateDirectory(directory);
+        }
+
+        files.TryGetValue(normalizedPath, out var existing);
+        files[normalizedPath] = (existing ?? string.Empty) + contents;
+    }
+
     public void DeleteFile(string path)
     {
         files.Remove(Normalize(path));
