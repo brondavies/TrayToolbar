@@ -122,7 +122,8 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.8.2...HEAD
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.8.3...HEAD
+[1.8.3]: https://github.com/brondavies/TrayToolbar/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/brondavies/TrayToolbar/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.8.1
 [1.7.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.0...v1.7.1
