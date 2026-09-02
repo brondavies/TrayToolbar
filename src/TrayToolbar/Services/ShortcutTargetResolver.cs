@@ -150,7 +150,8 @@ internal static class ShortcutTargetResolver
                 FormatIconLocation(iconLocation, iconIndex),
                 string.Empty,
                 MapWindowStyle(showCommand),
-                (flags & SldfRunAsUser) != 0);
+                (flags & SldfRunAsUser) != 0,
+                (flags & SldfHasDarwinId) != 0);
             return true;
         }
         catch
@@ -165,6 +166,13 @@ internal static class ShortcutTargetResolver
 
     static bool CanCreateDirectShortcutStartInfo(FileShortcutLaunchInfo launchInfo)
     {
+        // Advertised (MSI) shortcuts report a stub path from GetPath; only the shell can
+        // resolve the Darwin descriptor, so the .lnk itself must be launched.
+        if (launchInfo.IsAdvertised)
+        {
+            return false;
+        }
+
         if (!launchInfo.TargetPath.HasValue()
             || launchInfo.TargetPath.Is(launchInfo.ShortcutPath)
             || (!File.Exists(launchInfo.TargetPath) && !Directory.Exists(launchInfo.TargetPath)))
@@ -287,7 +295,8 @@ internal static class ShortcutTargetResolver
         string IconLocation,
         string RelativePath,
         ProcessWindowStyle WindowStyle,
-        bool RunAsUser);
+        bool RunAsUser,
+        bool IsAdvertised);
 
     [ComImport]
     [Guid("000214F9-0000-0000-C000-000000000046")]
@@ -344,4 +353,5 @@ internal static class ShortcutTargetResolver
     const uint SlgpRawPath = 0x00000004;
     const uint StgmRead = 0;
     const uint SldfRunAsUser = 0x00002000;
+    const uint SldfHasDarwinId = 0x00001000;
 }

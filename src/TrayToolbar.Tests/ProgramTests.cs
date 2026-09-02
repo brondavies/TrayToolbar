@@ -119,6 +119,38 @@ public class ProgramTests
     }
 
     [TestMethod]
+    public void Launch_shell_executes_advertised_shortcuts_instead_of_the_reported_target()
+    {
+        using var scope = new ConfigHelperStateScope();
+        var processLauncher = new FakeProcessLauncher();
+        ConfigHelper.ProcessLauncher = processLauncher;
+
+        var tempDirectory = Path.Combine(Path.GetTempPath(), $"TrayToolbar-ShortcutTests-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(tempDirectory);
+        var shortcutPath = Path.Combine(tempDirectory, "Advertised.lnk");
+        var targetPath = Path.Combine(Environment.SystemDirectory, "cmd.exe");
+
+        try
+        {
+            // An MSI advertised shortcut carries a Darwin descriptor; GetPath reports a stub,
+            // so the .lnk itself must be shell-executed for the launch to work
+            CreateShortcut(shortcutPath, targetPath, string.Empty, tempDirectory);
+            MakeShortcutAdvertised(shortcutPath);
+
+            var launched = Program.Launch(shortcutPath);
+
+            Assert.IsTrue(launched);
+            Assert.AreEqual(1, processLauncher.StartedProcesses.Count);
+            Assert.AreEqual(shortcutPath, processLauncher.StartedProcesses[0].FileName);
+            Assert.IsTrue(processLauncher.StartedProcesses[0].UseShellExecute);
+        }
+        finally
+        {
+            Directory.Delete(tempDirectory, recursive: true);
+        }
+    }
+
+    [TestMethod]
     public void Launch_resolves_non_executable_shortcuts_without_arguments()
     {
         using var scope = new ConfigHelperStateScope();
@@ -205,11 +237,61 @@ public class ProgramTests
 
         if (runAsUser)
         {
-            SetShortcutRunAsUser(shortcutPath);
+            SetShortcutFlags(shortcutPath, SldfRunAsUser);
         }
     }
 
-    static void SetShortcutRunAsUser(string shortcutPath)
+    static void MakeShortcutAdvertised(string shortcutPath)
+    {
+        object? shellLink = null;
+        var block = IntPtr.Zero;
+
+        try
+        {
+            var shellLinkType = Type.GetTypeFromCLSID(ShellLinkClsid, throwOnError: true);
+            shellLink = Activator.CreateInstance(shellLinkType!);
+            Assert.IsNotNull(shellLink);
+
+            var persistFile = (IPersistFile)shellLink!;
+            persistFile.Load(shortcutPath, StgmReadWrite);
+
+            // EXP_DARWIN_LINK: DATABLOCK_HEADER + szDarwinID[260] (ANSI) + szwDarwinID[260] (wide);
+            // saving the block makes the shell set SLDF_HAS_DARWINID in the link header
+            const int blockSize = 4 + 4 + 260 + 520;
+            block = Marshal.AllocHGlobal(blockSize);
+            for (var offset = 0; offset < blockSize; offset += 4)
+            {
+                Marshal.WriteInt32(block, offset, 0);
+            }
+            Marshal.WriteInt32(block, 0, blockSize);
+            Marshal.WriteInt32(block, 4, unchecked((int)ExpDarwinIdSignature));
+            const string darwinId = "TestDarwinDescriptor";
+            var ansiId = System.Text.Encoding.ASCII.GetBytes(darwinId);
+            Marshal.Copy(ansiId, 0, block + 8, ansiId.Length);
+            var wideId = System.Text.Encoding.Unicode.GetBytes(darwinId);
+            Marshal.Copy(wideId, 0, block + 8 + 260, wideId.Length);
+
+            var dataList = (IShellLinkDataList)shellLink!;
+            dataList.AddDataBlock(block);
+            dataList.GetFlags(out var flags);
+            dataList.SetFlags(flags | SldfHasDarwinId);
+
+            persistFile.Save(shortcutPath, true);
+        }
+        finally
+        {
+            if (block != IntPtr.Zero)
+            {
+                Marshal.FreeHGlobal(block);
+            }
+            if (shellLink != null && Marshal.IsComObject(shellLink))
+            {
+                Marshal.FinalReleaseComObject(shellLink);
+            }
+        }
+    }
+
+    static void SetShortcutFlags(string shortcutPath, uint additionalFlags)
     {
         object? shellLink = null;
 
@@ -224,7 +306,7 @@ public class ProgramTests
 
             var dataList = (IShellLinkDataList)shellLink!;
             dataList.GetFlags(out var flags);
-            dataList.SetFlags(flags | SldfRunAsUser);
+            dataList.SetFlags(flags | additionalFlags);
 
             persistFile.Save(shortcutPath, true);
         }
@@ -265,4 +347,6 @@ public class ProgramTests
     static readonly Guid ShellLinkClsid = new("00021401-0000-0000-C000-000000000046");
     const uint StgmReadWrite = 0x00000002;
     const uint SldfRunAsUser = 0x00002000;
+    const uint SldfHasDarwinId = 0x00001000;
+    const uint ExpDarwinIdSignature = 0xA0000006;
 }
