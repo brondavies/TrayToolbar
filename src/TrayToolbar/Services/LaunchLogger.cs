@@ -26,6 +26,14 @@ internal static class LaunchLogger
         Cef,
     }
 
+    static readonly object WriteSync = new();
+    static Task PendingWrites = Task.CompletedTask;
+
+    /// <summary>
+    /// Captures the entry details immediately and queues the file write to a background
+    /// thread so logging never delays the launch. Writes are serialized so entries
+    /// cannot interleave.
+    /// </summary>
     internal static void Log(TrayToolbarConfiguration? configuration, string itemName, string targetPath)
     {
         try
@@ -36,8 +44,48 @@ internal static class LaunchLogger
                 .Or(Path.Combine(ConfigHelper.ProfileFolder, DefaultLogFileName))!
                 .ToLocalPath();
             var timestamp = Clock().ToString("yyyy-MM-ddTHH:mm:ss.fffK", CultureInfo.InvariantCulture);
+            var user = UserName();
+            lock (WriteSync)
+            {
+                PendingWrites = PendingWrites.ContinueWith(
+                    _ => WriteEntry(format, path, timestamp, user, itemName, targetPath),
+                    CancellationToken.None,
+                    TaskContinuationOptions.None,
+                    TaskScheduler.Default);
+            }
+        }
+        catch
+        {
+            // Logging must never interfere with launching
+        }
+    }
+
+    /// <summary>
+    /// Waits for all queued log writes to finish. Called before the process exits
+    /// and by tests that assert on log contents.
+    /// </summary>
+    internal static void Flush()
+    {
+        Task pending;
+        lock (WriteSync)
+        {
+            pending = PendingWrites;
+        }
+        try
+        {
+            pending.Wait();
+        }
+        catch
+        {
+        }
+    }
+
+    static void WriteEntry(LogFormat format, string path, string timestamp, string user, string name, string target)
+    {
+        try
+        {
             var header = NeedsHeader(format, path) ? FormatHeader(format) + Environment.NewLine : string.Empty;
-            var line = FormatEntry(format, timestamp, UserName(), itemName, targetPath);
+            var line = FormatEntry(format, timestamp, user, name, target);
             ConfigHelper.FileSystem.AppendAllText(path, header + line + Environment.NewLine);
         }
         catch

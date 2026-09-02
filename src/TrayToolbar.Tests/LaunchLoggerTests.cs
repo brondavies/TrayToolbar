@@ -54,6 +54,7 @@ public class LaunchLoggerTests
         var fileSystem = Setup();
 
         LaunchLogger.Log(new TrayToolbarConfiguration(), "Notes", @"C:\Root\Notes.lnk");
+        LaunchLogger.Flush();
 
         Assert.IsFalse(new TrayToolbarConfiguration().LaunchLogEnabled);
         Assert.IsFalse(fileSystem.FileExists(DefaultLogFile));
@@ -69,6 +70,7 @@ public class LaunchLoggerTests
 
         LaunchLogger.Log(configuration, "Notes, with comma", @"C:\Root\Notes.lnk");
         LaunchLogger.Log(configuration, "Second", @"C:\Root\Second.lnk");
+        LaunchLogger.Flush();
 
         var lines = fileSystem.GetFileContents(DefaultLogFile)
             .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
@@ -87,6 +89,7 @@ public class LaunchLoggerTests
         var configuration = EnabledConfiguration("tsv");
 
         LaunchLogger.Log(configuration, "Notes\twith tab", @"C:\Root\Notes.lnk");
+        LaunchLogger.Flush();
 
         var lines = fileSystem.GetFileContents(DefaultLogFile)
             .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
@@ -104,6 +107,7 @@ public class LaunchLoggerTests
         var configuration = EnabledConfiguration("jsonl");
 
         LaunchLogger.Log(configuration, "Notes", @"C:\Root\Notes.lnk");
+        LaunchLogger.Flush();
 
         var lines = fileSystem.GetFileContents(DefaultLogFile)
             .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
@@ -125,6 +129,7 @@ public class LaunchLoggerTests
         var configuration = EnabledConfiguration("syslog");
 
         LaunchLogger.Log(configuration, "Notes", @"C:\Root\Notes.lnk");
+        LaunchLogger.Flush();
 
         var lines = fileSystem.GetFileContents(DefaultLogFile)
             .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
@@ -144,6 +149,7 @@ public class LaunchLoggerTests
         var configuration = EnabledConfiguration("cef");
 
         LaunchLogger.Log(configuration, "Name=Equals", @"C:\Root\Notes.lnk");
+        LaunchLogger.Flush();
 
         var lines = fileSystem.GetFileContents(DefaultLogFile)
             .Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
@@ -167,6 +173,7 @@ public class LaunchLoggerTests
             var configuration = EnabledConfiguration(file: @"%TRAYTOOLBAR_TEST_LOGDIR%\launches.csv");
 
             LaunchLogger.Log(configuration, "Notes", @"C:\Root\Notes.lnk");
+            LaunchLogger.Flush();
 
             Assert.IsTrue(fileSystem.FileExists(@"C:\Logs\launches.csv"));
             Assert.IsFalse(fileSystem.FileExists(DefaultLogFile));
@@ -186,6 +193,7 @@ public class LaunchLoggerTests
         var configuration = EnabledConfiguration(file: "::::invalid::::");
 
         LaunchLogger.Log(configuration, "Notes", @"C:\Root\Notes.lnk");
+        LaunchLogger.Flush();
         // no exception means logging can never break a launch
     }
 
