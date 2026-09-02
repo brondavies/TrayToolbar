@@ -8,6 +8,8 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+## [1.8.3] - 2026-09-02
+
 ### Added
 
 - Added optional launch logging, configured only in the JSON file and off by default: `LaunchLogEnabled`, `LaunchLogFile`, and `LaunchLogFormat` with `csv` (default), `tsv`, `jsonl`, `syslog`, and `cef` formats. Every format uses ISO-8601 timestamps and captures the timestamp, username, menu item name, and target path ([#85](https://github.com/brondavies/TrayToolbar/issues/85)).
