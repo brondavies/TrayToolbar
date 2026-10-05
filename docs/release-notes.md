@@ -1,8 +1,5 @@
 # Release notes
 
-`CHANGELOG.md` is the canonical, Keep a Changelog-style release history for this repository.
-This file stays as the supplemental narrative release summary for highlights, rollout notes, and packaging context that are easier to read in prose.
-
 - Canonical history: [`../CHANGELOG.md`](../CHANGELOG.md)
 - GitHub release assets: <https://github.com/brondavies/TrayToolbar/releases>
 - Update and packaging trust boundary: [`update-security.md`](update-security.md)

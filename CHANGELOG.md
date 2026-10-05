@@ -8,6 +8,10 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+### Changed
+
+- Updated the build and CodeQL workflows to `actions/checkout` v5 ahead of the Node 20 runtime deprecation.
+
 ## [1.8.3] - 2026-09-02
 
 ### Added
