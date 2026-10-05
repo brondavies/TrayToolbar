@@ -252,4 +252,7 @@
   <data name="Is not a valid regular expression" xml:space="preserve">
     <value>{0} no es una expresión regular válida.</value>
   </data>
+  <data name="TrayToolbar on GitHub" xml:space="preserve">
+    <value>TrayToolbar en GitHub</value>
+  </data>
 </root>

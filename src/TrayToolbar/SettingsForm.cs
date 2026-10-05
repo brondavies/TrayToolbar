@@ -28,7 +28,7 @@ public partial class SettingsForm : Form
 
     private System.Threading.Timer? _updateCheckTimer;
 
-    internal readonly CultureInfo[] SupportedLanguages = [
+    internal static readonly CultureInfo[] SupportedLanguages = [
         CultureInfo.GetCultureInfo("en"),
         CultureInfo.GetCultureInfo("es"),
         CultureInfo.GetCultureInfo("fr"),
@@ -126,6 +126,7 @@ public partial class SettingsForm : Form
     const string Command_Open = "Open";
     const string Command_Exit = "Exit";
     const string Command_Locate = "Locate";
+    const string Command_GitHub = "GitHub";
 
     private void LoadResources(string? language)
     {
@@ -165,6 +166,7 @@ public partial class SettingsForm : Form
             new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
             new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = Command_Open },
             new ToolStripMenuItem { Text = R.TrayToolbar_Location, CommandParameter = Command_Locate },
+            new ToolStripMenuItem { Text = R.TrayToolbar_on_GitHub, CommandParameter = Command_GitHub },
             new ToolStripMenuItem { Text = R.Exit, CommandParameter = Command_Exit }
         ]);
 
@@ -741,6 +743,9 @@ public partial class SettingsForm : Form
                 break;
             case Command_Locate:
                 Program.Launch(ConfigHelper.ApplicationRoot);
+                break;
+            case Command_GitHub:
+                Program.Launch(UpdateLogic.ReleasesPageUrl);
                 break;
             case Command_Exit:
                 Quit();

@@ -36,6 +36,13 @@ public class UpdateLogicTests
     }
 
     [TestMethod]
+    public void ReleasesPageUrl_is_an_allowed_remote_launch_target()
+    {
+        Assert.IsTrue(UpdateLogic.TryGetAllowedRemoteLaunchUri(UpdateLogic.ReleasesPageUrl, out var uri));
+        Assert.AreEqual("https://github.com/brondavies/TrayToolbar/releases", uri.AbsoluteUri);
+    }
+
+    [TestMethod]
     public void IsPrereleaseVersion_remains_explicit()
     {
         Assert.IsTrue(UpdateLogic.IsPrereleaseVersion("2.0.0", "1.9.0"));

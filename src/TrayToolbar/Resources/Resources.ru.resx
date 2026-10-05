@@ -252,4 +252,7 @@
   <data name="Is not a valid regular expression" xml:space="preserve">
     <value>{0} не является допустимым регулярным выражением.</value>
   </data>
+  <data name="TrayToolbar on GitHub" xml:space="preserve">
+    <value>TrayToolbar на GitHub</value>
+  </data>
 </root>

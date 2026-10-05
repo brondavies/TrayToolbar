@@ -58,6 +58,21 @@ public class ProgramTests
     }
 
     [TestMethod]
+    public void Launch_opens_the_releases_page()
+    {
+        using var scope = new ConfigHelperStateScope();
+        var processLauncher = new FakeProcessLauncher();
+        ConfigHelper.ProcessLauncher = processLauncher;
+
+        var launched = Program.Launch(UpdateLogic.ReleasesPageUrl);
+
+        Assert.IsTrue(launched);
+        Assert.AreEqual(1, processLauncher.StartedProcesses.Count);
+        Assert.AreEqual(UpdateLogic.ReleasesPageUrl, processLauncher.StartedProcesses[0].FileName);
+        Assert.IsTrue(processLauncher.StartedProcesses[0].UseShellExecute);
+    }
+
+    [TestMethod]
     public void Launch_resolves_executable_shortcuts_and_preserves_shortcut_metadata()
     {
         using var scope = new ConfigHelperStateScope();

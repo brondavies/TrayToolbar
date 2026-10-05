@@ -11,6 +11,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 ### Added
 
 - Include and Exclude file patterns accept regular expressions wrapped in slashes, such as `/^[a-z]{4,6}\d{6,}/`, matched case-insensitively against the file name. Settings refuses to save a pattern that isn't valid ([#108](https://github.com/brondavies/TrayToolbar/issues/108)).
+- Added a "TrayToolbar on GitHub" item to the tray icon's right-click menu that opens the GitHub releases page ([#84](https://github.com/brondavies/TrayToolbar/issues/84)).
 
 ### Changed
 

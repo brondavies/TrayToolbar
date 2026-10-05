@@ -459,7 +459,16 @@ namespace TrayToolbar.Resources {
                 return ResourceManager.GetString("TrayToolbar Location", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to TrayToolbar on GitHub.
+        /// </summary>
+        internal static string TrayToolbar_on_GitHub {
+            get {
+                return ResourceManager.GetString("TrayToolbar on GitHub", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to TrayToolbar Settings.
         /// </summary>

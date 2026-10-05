@@ -252,4 +252,7 @@
   <data name="Is not a valid regular expression" xml:space="preserve">
     <value>{0}은(는) 올바른 정규식이 아닙니다.</value>
   </data>
+  <data name="TrayToolbar on GitHub" xml:space="preserve">
+    <value>GitHub의 트레이툴바</value>
+  </data>
 </root>
