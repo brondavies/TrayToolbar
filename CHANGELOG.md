@@ -12,6 +12,10 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - Updated the build and CodeQL workflows to `actions/checkout` v5 ahead of the Node 20 runtime deprecation.
 
+### Fixed
+
+- TrayToolbar no longer adds a `TrayToolbar` shortcut to the Start menu's Programs folder on every launch. Toast notifications only need the registry registration, and the shortcut that earlier versions created is removed on startup ([#111](https://github.com/brondavies/TrayToolbar/issues/111)).
+
 ## [1.8.3] - 2026-09-02
 
 ### Added

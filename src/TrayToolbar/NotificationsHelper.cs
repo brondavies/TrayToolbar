@@ -27,7 +27,6 @@ internal partial class NotificationsHelper
     private static readonly Guid ToastNotificationManagerStaticsGuid = new("50AC103F-D235-4598-BBEF-98FE4D1A3AD4");
     private static readonly Guid ToastNotifierGuid = new("75927B93-03F3-41EC-91D3-6E5BAC1B38E7");
     private static readonly PROPERTYKEY PKEY_AppUserModel_ID = new(new Guid("9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3"), 5);
-    private static readonly PROPERTYKEY PKEY_AppUserModel_ToastActivatorCLSID = new(new Guid("9F4C2855-9F79-4B39-A8D0-E1D42DE1D5F3"), 26);
     private static readonly object SyncLock = new();
     private static bool _isActivated;
     private static uint _registrationCookie;
@@ -66,7 +65,6 @@ internal partial class NotificationsHelper
             try
             {
                 RegisterAppUserModel();
-                EnsureStartMenuShortcut();
                 RegisterComServer();
                 RegisterActivator();
                 _isActivated = true;
@@ -74,6 +72,8 @@ internal partial class NotificationsHelper
             catch
             {
             }
+
+            RemoveStartMenuShortcut();
         }
     }
 
@@ -110,57 +110,51 @@ internal partial class NotificationsHelper
         Marshal.ThrowExceptionForHR(hr);
     }
 
-    private static void EnsureStartMenuShortcut()
+    private static void RemoveStartMenuShortcut()
     {
         var programsFolder = Environment.GetFolderPath(Environment.SpecialFolder.Programs);
-        if (!programsFolder.HasValue())
+        if (programsFolder.HasValue())
         {
-            return;
+            RemoveStartMenuShortcut(Path.Combine(programsFolder, $"{R.TrayToolbar}.lnk"));
         }
+    }
 
-        Directory.CreateDirectory(programsFolder);
-        var shortcutPath = Path.Combine(programsFolder, $"{R.TrayToolbar}.lnk");
+    // Earlier versions recreated this shortcut on every launch, but the AppUserModelId registry
+    // entry is all toasts need. Only delete it when it carries our AppUserModelId, so a shortcut
+    // the user made themselves is left alone.
+    internal static void RemoveStartMenuShortcut(string shortcutPath)
+    {
+        try
+        {
+            if (File.Exists(shortcutPath) && ReadShortcutAppUserModelId(shortcutPath) == AppUserModelId)
+            {
+                File.Delete(shortcutPath);
+            }
+        }
+        catch
+        {
+        }
+    }
 
+    private static string? ReadShortcutAppUserModelId(string shortcutPath)
+    {
         var shellLinkType = Type.GetTypeFromCLSID(new Guid("00021401-0000-0000-C000-000000000046"), throwOnError: true)!;
         var shellLink = Activator.CreateInstance(shellLinkType)!;
 
         try
         {
-            var link = (IShellLinkW)shellLink;
-            link.SetPath(ConfigHelper.ApplicationExe);
-            link.SetWorkingDirectory(ConfigHelper.ApplicationRoot);
-            link.SetDescription(R.TrayToolbar);
-            link.SetIconLocation(ConfigHelper.ApplicationExe, 0);
+            ((IPersistFile)shellLink).Load(shortcutPath, STGM_READ);
 
-            var persistFile = (IPersistFile)shellLink;
-            persistFile.Save(shortcutPath, true);
-            persistFile.Load(shortcutPath, STGM_READWRITE);
-
-            var propertyStore = (IPropertyStore)shellLink;
             var appUserModelKey = PKEY_AppUserModel_ID;
-            var appId = PropVariant.FromString(AppUserModelId);
+            ((IPropertyStore)shellLink).GetValue(ref appUserModelKey, out var appId);
             try
             {
-                propertyStore.SetValue(ref appUserModelKey, ref appId);
+                return appId.GetString();
             }
             finally
             {
                 appId.Dispose();
             }
-
-            var toastActivatorKey = PKEY_AppUserModel_ToastActivatorCLSID;
-            var clsid = PropVariant.FromGuid(ToastActivatorClsid);
-            try
-            {
-                propertyStore.SetValue(ref toastActivatorKey, ref clsid);
-            }
-            finally
-            {
-                clsid.Dispose();
-            }
-
-            propertyStore.Commit();
-            persistFile.Save(shortcutPath, true);
         }
         finally
         {

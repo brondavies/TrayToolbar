@@ -51,31 +51,6 @@ internal partial class NotificationsHelper
     }
 
     [ComImport]
-    [Guid("000214F9-0000-0000-C000-000000000046")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
-    private interface IShellLinkW
-    {
-        void GetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile, int cchMaxPath, IntPtr pfd, uint fFlags);
-        void GetIDList(out IntPtr ppidl);
-        void SetIDList(IntPtr pidl);
-        void GetDescription([MarshalAs(UnmanagedType.LPWStr)] string pszName, int cchMaxName);
-        void SetDescription([MarshalAs(UnmanagedType.LPWStr)] string pszName);
-        void GetWorkingDirectory([MarshalAs(UnmanagedType.LPWStr)] string pszDir, int cchMaxPath);
-        void SetWorkingDirectory([MarshalAs(UnmanagedType.LPWStr)] string pszDir);
-        void GetArguments([MarshalAs(UnmanagedType.LPWStr)] string pszArgs, int cchMaxPath);
-        void SetArguments([MarshalAs(UnmanagedType.LPWStr)] string pszArgs);
-        void GetHotkey(out short pwHotkey);
-        void SetHotkey(short wHotkey);
-        void GetShowCmd(out int piShowCmd);
-        void SetShowCmd(int iShowCmd);
-        void GetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int cchIconPath, out int piIcon);
-        void SetIconLocation([MarshalAs(UnmanagedType.LPWStr)] string pszIconPath, int iIcon);
-        void SetRelativePath([MarshalAs(UnmanagedType.LPWStr)] string pszPathRel, uint dwReserved);
-        void Resolve(IntPtr hwnd, uint fFlags);
-        void SetPath([MarshalAs(UnmanagedType.LPWStr)] string pszFile);
-    }
-
-    [ComImport]
     [Guid("0000010b-0000-0000-C000-000000000046")]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     private interface IPersistFile
@@ -141,7 +116,8 @@ internal partial class NotificationsHelper
         public uint pid = pid;
     }
 
-    [StructLayout(LayoutKind.Explicit)]
+    // Size matches the native 64-bit PROPVARIANT so GetValue can write the whole struct
+    [StructLayout(LayoutKind.Explicit, Size = 24)]
     private struct PropVariant : IDisposable
     {
         [FieldOffset(0)]
@@ -150,24 +126,9 @@ internal partial class NotificationsHelper
         [FieldOffset(8)]
         private IntPtr pointerValue;
 
-        public static PropVariant FromString(string value)
+        public readonly string? GetString()
         {
-            return new PropVariant
-            {
-                vt = (ushort)VarEnum.VT_LPWSTR,
-                pointerValue = Marshal.StringToCoTaskMemUni(value)
-            };
-        }
-
-        public static PropVariant FromGuid(Guid value)
-        {
-            var guidMemory = Marshal.AllocCoTaskMem(Marshal.SizeOf<Guid>());
-            Marshal.StructureToPtr(value, guidMemory, false);
-            return new PropVariant
-            {
-                vt = (ushort)VarEnum.VT_CLSID,
-                pointerValue = guidMemory
-            };
+            return vt == (ushort)VarEnum.VT_LPWSTR ? Marshal.PtrToStringUni(pointerValue) : null;
         }
 
         public void Dispose()
@@ -209,7 +170,7 @@ internal partial class NotificationsHelper
     private const int RPC_E_CHANGED_MODE = unchecked((int)0x80010106);
     private const uint CLSCTX_LOCAL_SERVER = 0x4;
     private const uint REGCLS_MULTIPLEUSE = 0x1;
-    private const uint STGM_READWRITE = 0x00000002;
+    private const uint STGM_READ = 0x00000000;
     private const uint RO_INIT_SINGLETHREADED = 0;
     private const uint RO_INIT_MULTITHREADED = 1;
 
