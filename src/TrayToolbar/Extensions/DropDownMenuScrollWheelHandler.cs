@@ -44,6 +44,12 @@ public class DropDownMenuScrollWheelHandler : IMessageFilter
             HandleDelta(this.activeMenu, delta);
             return true;
         }
+        else if (m.Msg == WM_CHAR && FindDropDown(m.HWnd) is { } dropDown)
+        {
+            // Typing a letter shared by several items selects the next one without the
+            // scroll into view that arrow keys get, so scroll once WinForms has handled the key
+            dropDown.BeginInvoke(() => ScrollSelectedItemIntoView(dropDown));
+        }
         return false;
     }
 
@@ -81,6 +87,17 @@ public class DropDownMenuScrollWheelHandler : IMessageFilter
         Scroll(toolStripDropDown, delta);
     }
 
+    private static void ScrollSelectedItemIntoView(ToolStripDropDown toolStripDropDown)
+    {
+        if (toolStripDropDown.IsDisposed || !toolStripDropDown.Visible)
+            return;
+        var selected = toolStripDropDown.Items.OfType<ToolStripItem>().FirstOrDefault(i => i.Selected);
+        if (selected == null)
+            return;
+        var view = toolStripDropDown.DisplayRectangle;
+        Scroll(toolStripDropDown, GetScrollIntoViewDelta(selected.Bounds.Top, selected.Bounds.Bottom, view.Top, view.Bottom));
+    }
+
     private static void Scroll(ToolStripDropDown toolStripDropDown, int delta)
     {
         if (delta == 0)
@@ -98,6 +115,19 @@ public class DropDownMenuScrollWheelHandler : IMessageFilter
     {
         var pixelsPerNotch = scrollLines < 0 ? pageHeight : scrollLines * lineHeight;
         return -wheelDelta * pixelsPerNotch / WheelDelta;
+    }
+
+    /// <summary>
+    /// Pixels to scroll so an item is fully visible, the same way arrow-key selection scrolls;
+    /// an item taller than the view is aligned to the top
+    /// </summary>
+    internal static int GetScrollIntoViewDelta(int itemTop, int itemBottom, int viewTop, int viewBottom)
+    {
+        if (itemTop < viewTop)
+            return itemTop - viewTop;
+        if (itemBottom > viewBottom)
+            return Math.Min(itemBottom - viewBottom, itemTop - viewTop);
+        return 0;
     }
 
     /// <summary>

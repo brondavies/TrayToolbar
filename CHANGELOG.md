@@ -20,6 +20,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ### Fixed
 
+- Typing a letter to move between menu items that start with it now scrolls a long menu so the selected item is visible, as the arrow keys already did ([#110](https://github.com/brondavies/TrayToolbar/issues/110)).
 - TrayToolbar no longer adds a `TrayToolbar` shortcut to the Start menu's Programs folder on every launch. Toast notifications only need the registry registration, and the shortcut that earlier versions created is removed on startup ([#111](https://github.com/brondavies/TrayToolbar/issues/111)).
 
 ## [1.8.3] - 2026-09-02
