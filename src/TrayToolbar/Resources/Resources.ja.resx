@@ -249,4 +249,7 @@
   <data name="Updated to version" xml:space="preserve">
     <value>バージョン {0} に更新されました。</value>
   </data>
+  <data name="Is not a valid regular expression" xml:space="preserve">
+    <value>{0} は有効な正規表現ではありません。</value>
+  </data>
 </root>

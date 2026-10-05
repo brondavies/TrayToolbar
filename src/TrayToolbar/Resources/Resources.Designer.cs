@@ -224,7 +224,16 @@ namespace TrayToolbar.Resources {
                 return ResourceManager.GetString("Include Subfolders", resourceCulture);
             }
         }
-        
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0} is not a valid regular expression..
+        /// </summary>
+        internal static string Is_not_a_valid_regular_expression {
+            get {
+                return ResourceManager.GetString("Is not a valid regular expression", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Language.
         /// </summary>

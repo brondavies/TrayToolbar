@@ -134,8 +134,8 @@ public class TrayToolbarConfiguration
     public List<FolderConfig> Folders { get; set; } = [];
 
 
-    internal bool IncludesFile(string f) => !IgnoreFiles.Any(i => f.IsMatch("." + i.Replace(".", "\\.")))
-        && IncludeFiles.DefaultIfEmpty(".*").Any(i => f.IsMatch("." + i.Replace(".", "\\.")));
+    internal bool IncludesFile(string f) => !IgnoreFiles.Any(i => FilePattern.Matches(f, i))
+        && IncludeFiles.DefaultIfEmpty(".*").Any(i => FilePattern.Matches(f, i));
 }
 
 public class FolderConfig

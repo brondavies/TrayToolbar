@@ -192,8 +192,8 @@ Serialization uses `System.Text.Json` with indented output.
 | --- | --- | --- | --- | --- |
 | `HideFileExtensions` | `bool` | `false` | Yes | Hides file extensions in menu text. `.lnk` and `.url` names are already shown without extensions in menus. |
 | `IgnoreAllDotFiles` | `bool` | `false` | Yes | Prevents items from dot-prefixed folders such as `.git` from appearing in nested menus. |
-| `IgnoreFiles` | `string[]` | `['.bak', '.config', '.dll', '.ico', '.ini']` | Yes | Case-insensitive patterns filtered by regex-style matching. |
-| `IncludeFiles` | `string[]` | `['.*']` | Yes | Allow-list patterns; the default effectively includes everything not ignored. |
+| `IgnoreFiles` | `string[]` | `['.bak', '.config', '.dll', '.ico', '.ini']` | Yes | Case-insensitive patterns filtered by regex-style matching. An entry wrapped in slashes, such as `/^[a-z]{4,6}\d{6,}/`, is a full regular expression matched against the file name only. |
+| `IncludeFiles` | `string[]` | `['.*']` | Yes | Allow-list patterns; the default effectively includes everything not ignored. Accepts the same `/regex/` entries as `IgnoreFiles`. |
 | `IgnoreFolders` | `string[]` | `['.git', '.github']` | Yes | Folder names skipped during scanning. Matching is case-insensitive. |
 | `MaxMenuPath` | `int` | `512` | Yes | Guards against extremely deep or looping menu paths. |
 | `Theme` | `int` | `0` | Yes | `0` = system, `1` = light, `-1` = dark. |

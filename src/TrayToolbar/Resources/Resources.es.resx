@@ -249,4 +249,7 @@
   <data name="Updated to version" xml:space="preserve">
     <value>¡Actualizado a la versión {0}!</value>
   </data>
+  <data name="Is not a valid regular expression" xml:space="preserve">
+    <value>{0} no es una expresión regular válida.</value>
+  </data>
 </root>

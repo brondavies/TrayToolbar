@@ -809,9 +809,16 @@ public partial class SettingsForm : Form
             return;
         }
 
+        var includeFiles = IncludeFilesTextBox.Text.SplitPatterns();
+        var ignoreFiles = IgnoreFilesTextBox.Text.SplitPatterns();
+        if (!ValidateFilePatterns(includeFiles.Concat(ignoreFiles)))
+        {
+            return;
+        }
+
         Configuration.Folders = FolderControls().Select(c => c.Config).ToList();
-        Configuration.IncludeFiles = IncludeFilesTextBox.Text.SplitPaths();
-        Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.SplitPaths();
+        Configuration.IncludeFiles = includeFiles;
+        Configuration.IgnoreFiles = ignoreFiles;
         Configuration.IgnoreFolders = IgnoreFoldersTextBox.Text.SplitPaths();
         Configuration.ShowFolderLinksAsSubMenus = ShowFolderLinksAsSubMenusCheckbox.Checked;
         Configuration.Theme = (int)ThemeToggleButton.Theme;
@@ -858,6 +865,20 @@ public partial class SettingsForm : Form
             return false;
         }
         return true;
+    }
+
+    private bool ValidateFilePatterns(IEnumerable<string> patterns)
+    {
+        var invalid = patterns.FirstOrDefault(p => !FilePattern.IsValid(p));
+        if (invalid == null)
+        {
+            return true;
+        }
+
+        MessageBox.Show(this,
+            string.Format(R.Is_not_a_valid_regular_expression, invalid), R.Error,
+            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        return false;
     }
 
     private void CancelBtn_Click(object sender, EventArgs e)

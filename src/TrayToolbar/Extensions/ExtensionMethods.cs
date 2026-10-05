@@ -143,6 +143,43 @@ public static class ExtensionMethods
         return value.Split(splitchars ?? [';', ','], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
     }
 
+    /// <summary>
+    /// Splits a file pattern list like <see cref="SplitPaths"/>, but keeps a <c>/regex/</c> entry
+    /// whole even when it contains separators, such as the comma in <c>{4,6}</c>
+    /// </summary>
+    public static string[] SplitPatterns(this string value)
+    {
+        List<string> result = [];
+        var start = 0;
+        while (start < value.Length)
+        {
+            var end = FindPatternEnd(value, start);
+            var pattern = value[start..end].Trim();
+            if (pattern.Length > 0) result.Add(pattern);
+            start = end + 1;
+        }
+        return [.. result];
+    }
+
+    static int FindPatternEnd(string value, int start)
+    {
+        var first = start;
+        while (first < value.Length && char.IsWhiteSpace(value[first])) first++;
+        if (first < value.Length && value[first] == '/')
+        {
+            // A regex ends at the first later slash followed only by whitespace and then a separator or the end
+            for (var i = first + 1; i < value.Length; i++)
+            {
+                if (value[i] != '/') continue;
+                var next = i + 1;
+                while (next < value.Length && char.IsWhiteSpace(value[next])) next++;
+                if (next == value.Length || value[next] is ';' or ',') return next;
+            }
+        }
+        var separator = value.IndexOfAny([';', ','], start);
+        return separator < 0 ? value.Length : separator;
+    }
+
     public static string ToLocalPath(this string value)
     {
         var path = Environment.ExpandEnvironmentVariables(value);

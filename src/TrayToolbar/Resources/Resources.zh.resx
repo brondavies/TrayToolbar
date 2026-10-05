@@ -250,4 +250,7 @@
     <value>已更新至版本 {0}！</value>
   </data>
 
+  <data name="Is not a valid regular expression" xml:space="preserve">
+    <value>{0} 不是有效的正则表达式。</value>
+  </data>
 </root>

@@ -8,6 +8,10 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+### Added
+
+- Include and Exclude file patterns accept regular expressions wrapped in slashes, such as `/^[a-z]{4,6}\d{6,}/`, matched case-insensitively against the file name. Settings refuses to save a pattern that isn't valid ([#108](https://github.com/brondavies/TrayToolbar/issues/108)).
+
 ### Changed
 
 - Updated the build and CodeQL workflows to `actions/checkout` v5 ahead of the Node 20 runtime deprecation.
