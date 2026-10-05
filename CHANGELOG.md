@@ -15,6 +15,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ### Changed
 
+- Mouse-wheel scrolling in long menus follows the Windows "lines to scroll" setting, three items per notch by default instead of about one, and scrolls a page at a time when Windows is set to scroll one screen at a time. The wheel also keeps working over the menu's scroll arrows, and the arrows' enabled state now updates after wheel scrolling ([#109](https://github.com/brondavies/TrayToolbar/issues/109)).
 - Updated the build and CodeQL workflows to `actions/checkout` v5 ahead of the Node 20 runtime deprecation.
 
 ### Fixed

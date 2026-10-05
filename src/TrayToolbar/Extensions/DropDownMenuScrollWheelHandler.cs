@@ -26,7 +26,7 @@ public class DropDownMenuScrollWheelHandler : IMessageFilter
         }
     }
 
-    public static int ScrollMargin = 24;
+    private const int WheelDelta = 120;
 
     private IntPtr activeHwnd = 0;
     private ToolStripDropDown? activeMenu;
@@ -36,7 +36,7 @@ public class DropDownMenuScrollWheelHandler : IMessageFilter
         if (m.Msg == WM_MOUSEMOVE && activeHwnd != m.HWnd)
         {
             activeHwnd = m.HWnd;
-            this.activeMenu = Control.FromHandle(m.HWnd) as ToolStripDropDown;
+            this.activeMenu = FindDropDown(m.HWnd);
         }
         else if (m.Msg == WM_MOUSEWHEEL && this.activeMenu != null)
         {
@@ -47,30 +47,69 @@ public class DropDownMenuScrollWheelHandler : IMessageFilter
         return false;
     }
 
+    // The scroll buttons are child windows, so the pointer over them reports the button's handle
+    private static ToolStripDropDown? FindDropDown(IntPtr hwnd)
+    {
+        var control = Control.FromHandle(hwnd);
+        return control as ToolStripDropDown ?? control?.Parent as ToolStripDropDown;
+    }
+
     private static readonly Action<ToolStrip, int> ScrollInternal
         = (Action<ToolStrip, int>)Delegate.CreateDelegate(typeof(Action<ToolStrip, int>),
             typeof(ToolStrip).GetMethod("ScrollInternal",
                 System.Reflection.BindingFlags.NonPublic
                 | System.Reflection.BindingFlags.Instance)!);
 
-    private void HandleDelta(ToolStripDropDown toolStripDropDown, int delta)
+    // Keeps the up/down scroll buttons enabled only while there is more to scroll
+    internal static readonly System.Reflection.MethodInfo? UpdateScrollButtonStatus
+        = typeof(ToolStripDropDownMenu).GetMethod("UpdateScrollButtonStatus",
+            System.Reflection.BindingFlags.NonPublic
+            | System.Reflection.BindingFlags.Instance,
+            Type.EmptyTypes);
+
+    private static void HandleDelta(ToolStripDropDown toolStripDropDown, int wheelDelta)
     {
-        if (toolStripDropDown.Items.Count == 0)
+        var itemCount = toolStripDropDown.Items.Count;
+        if (itemCount == 0)
             return;
         var firstItem = toolStripDropDown.Items[0];
-        var lastItem = toolStripDropDown.Items[toolStripDropDown.Items.Count - 1];
-        if (lastItem.Bounds.Bottom < toolStripDropDown.Height && firstItem.Bounds.Top > 0)
+        var lastItem = toolStripDropDown.Items[itemCount - 1];
+        var view = toolStripDropDown.DisplayRectangle;
+        var lineHeight = (lastItem.Bounds.Bottom - firstItem.Bounds.Top) / itemCount;
+        var delta = GetWheelScrollDelta(wheelDelta, SystemInformation.MouseWheelScrollLines, lineHeight, view.Height);
+        delta = ClampScrollDelta(delta, firstItem.Bounds.Top, lastItem.Bounds.Bottom, view.Top, view.Bottom);
+        Scroll(toolStripDropDown, delta);
+    }
+
+    private static void Scroll(ToolStripDropDown toolStripDropDown, int delta)
+    {
+        if (delta == 0)
             return;
-        delta = delta / -4;
-        if (delta < 0 && firstItem.Bounds.Top - delta > ScrollMargin)
-        {
-            delta = firstItem.Bounds.Top - ScrollMargin;
-        }
-        else if (delta > 0 && delta > lastItem.Bounds.Bottom - toolStripDropDown.Height + ScrollMargin)
-        {
-            delta = lastItem.Bounds.Bottom - toolStripDropDown.Height + ScrollMargin;
-        }
-        if (delta != 0)
-            ScrollInternal(toolStripDropDown, delta);
+        ScrollInternal(toolStripDropDown, delta);
+        if (toolStripDropDown is ToolStripDropDownMenu)
+            UpdateScrollButtonStatus?.Invoke(toolStripDropDown, null);
+    }
+
+    /// <summary>
+    /// Pixels to scroll for a wheel movement: Windows' "lines to scroll" setting times the item
+    /// height per notch, or one page when the setting is "one screen at a time"
+    /// </summary>
+    internal static int GetWheelScrollDelta(int wheelDelta, int scrollLines, int lineHeight, int pageHeight)
+    {
+        var pixelsPerNotch = scrollLines < 0 ? pageHeight : scrollLines * lineHeight;
+        return -wheelDelta * pixelsPerNotch / WheelDelta;
+    }
+
+    /// <summary>
+    /// Limits a scroll so the first item never moves below the top of the view
+    /// and the last item never moves above the bottom of it
+    /// </summary>
+    internal static int ClampScrollDelta(int delta, int firstItemTop, int lastItemBottom, int viewTop, int viewBottom)
+    {
+        if (delta < 0)
+            return Math.Max(delta, Math.Min(0, firstItemTop - viewTop));
+        if (delta > 0)
+            return Math.Min(delta, Math.Max(0, lastItemBottom - viewBottom));
+        return 0;
     }
 }
