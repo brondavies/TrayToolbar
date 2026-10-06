@@ -30,8 +30,8 @@ public class AboutInfoTests
     [TestMethod]
     public void Links_point_at_the_project()
     {
-        Assert.AreEqual("https://github.com/brondavies/TrayToolbar/releases", AboutInfo.ReleasesUrl);
         StringAssert.StartsWith(AboutInfo.IssuesUrl, "https://github.com/brondavies/TrayToolbar/issues");
-        Assert.IsTrue(UpdateLogic.TryGetAllowedRemoteLaunchUri(AboutInfo.ReleasesUrl, out _));
+        Assert.IsTrue(UpdateLogic.TryGetAllowedRemoteLaunchUri(AboutInfo.ReleasesUrl, out var releases));
+        Assert.AreEqual("https://github.com/brondavies/TrayToolbar/releases", releases.AbsoluteUri);
     }
 }
