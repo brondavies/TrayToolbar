@@ -249,4 +249,10 @@
   <data name="Updated to version" xml:space="preserve">
     <value>Atualizado para a versão {0}!</value>
   </data>
+  <data name="Is not a valid regular expression" xml:space="preserve">
+    <value>{0} não é uma expressão regular válida.</value>
+  </data>
+  <data name="TrayToolbar on GitHub" xml:space="preserve">
+    <value>TrayToolbar no GitHub</value>
+  </data>
 </root>

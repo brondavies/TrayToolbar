@@ -28,7 +28,7 @@ public partial class SettingsForm : Form
 
     private System.Threading.Timer? _updateCheckTimer;
 
-    internal readonly CultureInfo[] SupportedLanguages = [
+    internal static readonly CultureInfo[] SupportedLanguages = [
         CultureInfo.GetCultureInfo("en"),
         CultureInfo.GetCultureInfo("es"),
         CultureInfo.GetCultureInfo("fr"),
@@ -126,6 +126,7 @@ public partial class SettingsForm : Form
     const string Command_Open = "Open";
     const string Command_Exit = "Exit";
     const string Command_Locate = "Locate";
+    const string Command_GitHub = "GitHub";
 
     private void LoadResources(string? language)
     {
@@ -165,6 +166,7 @@ public partial class SettingsForm : Form
             new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
             new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = Command_Open },
             new ToolStripMenuItem { Text = R.TrayToolbar_Location, CommandParameter = Command_Locate },
+            new ToolStripMenuItem { Text = R.TrayToolbar_on_GitHub, CommandParameter = Command_GitHub },
             new ToolStripMenuItem { Text = R.Exit, CommandParameter = Command_Exit }
         ]);
 
@@ -742,6 +744,9 @@ public partial class SettingsForm : Form
             case Command_Locate:
                 Program.Launch(ConfigHelper.ApplicationRoot);
                 break;
+            case Command_GitHub:
+                Program.Launch(UpdateLogic.ReleasesPageUrl);
+                break;
             case Command_Exit:
                 Quit();
                 break;
@@ -809,9 +814,16 @@ public partial class SettingsForm : Form
             return;
         }
 
+        var includeFiles = IncludeFilesTextBox.Text.SplitPatterns();
+        var ignoreFiles = IgnoreFilesTextBox.Text.SplitPatterns();
+        if (!ValidateFilePatterns(includeFiles.Concat(ignoreFiles)))
+        {
+            return;
+        }
+
         Configuration.Folders = FolderControls().Select(c => c.Config).ToList();
-        Configuration.IncludeFiles = IncludeFilesTextBox.Text.SplitPaths();
-        Configuration.IgnoreFiles = IgnoreFilesTextBox.Text.SplitPaths();
+        Configuration.IncludeFiles = includeFiles;
+        Configuration.IgnoreFiles = ignoreFiles;
         Configuration.IgnoreFolders = IgnoreFoldersTextBox.Text.SplitPaths();
         Configuration.ShowFolderLinksAsSubMenus = ShowFolderLinksAsSubMenusCheckbox.Checked;
         Configuration.Theme = (int)ThemeToggleButton.Theme;
@@ -858,6 +870,20 @@ public partial class SettingsForm : Form
             return false;
         }
         return true;
+    }
+
+    private bool ValidateFilePatterns(IEnumerable<string> patterns)
+    {
+        var invalid = patterns.FirstOrDefault(p => !FilePattern.IsValid(p));
+        if (invalid == null)
+        {
+            return true;
+        }
+
+        MessageBox.Show(this,
+            string.Format(R.Is_not_a_valid_regular_expression, invalid), R.Error,
+            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        return false;
     }
 
     private void CancelBtn_Click(object sender, EventArgs e)

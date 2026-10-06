@@ -17,6 +17,7 @@ SHGetFileInfo
 SHGetStockIconInfo
 SHGFI_FLAGS
 UnregisterHotKey
+WM_CHAR
 WM_HOTKEY
 WM_MOUSE*
 WM_PAINT

@@ -8,6 +8,21 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+### Added
+
+- Include and Exclude file patterns accept regular expressions wrapped in slashes, such as `/^[a-z]{4,6}\d{6,}/`, matched case-insensitively against the file name. Settings refuses to save a pattern that isn't valid ([#108](https://github.com/brondavies/TrayToolbar/issues/108)).
+- Added a "TrayToolbar on GitHub" item to the tray icon's right-click menu that opens the GitHub releases page ([#84](https://github.com/brondavies/TrayToolbar/issues/84)).
+
+### Changed
+
+- Mouse-wheel scrolling in long menus follows the Windows "lines to scroll" setting, three items per notch by default instead of about one, and scrolls a page at a time when Windows is set to scroll one screen at a time. The wheel also keeps working over the menu's scroll arrows, and the arrows' enabled state now updates after wheel scrolling ([#109](https://github.com/brondavies/TrayToolbar/issues/109)).
+- Updated the build and CodeQL workflows to `actions/checkout` v5 ahead of the Node 20 runtime deprecation.
+
+### Fixed
+
+- Typing a letter to move between menu items that start with it now scrolls a long menu so the selected item is visible, as the arrow keys already did ([#110](https://github.com/brondavies/TrayToolbar/issues/110)).
+- TrayToolbar no longer adds a `TrayToolbar` shortcut to the Start menu's Programs folder on every launch. Toast notifications only need the registry registration, and the shortcut that earlier versions created is removed on startup ([#111](https://github.com/brondavies/TrayToolbar/issues/111)).
+
 ## [1.8.3] - 2026-09-02
 
 ### Added

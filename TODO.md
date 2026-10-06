@@ -2,7 +2,6 @@
 
 ## Open GitHub feature requests
 
-- [ ] Add a clickable link to the project's GitHub releases page from Settings or a new About dialog. (#84)
 - [ ] Expand drag-and-drop support:
 	- [ ] Allow dragging files and folders out of TrayToolbar menus into Explorer and other app windows. (#79, #8)
 	- [ ] Allow dropping files, folders, shortcuts, and URLs into TrayToolbar so toolbars can be updated more easily. (#60)

@@ -11,6 +11,7 @@ internal static class UpdateLogic
     const string DownloadBaseUrl = "https://github.com/brondavies/TrayToolbar/releases/download";
     const string ReleaseHost = "github.com";
     const string ReleasePathPrefix = "/brondavies/TrayToolbar/releases";
+    internal const string ReleasesPageUrl = "https://" + ReleaseHost + ReleasePathPrefix;
 
     static readonly HashSet<string> SupportedZipContentTypes = [
         "application/zip",
