@@ -12,7 +12,7 @@ Use labels to communicate both the *type* of work and the *next triage action*.
 | `documentation` | Docs-only work | README, contributor docs, release notes, security docs |
 | `tests` | Test-only or test-heavy work | Coverage expansion, deterministic seams, benchmark scaffolding |
 | `release` | Packaging, workflow, or versioning work | GitHub Actions, release assets, changelog, version tags |
-| `security` | Security-sensitive hardening or reporting follow-up | Trust-boundary changes, update integrity, launch policy |
+| `security` | Security-sensitive hardening or reporting follow-up | Trust-boundary changes, update integrity, launch behavior |
 
 ## Contributor-friendly labels
 

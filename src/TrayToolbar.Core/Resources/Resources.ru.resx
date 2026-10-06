@@ -118,141 +118,168 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Cancel" xml:space="preserve">
-    <value>Annulla</value>
+    <value>Отмена</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Errore</value>
+    <value>Ошибка</value>
   </data>
   <data name="Exclude files" xml:space="preserve">
-    <value>Escludi file</value>
+    <value>Исключить файлы</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Esci</value>
+    <value>Выход</value>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Cartelle</value>
+    <value>Папки</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Opzioni</value>
+    <value>Параметры</value>
+  </data>
+  <data name="Refresh" xml:space="preserve">
+    <value>Обновить</value>
   </data>
   <data name="Run on log in" xml:space="preserve">
-    <value>Esegui al login</value>
+    <value>Запускать при входе в систему</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Salva</value>
+    <value>Сохранить</value>
   </data>
   <data name="The folder does not exist" xml:space="preserve">
-    <value>La cartella non esiste.</value>
+    <value>Папка не существует.</value>
   </data>
   <data name="The folder value must be set" xml:space="preserve">
-    <value>Il valore della cartella deve essere impostato.</value>
+    <value>Значение папки должно быть установлено.</value>
   </data>
   <data name="TrayToolbar" xml:space="preserve">
     <value>TrayToolbar</value>
   </data>
   <data name="TrayToolbar Settings" xml:space="preserve">
-    <value>Impostazioni della barra degli strumenti</value>
-  </data>
-  <data name="Refresh" xml:space="preserve">
-    <value>Aggiorna</value>
+    <value>Настройки TrayToolbar</value>
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
-    <value>Una nuova versione è disponibile!</value>
+    <value>Доступна новая версия!</value>
   </data>
   <data name="Add Folder" xml:space="preserve">
-    <value>Aggiungi cartella</value>
+    <value>Добавить папку</value>
   </data>
   <data name="Browse Folder" xml:space="preserve">
-    <value>Sfoglia cartella</value>
+    <value>Обзор папки</value>
   </data>
   <data name="Include Subfolders" xml:space="preserve">
-    <value>Includi sottocartelle</value>
+    <value>Включить подпапки</value>
   </data>
   <data name="Open Folder" xml:space="preserve">
-    <value>Apri cartella</value>
+    <value>Открыть папку</value>
   </data>
   <data name="Remove Folder" xml:space="preserve">
-    <value>Rimuovi cartella</value>
+    <value>Удалить папку</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Scuro</value>
+    <value>Темная</value>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Chiaro</value>
+    <value>Светлая</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>Sistema</value>
+    <value>Система</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Tema</value>
+    <value>Тема</value>
   </data>
   <data name="Exclude folders" xml:space="preserve">
-    <value>Escludi cartelle</value>
+    <value>Исключить папки</value>
   </data>
   <data name="Menu Font Size" xml:space="preserve">
-    <value>Dimensione caratteri del menu</value>
+    <value>Размер шрифта меню</value>
   </data>
   <data name="Icon Size" xml:space="preserve">
-    <value>Icone</value>
+    <value>Размер значка</value>
   </data>
   <data name="Small" xml:space="preserve">
-    <value>Piccole</value>
+    <value>Маленький</value>
   </data>
   <data name="Large" xml:space="preserve">
-    <value>Grandi</value>
+    <value>Большой</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Chiaro</value>
+    <value>Прозрачный</value>
   </data>
   <data name="OK" xml:space="preserve">
-    <value>OK</value>
+    <value>ХОРОШО</value>
   </data>
   <data name="Press the keys to use as the shortcut key" xml:space="preserve">
-    <value>Premere i tasti da utilizzare come tasto di scelta rapida</value>
+    <value>Нажмите клавиши, которые будут использоваться в качестве сочетания клавиш</value>
   </data>
   <data name="Set" xml:space="preserve">
-    <value>Impostato</value>
+    <value>Набор</value>
   </data>
   <data name="Shortcut Key" xml:space="preserve">
-    <value>Tasto di scelta rapida</value>
+    <value>Сочетание клавиш</value>
   </data>
   <data name="Include files" xml:space="preserve">
-    <value>Inclusi file</value>
+    <value>включенные файлы</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Lingua</value>
+    <value>Язык</value>
   </data>
   <data name="Show links to folders as submenus" xml:space="preserve">
-    <value>Mostra i collegamenti alle cartelle come sottomenu</value>
+    <value>Показывать ссылки на папки в виде подменю</value>
   </data>
   <data name="Select icon" xml:space="preserve">
-    <value>Seleziona l'icona</value>
+    <value>Выберите значок</value>
   </data>
   <data name="You are using a prerelease version" xml:space="preserve">
-    <value>Stai utilizzando una versione preliminare</value>
+    <value>Вы используете предварительную версию</value>
   </data>
   <data name="Notify me when a new version is available" xml:space="preserve">
-    <value>Avvisami quando è disponibile una nuova versione</value>
+    <value>Сообщите мне, когда будет доступна новая версия</value>
   </data>
   <data name="TrayToolbar Location" xml:space="preserve">
-    <value>Percorso di TrayToolbar</value>
+    <value>Расположение TrayToolbar</value>
   </data>
   <data name="Are you sure you want to update to the latest version" xml:space="preserve">
-    <value>Sei sicuro di voler aggiornare all'ultima versione?</value>
+    <value>Вы уверены, что хотите обновить программу до последней версии?</value>
   </data>
   <data name="Update now" xml:space="preserve">
-    <value>Aggiorna ora</value>
+    <value>Обновить сейчас</value>
   </data>
   <data name="Update TrayToolbar" xml:space="preserve">
-    <value>Aggiorna TrayToolbar</value>
+    <value>Обновить панель инструментов в трее</value>
   </data>
   <data name="Updated to version" xml:space="preserve">
-    <value>Aggiornato alla versione {0}!</value>
+    <value>Обновлено до версии {0}!</value>
   </data>
   <data name="Is not a valid regular expression" xml:space="preserve">
-    <value>{0} non è un'espressione regolare valida.</value>
+    <value>{0} не является допустимым регулярным выражением.</value>
   </data>
   <data name="TrayToolbar on GitHub" xml:space="preserve">
-    <value>TrayToolbar su GitHub</value>
+    <value>TrayToolbar на GitHub</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>О программе</value>
+  </data>
+  <data name="Check for updates" xml:space="preserve">
+    <value>Проверить обновления</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Версия {0} ({1})</value>
+  </data>
+  <data name="Report an issue" xml:space="preserve">
+    <value>Сообщить о проблеме</value>
+  </data>
+  <data name="SignPath sponsor" xml:space="preserve">
+    <value>Бесплатная подпись кода для Windows предоставлена SignPath.io, сертификат — SignPath Foundation</value>
+  </data>
+  <data name="Last checked" xml:space="preserve">
+    <value>Последняя проверка: {0}</value>
+  </data>
+  <data name="You are up to date" xml:space="preserve">
+    <value>У вас последняя версия</value>
+  </data>
+  <data name="Checking for updates" xml:space="preserve">
+    <value>Проверка обновлений…</value>
+  </data>
+  <data name="Could not check for updates" xml:space="preserve">
+    <value>Не удалось проверить обновления.</value>
   </data>
 </root>

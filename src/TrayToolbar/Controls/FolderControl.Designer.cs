@@ -75,7 +75,7 @@ namespace TrayToolbar
             BrowseFolderButton.AccessibleName = "Browse";
             BrowseFolderButton.AccessibleRole = AccessibleRole.PushButton;
             BrowseFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            BrowseFolderButton.BackgroundImage = Resources.Resources.TrayIcon;
+            BrowseFolderButton.BackgroundImage = Resources.Images.TrayIcon;
             BrowseFolderButton.BackgroundImageLayout = ImageLayout.Zoom;
             BrowseFolderButton.Cursor = Cursors.Hand;
             BrowseFolderButton.Location = new Point(335, 3);
@@ -92,7 +92,7 @@ namespace TrayToolbar
             DeleteFolderButton.AccessibleName = "Remove";
             DeleteFolderButton.AccessibleRole = AccessibleRole.PushButton;
             DeleteFolderButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            DeleteFolderButton.BackgroundImage = Resources.Resources.delete;
+            DeleteFolderButton.BackgroundImage = Resources.Images.delete;
             DeleteFolderButton.BackgroundImageLayout = ImageLayout.Zoom;
             DeleteFolderButton.Cursor = Cursors.Hand;
             DeleteFolderButton.Location = new Point(367, 3);
@@ -118,7 +118,7 @@ namespace TrayToolbar
             // 
             ErrorIcon.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             ErrorIcon.BackColor = Color.Transparent;
-            ErrorIcon.BackgroundImage = Resources.Resources.warning;
+            ErrorIcon.BackgroundImage = Resources.Images.warning;
             ErrorIcon.BackgroundImageLayout = ImageLayout.Zoom;
             ErrorIcon.Location = new Point(313, 6);
             ErrorIcon.Margin = new Padding(0);

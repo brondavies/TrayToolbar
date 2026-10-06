@@ -1,8 +1,18 @@
 # Release notes
 
-- Canonical history: [`../CHANGELOG.md`](../CHANGELOG.md)
+- Canonical history: [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md)
 - GitHub release assets: <https://github.com/brondavies/TrayToolbar/releases>
-- Update and packaging trust boundary: [`update-security.md`](update-security.md)
+- Update and packaging trust boundary: [`update-security.md`](https://github.com/brondavies/TrayToolbar/blob/master/docs/update-security.md)
+
+## 1.9.0
+
+## Highlights
+
+- Runs on .NET 10. Support for .NET 8 ends on 10 November 2026, so TrayToolbar now needs the .NET Desktop Runtime 10 (see Requirements below). Everything else about the portable install is unchanged.
+- About dialog. The tray icon's right-click menu and the Settings window have a new **About** entry showing the version, architecture, runtime and copyright, with links to the GitHub releases page and the issue tracker, a **Check for updates** button and **Update now**. The "TrayToolbar on GitHub" menu item and the **Update now** link moved there; the "A new version is available!" notice stays on the Settings window and opens About.
+- Opt out of updates. A **Check for updates** checkbox in Settings turns update checks off completely. TrayToolbar 2.0 will require Windows 11 and will be a larger download; untick the box to stay on the 1.x line.
+- Ready for 2.0. The updater can install releases that ship as a folder rather than a single executable, verifies every library in the package, and cleans up its temporary files. Existing 1.8.x installs should update to 1.9.0 before 2.0 is released.
+- **Full changelog**: see [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md).
 
 ## 1.8.4
 
@@ -13,7 +23,7 @@
 - Letter keys reach off-screen items. Pressing a letter that several items start with now scrolls a long menu to the selected item, as the arrow keys already did.
 - Regular expressions in file filters. Wrap an entry in slashes, such as `/^[a-z]{4,6}\d{6,}/`, in **Include files** or **Exclude files** to match file names with a regular expression. Handy for hiding generated files whose names change daily.
 - Quick link to releases. The tray icon's right-click menu has a new **TrayToolbar on GitHub** item that opens the releases page.
-- **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
+- **Full changelog**: see [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md).
 
 ## 1.8.3
 
@@ -23,8 +33,8 @@
 - "Show links to folders as submenus" no longer hangs. A folder link pointing back into the folder being scanned recursed until the app froze; cyclic links now appear as regular menu items.
 - Loading feedback. A tray icon shows a spinner overlay while its menu is being built, and a click during loading opens the menu as soon as it is ready instead of being ignored.
 - Stuck submenus fixed. Right-clicking inside a submenu that opened toward the left could leave submenus orphaned on screen until restart; every suspended menu is now restored no matter which item receives the click.
-- Optional launch logging. Set `LaunchLogEnabled` in the configuration file to record which items are launched, by whom, and when — in `csv`, `tsv`, `jsonl`, `syslog`, or `cef` format with ISO-8601 timestamps, written off the launching thread. Off by default; see [`developer-guide.md`](developer-guide.md) for the settings.
-- **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
+- Optional launch logging. Set `LaunchLogEnabled` in the configuration file to record which items are launched, by whom, and when — in `csv`, `tsv`, `jsonl`, `syslog`, or `cef` format with ISO-8601 timestamps, written off the launching thread. Off by default; see [`developer-guide.md`](https://github.com/brondavies/TrayToolbar/blob/master/docs/developer-guide.md) for the settings.
+- **Full changelog**: see [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md).
 
 ## 1.8.2
 
@@ -33,7 +43,7 @@
 - Automatic updates work again. The Authenticode check added in 1.8.1 rejected every update, signed or not, because of a `WinVerifyTrust` interop mistake. Applying `[MarshalAs(UnmanagedType.LPStruct)]` to the already-by-ref `in Guid actionId` parameter passed a pointer to a pointer, so Windows never resolved the verification action and returned `TRUST_E_PROVIDER_UNKNOWN` (`0x800B0001`) for every file it was handed.
 - Clearer failure messages. A trust status meaning "the check could not be performed" now says so instead of reporting an unverifiable signature, and any status the app does not recognize now carries its `WinVerifyTrust` code in the message shown to you.
 - Regression coverage. The update signature verifier now has tests that exercise the real Windows trust call rather than a stand-in, so a broken interop declaration fails the build instead of shipping.
-- **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
+- **Full changelog**: see [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md).
 
 ## Upgrading from 1.8.1
 
@@ -55,8 +65,8 @@ Installs on 1.7.1 or earlier hit the same wall from the other side. 1.7.1 shippe
 
 ## Requirements
 
-- This application runs on .NET Desktop Runtime 8. Download and install the runtime here:
-  [Download .NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) | [Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.18-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
+- This application runs on .NET Desktop Runtime 10. Download and install the runtime here:
+  [Download .NET 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) | [Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.12-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.12-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
 
 ## Installation
 

@@ -21,11 +21,11 @@ For the canonical release history, see [CHANGELOG.md](CHANGELOG.md).
 For supplemental narrative release notes, packaging callouts, and rollout context, see [docs/release-notes.md](docs/release-notes.md).
 
 ## Requirements
-This application runs on .NET Desktop Runtime 8.  Download and install the runtime here:
+This application runs on .NET Desktop Runtime 10.  Download and install the runtime here:
 
-[Download .NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+[Download .NET 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
-[Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-8.0.18-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
+[Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.12-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.12-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
 
 ## Installation
 This application is "portable" so there is no setup package, just extract and go!
@@ -37,13 +37,11 @@ This application is "portable" so there is no setup package, just extract and go
 - Click **Save**
 - If you don't see the icon in your system tray, open **Settings** → **Personalization** → **Taskbar** → **Other system tray icons** and turn on TrayToolbar
 
-## Configuration and launch policy
+## Configuration
 
 TrayToolbar stores its current configuration in `%LOCALAPPDATA%\TrayToolbar\TrayToolbarConfig.json`.
 
-The default launch policy trusts items that originate from your configured folders and always allows TrayToolbar GitHub Releases URLs for update flows.
-
-For the full configuration schema, command-line reference, and launch-policy details, see [docs/developer-guide.md](docs/developer-guide.md).
+For the full configuration schema and command-line reference, see [docs/developer-guide.md](docs/developer-guide.md).
 
 ## Sponsors
 

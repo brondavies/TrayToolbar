@@ -1,4 +1,4 @@
-using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
@@ -7,8 +7,6 @@ using Microsoft.Win32;
 using TrayToolbar.Extensions;
 using TrayToolbar.Models;
 using TrayToolbar.Services;
-
-using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar;
 
@@ -30,9 +28,14 @@ internal class ConfigHelper
     internal static IUpdateSignatureVerifier UpdateSignatureVerifier { get; set; } = new AuthenticodeUpdateSignatureVerifier();
     internal static IFileSystemWatcherFactory FileSystemWatcherFactory { get; set; } = new SystemFileSystemWatcherFactory();
 
+    /// <summary>
+    /// Shows an error to the user; the UI layer replaces this with a message box
+    /// </summary>
+    internal static Action<string> ReportError { get; set; } = _ => { };
+
     internal static string ApplicationExe => Environment.ProcessPath!;
     internal static readonly string ApplicationRoot = new FileInfo(ApplicationExe!).DirectoryName!;
-    internal static readonly string ApplicationVersion = Application.ProductVersion.Split('+')[0];
+    internal static readonly string ApplicationVersion = GetApplicationVersion();
     internal static string LocalAppData { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
     internal static string ProfileFolder { get; set; } = Path.Combine(LocalAppData, "TrayToolbar");
     internal static string ConfigurationFile = Path.Combine(ProfileFolder, "TrayToolbarConfig.json");
@@ -88,7 +91,19 @@ internal class ConfigHelper
             configuration,
             ProfileFolder,
             ConfigurationFile,
-            message => MessageBox.Show(message, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Error));
+            ReportError);
+    }
+
+    // The core assembly carries the same version as the app, see TrayToolbar.Core.csproj
+    static string GetApplicationVersion()
+    {
+        var assembly = typeof(ConfigHelper).Assembly;
+        var informationalVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
+        if (informationalVersion.HasValue())
+        {
+            return informationalVersion.Split('+')[0];
+        }
+        return assembly.GetName().Version?.ToString(3) ?? "0.0.0";
     }
 
     internal static void MigrateConfiguration()

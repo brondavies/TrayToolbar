@@ -498,8 +498,8 @@ public class ShellContextMenu : NativeWindow
 
             var iidContextMenu2 = IID_IContextMenu2;
             var iidContextMenu3 = IID_IContextMenu3;
-            Marshal.QueryInterface(iContextMenuPtr, ref iidContextMenu2, out iContextMenuPtr2);
-            Marshal.QueryInterface(iContextMenuPtr, ref iidContextMenu3, out iContextMenuPtr3);
+            Marshal.QueryInterface(iContextMenuPtr, in iidContextMenu2, out iContextMenuPtr2);
+            Marshal.QueryInterface(iContextMenuPtr, in iidContextMenu3, out iContextMenuPtr3);
 
             _oContextMenu2 = (IContextMenu2)Marshal.GetTypedObjectForIUnknown(iContextMenuPtr2, typeof(IContextMenu2));
             _oContextMenu3 = (IContextMenu3)Marshal.GetTypedObjectForIUnknown(iContextMenuPtr3, typeof(IContextMenu3));

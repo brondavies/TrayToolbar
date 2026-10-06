@@ -87,7 +87,7 @@ body:
         - Folder scanning or filters
         - Hotkeys
         - Updates
-        - Launch policy / security boundary
+        - Security / trust boundary
         - Localization
         - Accessibility
         - Packaging / install experience
