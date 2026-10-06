@@ -473,5 +473,86 @@ namespace TrayToolbar.Resources {
                 return ResourceManager.GetString("You are using a prerelease version", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        internal static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check for updates.
+        /// </summary>
+        internal static string Check_for_updates {
+            get {
+                return ResourceManager.GetString("Check for updates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Checking for updates….
+        /// </summary>
+        internal static string Checking_for_updates {
+            get {
+                return ResourceManager.GetString("Checking for updates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not check for updates..
+        /// </summary>
+        internal static string Could_not_check_for_updates {
+            get {
+                return ResourceManager.GetString("Could not check for updates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last checked: {0}.
+        /// </summary>
+        internal static string Last_checked {
+            get {
+                return ResourceManager.GetString("Last checked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report an issue.
+        /// </summary>
+        internal static string Report_an_issue {
+            get {
+                return ResourceManager.GetString("Report an issue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Free code signing on Windows provided by SignPath.io, certificate by SignPath Foundation.
+        /// </summary>
+        internal static string SignPath_sponsor {
+            get {
+                return ResourceManager.GetString("SignPath sponsor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version {0} ({1}).
+        /// </summary>
+        internal static string Version {
+            get {
+                return ResourceManager.GetString("Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are up to date.
+        /// </summary>
+        internal static string You_are_up_to_date {
+            get {
+                return ResourceManager.GetString("You are up to date", resourceCulture);
+            }
+        }
     }
 }

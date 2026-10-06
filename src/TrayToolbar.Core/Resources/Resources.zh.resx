@@ -256,4 +256,31 @@
   <data name="TrayToolbar on GitHub" xml:space="preserve">
     <value>GitHub 上的托盘工具栏</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="Check for updates" xml:space="preserve">
+    <value>检查更新</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>版本 {0} ({1})</value>
+  </data>
+  <data name="Report an issue" xml:space="preserve">
+    <value>报告问题</value>
+  </data>
+  <data name="SignPath sponsor" xml:space="preserve">
+    <value>Windows 免费代码签名由 SignPath.io 提供，证书由 SignPath Foundation 提供</value>
+  </data>
+  <data name="Last checked" xml:space="preserve">
+    <value>上次检查: {0}</value>
+  </data>
+  <data name="You are up to date" xml:space="preserve">
+    <value>已是最新版本</value>
+  </data>
+  <data name="Checking for updates" xml:space="preserve">
+    <value>正在检查更新…</value>
+  </data>
+  <data name="Could not check for updates" xml:space="preserve">
+    <value>无法检查更新。</value>
+  </data>
 </root>

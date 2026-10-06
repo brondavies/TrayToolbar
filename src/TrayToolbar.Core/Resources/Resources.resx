@@ -256,4 +256,31 @@
   <data name="TrayToolbar on GitHub" xml:space="preserve">
     <value>TrayToolbar on GitHub</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="Check for updates" xml:space="preserve">
+    <value>Check for updates</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version {0} ({1})</value>
+  </data>
+  <data name="Report an issue" xml:space="preserve">
+    <value>Report an issue</value>
+  </data>
+  <data name="SignPath sponsor" xml:space="preserve">
+    <value>Free code signing on Windows provided by SignPath.io, certificate by SignPath Foundation</value>
+  </data>
+  <data name="Last checked" xml:space="preserve">
+    <value>Last checked: {0}</value>
+  </data>
+  <data name="You are up to date" xml:space="preserve">
+    <value>You are up to date</value>
+  </data>
+  <data name="Checking for updates" xml:space="preserve">
+    <value>Checking for updates…</value>
+  </data>
+  <data name="Could not check for updates" xml:space="preserve">
+    <value>Could not check for updates.</value>
+  </data>
 </root>

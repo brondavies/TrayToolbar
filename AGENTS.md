@@ -1,9 +1,10 @@
 # AGENTS.md
 
 ## Project
-- Windows Forms app targeting `net8.0-windows`
+- Windows Forms app targeting `net10.0-windows`
 - Solution: `src/TrayToolbar.sln`
-- Project: `src/TrayToolbar/TrayToolbar.csproj`
+- Project: `src/TrayToolbar/TrayToolbar.csproj` (UI only)
+- Core library: `src/TrayToolbar.Core/TrayToolbar.Core.csproj` (configuration, scanning, updates, launch logic, localized strings; no UI dependencies)
 - Tests: `src/TrayToolbar.Tests/TrayToolbar.Tests.csproj`
 
 ## Working rules

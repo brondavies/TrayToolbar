@@ -8,6 +8,22 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+### Added
+
+- Added an About dialog, opened from the tray icon's right-click menu and from the Settings window, with the version, architecture, runtime, copyright, links to the releases page and issue tracker, a *Check for updates* button and *Update now*. The "TrayToolbar on GitHub" menu item and the *Update now* link moved into it; the "A new version is available!" notice stays on the Settings window and opens About.
+- Added a *Check for updates* checkbox to Settings. Turning it off stops every update check, including the startup check, the periodic check and update notifications.
+
+### Changed
+
+- TrayToolbar now runs on .NET 10 and requires the .NET Desktop Runtime 10; .NET 8 leaves support on 2026-11-10.
+- Update packages may now ship as a folder (a root `TrayToolbar.exe` plus libraries and resource folders). Every entry path is validated, every other executable or library in the package must be signed by SignPath Foundation or Microsoft, and the staged updater copies the whole folder with the executable last. This prepares 1.x installs for the 2.0 release.
+- Shared logic (configuration, scanning, updates, launch logging and localized strings) moved into a new `TrayToolbar.Core` library. No user-visible change.
+
+### Fixed
+
+- Cancelling the Settings window no longer starts a second update-check timer.
+- Temporary update folders left behind by earlier updates are removed on the next start.
+
 ## [1.8.4] - 2026-10-06
 
 ### Added

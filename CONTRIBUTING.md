@@ -1,17 +1,17 @@
 # Contributing to TrayToolbar
 
 Thanks for helping improve TrayToolbar.
-This repository builds a Windows desktop app, so the most useful contributions are small, well-tested changes that stay aligned with the current .NET 8, Windows 11, and portable-release workflow.
+This repository builds a Windows desktop app, so the most useful contributions are small, well-tested changes that stay aligned with the current .NET 10, Windows 11, and portable-release workflow.
 
 ## Before you start
 
-TrayToolbar is a Windows Forms app targeting `net8.0-windows`.
+TrayToolbar is a Windows Forms app targeting `net10.0-windows`, with shared logic in the `TrayToolbar.Core` class library.
 Recommended contributor setup:
 
 - Windows 11
-- .NET 8 SDK
-- .NET Desktop Runtime 8
-- Visual Studio 2022 17.8+ or the `dotnet` CLI
+- .NET 10 SDK
+- .NET Desktop Runtime 10
+- Visual Studio 2022 17.12+, Visual Studio 2026, or the `dotnet` CLI
 
 Helpful references:
 
@@ -71,16 +71,16 @@ Releases are published from a branch run rather than a tag push. SignPath reject
 
 If a release is intended to be update-visible, publish it as a stable GitHub Release with the expected portable asset names.
 `UpdateLogic` validates those names and the GitHub Releases URL surface.
-If the signing certificate subject changes, or if thumbprint pinning is added or rotated, update `UpdateSignerPolicy.Default` in `src/TrayToolbar/Services/AuthenticodeUpdateSignatureVerifier.cs` before publishing the next release.
+If the signing certificate subject changes, or if thumbprint pinning is added or rotated, update `UpdateSignerPolicy.Default` in `src/TrayToolbar.Core/Services/AuthenticodeUpdateSignatureVerifier.cs` before publishing the next release.
 
 ## Reproducible-build note
 
 This repository currently aims for **functional parity** between local and CI builds rather than byte-for-byte artifact reproducibility.
-Use the .NET 8 SDK, Release configuration, and the documented commands above when comparing outputs.
+Use the .NET 10 SDK, Release configuration, and the documented commands above when comparing outputs.
 
 In practical terms:
 
-- use the same major SDK family as CI (`8.0.x`)
+- use the same major SDK family as CI (`10.0.x`)
 - prefer `build.ps1` for packaging parity checks
 - do not rename or reshape release assets without updating code, tests, and docs together
 

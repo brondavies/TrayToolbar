@@ -4,6 +4,16 @@
 - GitHub release assets: <https://github.com/brondavies/TrayToolbar/releases>
 - Update and packaging trust boundary: [`update-security.md`](https://github.com/brondavies/TrayToolbar/blob/master/docs/update-security.md)
 
+## 1.9.0
+
+## Highlights
+
+- Runs on .NET 10. Support for .NET 8 ends on 10 November 2026, so TrayToolbar now needs the .NET Desktop Runtime 10 (see Requirements below). Everything else about the portable install is unchanged.
+- About dialog. The tray icon's right-click menu and the Settings window have a new **About** entry showing the version, architecture, runtime and copyright, with links to the GitHub releases page and the issue tracker, a **Check for updates** button and **Update now**. The "TrayToolbar on GitHub" menu item and the **Update now** link moved there; the "A new version is available!" notice stays on the Settings window and opens About.
+- Opt out of updates. A **Check for updates** checkbox in Settings turns update checks off completely. TrayToolbar 2.0 will require Windows 11 and will be a larger download; untick the box to stay on the 1.x line.
+- Ready for 2.0. The updater can install releases that ship as a folder rather than a single executable, verifies every library in the package, and cleans up its temporary files. Existing 1.8.x installs should update to 1.9.0 before 2.0 is released.
+- **Full changelog**: see [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md).
+
 ## 1.8.4
 
 ## Highlights
@@ -55,8 +65,8 @@ Installs on 1.7.1 or earlier hit the same wall from the other side. 1.7.1 shippe
 
 ## Requirements
 
-- This application runs on .NET Desktop Runtime 8. Download and install the runtime here:
-  [Download .NET 8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0) | [Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
+- This application runs on .NET Desktop Runtime 10. Download and install the runtime here:
+  [Download .NET 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) | [Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.12-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.12-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
 
 ## Installation
 

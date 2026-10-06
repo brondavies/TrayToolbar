@@ -255,4 +255,31 @@
   <data name="TrayToolbar on GitHub" xml:space="preserve">
     <value>GitHub のトレイツールバー</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>バージョン情報</value>
+  </data>
+  <data name="Check for updates" xml:space="preserve">
+    <value>更新を確認</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>バージョン {0} ({1})</value>
+  </data>
+  <data name="Report an issue" xml:space="preserve">
+    <value>問題を報告</value>
+  </data>
+  <data name="SignPath sponsor" xml:space="preserve">
+    <value>Windows 向けの無料コード署名は SignPath.io が提供、証明書は SignPath Foundation が提供</value>
+  </data>
+  <data name="Last checked" xml:space="preserve">
+    <value>最終確認: {0}</value>
+  </data>
+  <data name="You are up to date" xml:space="preserve">
+    <value>最新の状態です</value>
+  </data>
+  <data name="Checking for updates" xml:space="preserve">
+    <value>更新を確認しています…</value>
+  </data>
+  <data name="Could not check for updates" xml:space="preserve">
+    <value>更新を確認できませんでした。</value>
+  </data>
 </root>

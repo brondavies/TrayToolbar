@@ -59,12 +59,14 @@
             FontSizeInput = new NumericUpDown();
             IconSizeSmallCheckbox = new RadioButton();
             LanguageSelectList = new TrayToolbar.Controls.CustomComboBox();
+            CheckForUpdatesCheckbox = new CheckBox();
             NotifyOnUpdateAvailableCheckbox = new CheckBox();
+            row12col1placeholder = new Label();
             RunOnLoginCheckbox = new CheckBox();
             RightClickMenu = new ContextMenuStrip(components);
             LeftClickMenu = new ContextMenuStrip(components);
             FolderDialog = new FolderBrowserDialog();
-            UpdateNowLabel = new LinkLabel();
+            AboutLabel = new LinkLabel();
             flowLayoutPanel1 = new FlowLayoutPanel();
             flowLayoutPanel1.SuspendLayout();
             tableLayout.SuspendLayout();
@@ -78,11 +80,11 @@
             flowLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             flowLayoutPanel1.Controls.Add(CancelBtn);
             flowLayoutPanel1.Controls.Add(SaveButton);
-            flowLayoutPanel1.Controls.Add(UpdateNowLabel);
+            flowLayoutPanel1.Controls.Add(AboutLabel);
             flowLayoutPanel1.Controls.Add(NewVersionLabel);
             flowLayoutPanel1.Dock = DockStyle.Bottom;
             flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
-            flowLayoutPanel1.Location = new Point(10, 526);
+            flowLayoutPanel1.Location = new Point(10, 576);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
             flowLayoutPanel1.Padding = new Padding(3);
             flowLayoutPanel1.Size = new Size(520, 39);
@@ -152,6 +154,7 @@
             tableLayout.Controls.Add(LanguageLabel, 0, 8);
             tableLayout.Controls.Add(UpdatesLabel, 0, 9);
             tableLayout.Controls.Add(row11col1placeholder, 0, 10);
+            tableLayout.Controls.Add(row12col1placeholder, 0, 11);
             tableLayout.Controls.Add(FoldersLayout, 1, 0);
             tableLayout.Controls.Add(AddFolderButton, 1, 1);
             tableLayout.Controls.Add(IncludeFilesTextBox, 1, 2);
@@ -161,13 +164,14 @@
             tableLayout.Controls.Add(ThemeToggleButton, 1, 6);
             tableLayout.Controls.Add(fontImageSizeTableLayout, 1, 7);
             tableLayout.Controls.Add(LanguageSelectList, 1, 8);
-            tableLayout.Controls.Add(NotifyOnUpdateAvailableCheckbox, 1, 9);
-            tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 10);
+            tableLayout.Controls.Add(CheckForUpdatesCheckbox, 1, 9);
+            tableLayout.Controls.Add(NotifyOnUpdateAvailableCheckbox, 1, 10);
+            tableLayout.Controls.Add(RunOnLoginCheckbox, 1, 11);
             tableLayout.Dock = DockStyle.Fill;
             tableLayout.Location = new Point(10, 10);
             tableLayout.Margin = new Padding(10);
             tableLayout.Name = "tableLayout";
-            tableLayout.RowCount = 11;
+            tableLayout.RowCount = 12;
             tableLayout.RowStyles.Add(new RowStyle());
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
@@ -179,7 +183,8 @@
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            tableLayout.Size = new Size(520, 516);
+            tableLayout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            tableLayout.Size = new Size(520, 566);
             tableLayout.TabIndex = 3;
             // 
             // FoldersLabel
@@ -464,21 +469,45 @@
             LanguageSelectList.Size = new Size(121, 23);
             LanguageSelectList.TabIndex = 19;
             LanguageSelectList.SelectedIndexChanged += LanguageSelectList_SelectedIndexChanged;
-            // 
+            //
+            // CheckForUpdatesCheckbox
+            //
+            CheckForUpdatesCheckbox.AutoSize = true;
+            CheckForUpdatesCheckbox.Checked = true;
+            CheckForUpdatesCheckbox.CheckState = CheckState.Checked;
+            CheckForUpdatesCheckbox.Location = new Point(116, 428);
+            CheckForUpdatesCheckbox.Name = "CheckForUpdatesCheckbox";
+            CheckForUpdatesCheckbox.Size = new Size(120, 19);
+            CheckForUpdatesCheckbox.TabIndex = 22;
+            CheckForUpdatesCheckbox.Text = "Check for updates";
+            CheckForUpdatesCheckbox.UseVisualStyleBackColor = true;
+            CheckForUpdatesCheckbox.CheckedChanged += CheckForUpdatesCheckbox_CheckedChanged;
+            //
             // NotifyOnUpdateAvailableCheckbox
-            // 
+            //
             NotifyOnUpdateAvailableCheckbox.AutoSize = true;
-            NotifyOnUpdateAvailableCheckbox.Location = new Point(116, 428);
+            NotifyOnUpdateAvailableCheckbox.Location = new Point(116, 478);
             NotifyOnUpdateAvailableCheckbox.Name = "NotifyOnUpdateAvailableCheckbox";
             NotifyOnUpdateAvailableCheckbox.Size = new Size(204, 19);
             NotifyOnUpdateAvailableCheckbox.TabIndex = 23;
             NotifyOnUpdateAvailableCheckbox.Text = "Notify when updates are available";
             NotifyOnUpdateAvailableCheckbox.UseVisualStyleBackColor = true;
-            // 
+            //
+            // row12col1placeholder
+            //
+            row12col1placeholder.AutoSize = true;
+            row12col1placeholder.Dock = DockStyle.Top;
+            row12col1placeholder.Location = new Point(3, 525);
+            row12col1placeholder.Name = "row12col1placeholder";
+            row12col1placeholder.Padding = new Padding(5);
+            row12col1placeholder.Size = new Size(107, 25);
+            row12col1placeholder.TabIndex = 25;
+            row12col1placeholder.TextAlign = ContentAlignment.MiddleRight;
+            //
             // RunOnLoginCheckbox
-            // 
+            //
             RunOnLoginCheckbox.AutoSize = true;
-            RunOnLoginCheckbox.Location = new Point(116, 478);
+            RunOnLoginCheckbox.Location = new Point(116, 528);
             RunOnLoginCheckbox.Name = "RunOnLoginCheckbox";
             RunOnLoginCheckbox.Size = new Size(97, 19);
             RunOnLoginCheckbox.TabIndex = 24;
@@ -495,25 +524,21 @@
             // 
             LeftClickMenu.Name = "leftClickMenu";
             LeftClickMenu.Size = new Size(61, 4);
-            // 
-            // UpdateNowLabel
-            // 
-            UpdateNowLabel.AutoSize = true;
-            UpdateNowLabel.Cursor = Cursors.Hand;
-            UpdateNowLabel.Dock = DockStyle.Left;
-            UpdateNowLabel.Image = (Image)resources.GetObject("UpdateNowLabel.Image");
-            UpdateNowLabel.ImageAlign = ContentAlignment.MiddleLeft;
-            UpdateNowLabel.Location = new Point(183, 3);
-            UpdateNowLabel.Margin = new Padding(3, 0, 24, 0);
-            UpdateNowLabel.Name = "UpdateNowLabel";
-            UpdateNowLabel.Padding = new Padding(24, 0, 0, 0);
-            UpdateNowLabel.Size = new Size(95, 33);
-            UpdateNowLabel.TabIndex = 31;
-            UpdateNowLabel.TabStop = true;
-            UpdateNowLabel.Text = "Update now";
-            UpdateNowLabel.TextAlign = ContentAlignment.MiddleLeft;
-            UpdateNowLabel.Visible = false;
-            UpdateNowLabel.LinkClicked += UpdateNowLabel_LinkClicked;
+            //
+            // AboutLabel
+            //
+            AboutLabel.AutoSize = true;
+            AboutLabel.Cursor = Cursors.Hand;
+            AboutLabel.Dock = DockStyle.Left;
+            AboutLabel.Location = new Point(183, 3);
+            AboutLabel.Margin = new Padding(3, 0, 24, 0);
+            AboutLabel.Name = "AboutLabel";
+            AboutLabel.Size = new Size(40, 33);
+            AboutLabel.TabIndex = 31;
+            AboutLabel.TabStop = true;
+            AboutLabel.Text = "About";
+            AboutLabel.TextAlign = ContentAlignment.MiddleLeft;
+            AboutLabel.LinkClicked += AboutLabel_LinkClicked;
             // 
             // SettingsForm
             // 
@@ -522,7 +547,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(540, 575);
+            ClientSize = new Size(540, 625);
             Controls.Add(tableLayout);
             Controls.Add(flowLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
@@ -581,7 +606,9 @@
         private Label row6col1placeholder;
         private CheckBox ShowFolderLinksAsSubMenusCheckbox;
         private Label UpdatesLabel;
+        private CheckBox CheckForUpdatesCheckbox;
         private CheckBox NotifyOnUpdateAvailableCheckbox;
-        private LinkLabel UpdateNowLabel;
+        private Label row12col1placeholder;
+        private LinkLabel AboutLabel;
     }
 }

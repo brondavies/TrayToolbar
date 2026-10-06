@@ -317,7 +317,8 @@ Rules:
   carries a Microsoft or SignPath Foundation signature, run
   `extract\TrayToolbar.exe --update "<installed exe>"`. The staged exe broadcasts exit,
   waits, copies the folder over the install directory (new files first, exe last, retries as
-  now), deletes files not in the new layout, cleans the temp folder, relaunches with
+  now), leaves files the new version does not ship alone (the install folder may hold the
+  user's own scripts), cleans stale temp folders on the next start, relaunches with
   `--show --newversion`.
 - `docs/update-security.md`, `UpdateHelperTests` and `UpdateLogicTests` updated for the
   folder contract and the entry-count limits (raise 32 → 512, 512 MiB cap kept).
@@ -500,5 +501,5 @@ settings stay JSON-only; Explorer sort order is the default.
 1. Install the VS 2026 "Windows application development" workload (WinUI C# component and
    Windows SDK 10.0.26100).
 2. Create milestone 2.1 and move #72 plus the archive/paste parts of #8 (comment on #8).
-3. Branch `release/1.x` plan noted; start Phase 0 on `bugfix/1.9.0-bridge` from `master`.
+3. Branch `release/1.x` plan noted; Phase 0 is on `feature/1.9.0-bridge` (started 2026-10-06).
 4. Open a tracking issue "2.0.0 WinUI 3 rewrite" linking this plan and the decision gates.

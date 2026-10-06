@@ -255,4 +255,31 @@
   <data name="TrayToolbar on GitHub" xml:space="preserve">
     <value>GitHub의 트레이툴바</value>
   </data>
+  <data name="About" xml:space="preserve">
+    <value>정보</value>
+  </data>
+  <data name="Check for updates" xml:space="preserve">
+    <value>업데이트 확인</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>버전 {0} ({1})</value>
+  </data>
+  <data name="Report an issue" xml:space="preserve">
+    <value>문제 신고</value>
+  </data>
+  <data name="SignPath sponsor" xml:space="preserve">
+    <value>Windows용 무료 코드 서명은 SignPath.io에서, 인증서는 SignPath Foundation에서 제공합니다</value>
+  </data>
+  <data name="Last checked" xml:space="preserve">
+    <value>마지막 확인: {0}</value>
+  </data>
+  <data name="You are up to date" xml:space="preserve">
+    <value>최신 버전입니다</value>
+  </data>
+  <data name="Checking for updates" xml:space="preserve">
+    <value>업데이트를 확인하는 중…</value>
+  </data>
+  <data name="Could not check for updates" xml:space="preserve">
+    <value>업데이트를 확인할 수 없습니다.</value>
+  </data>
 </root>

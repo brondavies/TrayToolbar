@@ -11,29 +11,34 @@ This guide is the contributor-facing companion to `README.md` and `AGENTS.md`.
 Important paths:
 
 - Solution: `src/TrayToolbar.sln`
-- App project: `src/TrayToolbar/TrayToolbar.csproj`
+- App project (Windows Forms UI): `src/TrayToolbar/TrayToolbar.csproj`
+- Core project (UI-free logic shared by the app, tests and benchmarks): `src/TrayToolbar.Core/TrayToolbar.Core.csproj`
 - Test project: `src/TrayToolbar.Tests/TrayToolbar.Tests.csproj`
 - Benchmark project: `src/TrayToolbar.Benchmarks/TrayToolbar.Benchmarks.csproj`
 - Main runtime/config code:
-  - `src/TrayToolbar/ConfigHelper.cs`
+  - `src/TrayToolbar.Core/ConfigHelper.cs`
   - `src/TrayToolbar/Program.cs`
   - `src/TrayToolbar/SettingsForm.cs`
-  - `src/TrayToolbar/Models/TrayToolbarConfiguration.cs`
-  - `src/TrayToolbar/Services/ConfigurationStore.cs`
-  - `src/TrayToolbar/Services/FolderScanner.cs`
-  - `src/TrayToolbar/Services/LaunchPolicyEvaluator.cs`
-  - `src/TrayToolbar/Services/ShortcutTargetResolver.cs`
-  - `src/TrayToolbar/UpdateHelper.cs`
-  - `src/TrayToolbar/UpdateLogic.cs`
+  - `src/TrayToolbar/AboutForm.cs`
+  - `src/TrayToolbar.Core/Launcher.cs`
+  - `src/TrayToolbar.Core/Models/TrayToolbarConfiguration.cs`
+  - `src/TrayToolbar.Core/Services/ConfigurationStore.cs`
+  - `src/TrayToolbar.Core/Services/FolderScanner.cs`
+  - `src/TrayToolbar.Core/Services/ShortcutTargetResolver.cs`
+  - `src/TrayToolbar.Core/UpdateChecker.cs`
+  - `src/TrayToolbar.Core/UpdateHelper.cs`
+  - `src/TrayToolbar.Core/UpdateLogic.cs`
 - Test seams and infrastructure:
-  - `src/TrayToolbar/Services/IProcessLauncher.cs`
-  - `src/TrayToolbar/Services/ITrayToolbarFileSystemWatcher.cs`
+  - `src/TrayToolbar.Core/Services/IProcessLauncher.cs`
+  - `src/TrayToolbar.Core/Services/ITrayToolbarFileSystemWatcher.cs`
   - `src/TrayToolbar.Tests/TestInfrastructure/`
-- Localization resources: `src/TrayToolbar/Resources/`
+- Localization resources: `src/TrayToolbar.Core/Resources/` (strings) and `src/TrayToolbar/Resources/Images.resx` (images)
+
+The core project carries the app's version: `TrayToolbar.Core.csproj` reads `<Version>` from `TrayToolbar.csproj` at build time, so the release tooling only ever edits the app project.
 
 ## Build, validation, and packaging
 
-TrayToolbar is a Windows Forms app targeting `net8.0-windows`.
+TrayToolbar is a Windows Forms app targeting `net10.0-windows`; the shared `TrayToolbar.Core` class library targets the same framework.
 That target is intentional: the app relies on Windows desktop APIs and native WinRT interop, but the project avoids a version-specific Windows TFM to keep the portable release output lean.
 
 ### Prerequisites
@@ -41,10 +46,10 @@ That target is intentional: the app relies on Windows desktop APIs and native Wi
 For contributors:
 
 - Windows 11
-- .NET 8 SDK to build and test
-- .NET Desktop Runtime 8 to run the published portable app
+- .NET 10 SDK to build and test
+- .NET Desktop Runtime 10 to run the published portable app
 
-If you are using Visual Studio, Visual Studio 2022 17.8+ is the minimum practical baseline for .NET 8 SDK support.
+If you are using Visual Studio, Visual Studio 2022 17.12+ or Visual Studio 2026 is the minimum practical baseline for .NET 10 SDK support.
 
 ### Command matrix
 
@@ -89,7 +94,7 @@ Workflow behavior:
 - the workflow uploads each portable zip with `archive: false`, so SignPath receives the real file name such as `TrayToolbar-win-arm64-portable-<version>.zip` or `TrayToolbar-win-x64-portable-<version>.zip`
 - the uploaded artifact is treated as a `<zip-file>` in SignPath
 - the root `TrayToolbar.exe` inside the zip is Authenticode-signed
-- runtime update installation also validates that staged `TrayToolbar.exe` with `WinVerifyTrust` and requires the signer identity to match `UpdateSignerPolicy.Default` in `src/TrayToolbar/Services/AuthenticodeUpdateSignatureVerifier.cs`
+- runtime update installation also validates that staged `TrayToolbar.exe` with `WinVerifyTrust` and requires the signer identity to match `UpdateSignerPolicy.Default` in `src/TrayToolbar.Core/Services/AuthenticodeUpdateSignatureVerifier.cs`
 - if the signing certificate subject changes, or if you add or rotate pinned thumbprints, update `UpdateSignerPolicy.Default` before the next release so the new signer is update-valid
 - the release-signing GitHub policy requires GitHub-hosted runners, rejects workflow reruns, and expects a GitHub branch ruleset that blocks force pushes and requires reviewed pull requests on the default branch
 - in the SignPath `release-signing` policy itself, enable **Verify origin** and set **Allowed branch names** to `master`
@@ -99,7 +104,7 @@ Unsigned PR workflow artifacts and local `build.ps1` outputs are useful for test
 ### Reproducible-build note
 
 The repo currently aims for **functional parity** between local and CI builds rather than byte-identical reproducibility.
-Use Windows, the .NET 8 SDK, Release configuration, and the commands above when comparing artifacts.
+Use Windows, the .NET 10 SDK, Release configuration, and the commands above when comparing artifacts.
 
 ## Runtime expectations
 
@@ -111,7 +116,7 @@ The app is portable rather than MSI-installed, so it expects to run from a folde
 That matters because:
 
 - unhandled startup/runtime exceptions are written next to the executable as `Error-*.txt`
-- the update flow launches a downloaded replacement executable and copies it over the existing app
+- the update flow launches a downloaded replacement executable, which copies the new release's files over the existing app folder
 
 A writable location such as `C:\tools\TrayToolbar` or `%LOCALAPPDATA%\TrayToolbar` is a good fit.
 
@@ -304,7 +309,7 @@ These older JSON properties are still read for compatibility but should not be w
 
 ## Localization and translations
 
-Localization files live in `src/TrayToolbar/Resources/`.
+Localization files live in `src/TrayToolbar.Core/Resources/`.
 
 Current resource set:
 
