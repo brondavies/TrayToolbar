@@ -8,6 +8,8 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+## [1.8.4] - 2026-10-06
+
 ### Added
 
 - Include and Exclude file patterns accept regular expressions wrapped in slashes, such as `/^[a-z]{4,6}\d{6,}/`, matched case-insensitively against the file name. Settings refuses to save a pattern that isn't valid ([#108](https://github.com/brondavies/TrayToolbar/issues/108)).
@@ -137,7 +139,8 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.8.3...HEAD
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.8.4...HEAD
+[1.8.4]: https://github.com/brondavies/TrayToolbar/compare/v1.8.3...v1.8.4
 [1.8.3]: https://github.com/brondavies/TrayToolbar/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/brondavies/TrayToolbar/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/brondavies/TrayToolbar/compare/v1.7.1...v1.8.1
