@@ -1,8 +1,8 @@
 # Release notes
 
-- Canonical history: [`../CHANGELOG.md`](../CHANGELOG.md)
+- Canonical history: [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md)
 - GitHub release assets: <https://github.com/brondavies/TrayToolbar/releases>
-- Update and packaging trust boundary: [`update-security.md`](update-security.md)
+- Update and packaging trust boundary: [`update-security.md`](https://github.com/brondavies/TrayToolbar/blob/master/docs/update-security.md)
 
 ## 1.8.4
 
@@ -13,7 +13,7 @@
 - Letter keys reach off-screen items. Pressing a letter that several items start with now scrolls a long menu to the selected item, as the arrow keys already did.
 - Regular expressions in file filters. Wrap an entry in slashes, such as `/^[a-z]{4,6}\d{6,}/`, in **Include files** or **Exclude files** to match file names with a regular expression. Handy for hiding generated files whose names change daily.
 - Quick link to releases. The tray icon's right-click menu has a new **TrayToolbar on GitHub** item that opens the releases page.
-- **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
+- **Full changelog**: see [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md).
 
 ## 1.8.3
 
@@ -23,8 +23,8 @@
 - "Show links to folders as submenus" no longer hangs. A folder link pointing back into the folder being scanned recursed until the app froze; cyclic links now appear as regular menu items.
 - Loading feedback. A tray icon shows a spinner overlay while its menu is being built, and a click during loading opens the menu as soon as it is ready instead of being ignored.
 - Stuck submenus fixed. Right-clicking inside a submenu that opened toward the left could leave submenus orphaned on screen until restart; every suspended menu is now restored no matter which item receives the click.
-- Optional launch logging. Set `LaunchLogEnabled` in the configuration file to record which items are launched, by whom, and when — in `csv`, `tsv`, `jsonl`, `syslog`, or `cef` format with ISO-8601 timestamps, written off the launching thread. Off by default; see [`developer-guide.md`](developer-guide.md) for the settings.
-- **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
+- Optional launch logging. Set `LaunchLogEnabled` in the configuration file to record which items are launched, by whom, and when — in `csv`, `tsv`, `jsonl`, `syslog`, or `cef` format with ISO-8601 timestamps, written off the launching thread. Off by default; see [`developer-guide.md`](https://github.com/brondavies/TrayToolbar/blob/master/docs/developer-guide.md) for the settings.
+- **Full changelog**: see [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md).
 
 ## 1.8.2
 
@@ -33,7 +33,7 @@
 - Automatic updates work again. The Authenticode check added in 1.8.1 rejected every update, signed or not, because of a `WinVerifyTrust` interop mistake. Applying `[MarshalAs(UnmanagedType.LPStruct)]` to the already-by-ref `in Guid actionId` parameter passed a pointer to a pointer, so Windows never resolved the verification action and returned `TRUST_E_PROVIDER_UNKNOWN` (`0x800B0001`) for every file it was handed.
 - Clearer failure messages. A trust status meaning "the check could not be performed" now says so instead of reporting an unverifiable signature, and any status the app does not recognize now carries its `WinVerifyTrust` code in the message shown to you.
 - Regression coverage. The update signature verifier now has tests that exercise the real Windows trust call rather than a stand-in, so a broken interop declaration fails the build instead of shipping.
-- **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
+- **Full changelog**: see [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md).
 
 ## Upgrading from 1.8.1
 
