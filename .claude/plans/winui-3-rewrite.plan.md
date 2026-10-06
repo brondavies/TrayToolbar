@@ -26,7 +26,7 @@ Decisions already made:
 | Scope | Everything in the milestone **except** #72 (toolbar inside the taskbar; no supported API on stock Windows 11) and the archive-browsing and clipboard parts of #8. Both move to a 2.1 milestone. |
 | Packaging | **Single exe if at all possible**, folder zip as the fallback. See §3.1: a framework-dependent single file is not supported by WinUI 3, so this decision needs a spike and a follow-up answer. |
 | 1.9.0 bridge | **Yes.** Ship 1.9.0 on the WinForms app first (Phase 0). |
-| LaunchPolicy | **Implement it in Core** (Phase 2) with `ConfiguredSources` as the default, so the existing docs become true. |
+| LaunchPolicy | **Dropped.** The `LaunchPolicy` the docs described was never implemented. 1.9.0 corrects the docs instead; 2.0 keeps today's launch rules (shell-execute what the configured folders contain). |
 | JSON-only settings | **Stay JSON-only** (`HideFileExtensions`, `ShowToolTips`, `UpdateCheckInterval`, launch logging). Exception: `CheckForUpdates` gets a checkbox in 1.9.0 and keeps it in 2.0. |
 | About dialog in 1.9.0 | **Yes.** Built in WinForms for 1.9.0 with the content in §4.7; 2.0 re-creates it in WinUI. |
 | Sort order | **Explorer order (`StrCmpLogicalW`) becomes the default**; called out in the release notes. |
@@ -55,7 +55,7 @@ Decisions already made:
 | #8 (parts) | Hover-only cascading, right-click everywhere, double-click folder opens it | 3–4 | Cut/copy/delete/rename already come from the shell context menu |
 | #8 (parts) | Browse archives; paste into the tree | **2.1** | Deferred |
 | #72 | Host the toolbar in the taskbar | **2.1** | Deferred; investigate only |
-| TODO "LaunchPolicy" | Documented but never implemented | 2 | Implement as documented; `ConfiguredSources` default |
+| TODO "LaunchPolicy" | Documented but never implemented | 0 | Dropped; docs and TODO corrected in 1.9.0 |
 
 ### 2.2 Out of scope
 
@@ -179,13 +179,8 @@ New in Core:
   `NIM_ADD` retry (#76), `WM_POWERBROADCAST` resume check via `Shell_NotifyIconGetRect`,
   `WM_HOTKEY` dispatch, `WM_SETTINGCHANGE` (theme + environment), the single-instance
   broadcast messages, owner window for `IContextMenu` and `DoDragDrop`.
-- **`Launch/`** — `Launcher` (today's `Program.Launch` rules), `LaunchPolicyEvaluator`
-  implementing the modes already documented in `docs/developer-guide.md`
-  (`ConfiguredSources` default, `NetworkBlocked`, `LocalOnly`): approved roots are the
-  configured entries, the app folder and the release URL allow-list; shell items and direct
-  items count as configured sources; `.url`/`.lnk` targets are resolved and checked.
-  `ShellExecuteEx` with PIDL for shell items. The `LaunchPolicy` JSON property is read with
-  `ConfiguredSources` as the default so 1.x behaviour is unchanged.
+- **`Launch/`** — `Launcher` (today's `Program.Launch` rules, unchanged: `.lnk` metadata
+  honored, everything else shell-executed) plus `ShellExecuteEx` with a PIDL for shell items.
 - **`Notifications/`** — `INotificationService` with `AppNotificationManager` implementation
   and the existing COM activator as fallback.
 - **`Updates/`** — updater v2: whole-zip extraction, folder staging, atomic swap on next
@@ -338,7 +333,7 @@ Rules:
   `docs/developer-guide.md`); obsolete `IgnoreFileTypes`, `Folder`, `MaxRecursionDepth`
   still migrate; legacy `TrayToolbar.json` next to the exe still moves.
 - New properties are additive: `SortFoldersFirst`, `IconRetryInterval`, `MenuBackdrop`,
-  `BlackBackgroundInDarkMode`, `LaunchPolicy`, `FolderConfig.Kind`, `FolderConfig.ItemOrder`.
+  `BlackBackgroundInDarkMode`, `FolderConfig.Kind`, `FolderConfig.ItemOrder`.
 - Command line: `--show`, `--newversion`, `--update <path>`; toast activation argument.
 - Registry: `HKCU\...\Run\TrayToolbar`, `RunNotification\StartupTNotiTrayToolbar`, the
   AUMID `Brontech.TrayToolbar` and its activator CLSID.
@@ -403,8 +398,6 @@ Effort is for one developer, rough.
 
 - `Shell/`, `Menu/`, `Icons/`, `Tray/`, `Launch/`, `Notifications/` as in §4.2–4.6.
 - `StrCmpLogicalW` sorting, `SortFoldersFirst`, `ItemOrderStore`, `IconFailureCache`.
-- `LaunchPolicyEvaluator` with tests for each mode against local, UNC, shortcut, `.url`,
-  shell-item and release-URL targets.
 - Real debounce, watcher-driven invalidation, shell change notifications.
 - Benchmarks: level load for 100/500/2,000 entries, icon cache hit/miss, sort.
 - Exit: unit tests for every rule in §4.3–4.6 (in-memory `IFileSystem`, fake shell source,
@@ -433,7 +426,7 @@ Effort is for one developer, rough.
 ### Phase 5 — Packaging, docs, release (≈1–2 weeks)
 
 - `build.ps1`, workflows, SignPath configuration, `docs/update-security.md`,
-  `docs/developer-guide.md` (new schema rows, project layout, LaunchPolicy now real),
+  `docs/developer-guide.md` (new schema rows, project layout),
   `README.md` (requirements: Windows 11, .NET 10 Desktop Runtime), `CONTRIBUTING.md`,
   `AGENTS.md`, `TODO.md` (drop shipped lines, keep 2.1 items), `CHANGELOG.md` 2.0.0,
   `docs/release-notes.md` with an "Upgrading from 1.x" section that calls out the
@@ -466,7 +459,7 @@ Effort is for one developer, rough.
 2. **Memory budget** — accept 60–120 MB idle for the WinUI process (today ≈ 30 MB), or
    require the §9 target of ≤ 100 MB as a release blocker.
 
-Decided on 2026-10-06 (see §1): 1.9.0 bridge yes; LaunchPolicy implemented; JSON-only
+Decided on 2026-10-06 (see §1): 1.9.0 bridge yes; LaunchPolicy dropped; JSON-only
 settings stay JSON-only; Explorer sort order is the default.
 
 ## 9. Acceptance targets

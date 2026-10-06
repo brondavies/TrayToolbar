@@ -18,6 +18,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 - TrayToolbar now runs on .NET 10 and requires the .NET Desktop Runtime 10; .NET 8 leaves support on 2026-11-10.
 - Update packages may now ship as a folder (a root `TrayToolbar.exe` plus libraries and resource folders). Every entry path is validated, every other executable or library in the package must be signed by SignPath Foundation or Microsoft, and the staged updater copies the whole folder with the executable last. This prepares 1.x installs for the 2.0 release.
 - Shared logic (configuration, scanning, updates, launch logging and localized strings) moved into a new `TrayToolbar.Core` library. No user-visible change.
+- Removed the documentation for a `LaunchPolicy` setting that was never implemented; items are shell-executed as they always were, and the developer guide now describes that.
 
 ### Fixed
 

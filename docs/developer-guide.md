@@ -152,26 +152,15 @@ Treat these switches as implementation contract, not polished product CLI surfac
 
 ### Startup and launch behavior
 
-`Program.Launch(...)` delegates launch decisions to `LaunchPolicyEvaluator`.
+`Program.Launch(...)` hands the clicked item to `Launcher` in `TrayToolbar.Core`, which starts it through the Windows shell (`UseShellExecute = true`). There is no allow-list: anything that appears in a menu came from a configured folder, and the only URLs TrayToolbar launches itself are the GitHub release and issue links behind the update and About surfaces.
 
-The evaluator builds an approved-root set from:
+`.lnk` files get extra handling so they behave as they would from Explorer:
 
-- the application root
-- configured folder paths from `TrayToolbarConfiguration.Folders`
+- the shortcut is read with `IShellLink` (`ShortcutTargetResolver`) for its target, arguments, working directory, window style and run-as-administrator flag
+- when the target is an executable (`.exe`, `.com`, `.bat`, `.cmd`) and exists, the target is started directly with those settings, so arguments, working directory and `runas` are honored
+- otherwise, or when the shortcut is advertised (MSI), its target is missing, or the start fails, the `.lnk` file itself is shell-executed and Windows resolves it
 
-Launch evaluation then allows or rejects targets based on both origin and target type.
-
-Direct raw values can launch only when they resolve to:
-
-- an existing directory under an approved root
-- an existing file under an approved root
-- a trusted TrayToolbar GitHub Releases URL
-
-Shortcut behavior is more nuanced:
-
-- `.url` files are resolved and the resolved target must satisfy the active `LaunchPolicy`
-- `.lnk` files are resolved when possible; in stricter policies, unresolved shortcuts are rejected
-- if a `.lnk` target is allowed, the shortcut file itself is launched so normal shell behavior is preserved
+Every other item type (`.url` files, documents, folders, executables) is shell-executed as-is.
 
 Run-on-login is configured in the current user's registry hive:
 
@@ -189,7 +178,6 @@ The configuration model is defined by:
 - `FolderConfig`
 
 Serialization uses `System.Text.Json` with indented output.
-`LaunchPolicy` is serialized as a string enum value.
 
 ### Top-level configuration
 
@@ -206,7 +194,6 @@ Serialization uses `System.Text.Json` with indented output.
 | `LargeIcons` | `bool` | `false` | Yes | `false` means small icons. |
 | `Language` | `string?` | `null` | Yes | Two-letter code such as `en` or `fr`. Null or empty behaves as “use system language.” |
 | `CheckForUpdates` | `bool` | `true` | Yes | Enables release checks against GitHub. |
-| `LaunchPolicy` | `LaunchPolicyMode` | `ConfiguredSources` | Yes | Advanced trust-boundary control for files, shortcuts, URLs, and network paths. Currently JSON-config only; not exposed in the settings UI. |
 | `ShowFolderLinksAsSubMenus` | `bool` | `false` | Yes | If enabled, `.lnk` files that resolve to directories are expanded as submenus instead of launched as shortcuts. |
 | `NotifyOnUpdateAvailable` | `bool` | `false` | Yes | Requires `CheckForUpdates = true`; also enables the periodic update timer. |
 | `UpdateCheckInterval` | `double` | `1440` | Yes | Minutes between background update checks. Default is 1 day. |
@@ -215,16 +202,6 @@ Serialization uses `System.Text.Json` with indented output.
 | `LaunchLogFile` | `string?` | `null` | Yes | Launch log path. Environment variables are expanded. Defaults to `launch.log` in the profile folder. |
 | `LaunchLogFormat` | `string?` | `null` | Yes | `csv` (default), `tsv`, `jsonl`, `syslog`, or `cef`. Timestamps are ISO-8601 in every format. |
 | `Folders` | `FolderConfig[]` | `[]` | Yes | Folder list displayed as tray icons and menus. In practice the first-run UI seeds one default folder before save. |
-
-### Launch policy modes
-
-| Mode | What it allows | What it blocks |
-| --- | --- | --- |
-| `ConfiguredSources` | Local files and folders under approved roots, plus `.url` or `.lnk` shortcuts whose resolved targets are acceptable; TrayToolbar GitHub Releases URLs are always allowed. | Direct arbitrary raw URLs and missing targets. |
-| `NetworkBlocked` | Local files and folders under approved roots, plus trusted TrayToolbar GitHub Releases URLs. | UNC paths, non-release remote URLs, and `.url` or `.lnk` targets that resolve to network or other remote locations. |
-| `LocalOnly` | Local files and folders whose resolved targets stay within approved roots, plus trusted TrayToolbar GitHub Releases URLs. | UNC paths, non-release remote URLs, and local shortcut targets that resolve outside approved roots. |
-
-Approved roots are the application root plus configured folder paths.
 
 ### Launch logging
 
@@ -286,7 +263,6 @@ These older JSON properties are still read for compatibility but should not be w
   "LargeIcons": false,
   "Language": "en",
   "CheckForUpdates": true,
-  "LaunchPolicy": "ConfiguredSources",
   "ShowFolderLinksAsSubMenus": true,
   "NotifyOnUpdateAvailable": true,
   "UpdateCheckInterval": 1440,
@@ -412,13 +388,15 @@ For the full update asset and execution contract, see [`update-security.md`](upd
 
 ### Why doesn’t clicking an item launch anything?
 
-Launches are filtered through `LaunchPolicyEvaluator`.
-Common reasons a click does nothing:
+Items are started through the Windows shell, so a click that does nothing usually means Windows refused the launch.
+Common reasons:
 
-- the file or folder no longer exists
-- the item is outside the configured roots
-- a shortcut resolves to a blocked target under `NetworkBlocked` or `LocalOnly`
-- the target is a raw arbitrary URL rather than a trusted release URL or a permitted shortcut target
+- the file or folder no longer exists, or a shortcut's target is gone
+- the shortcut points at a removable or network location that is not available right now
+- the file type has no associated program
+- an elevated (run as administrator) shortcut was cancelled at the UAC prompt
+
+Turning on launch logging (`LaunchLogEnabled`) records what was clicked and which target was handed to the shell, which is the quickest way to see what TrayToolbar tried to start.
 
 ### What should I check when startup or shortcut behavior fails?
 

@@ -123,7 +123,7 @@ Before opening a pull request:
 2. Run `dotnet format .\TrayToolbar.sln` from `src\`.
 3. Run `dotnet build .\TrayToolbar.sln` from `src\`.
 4. If your change affects packaging, update behavior, or release assets, run `./build.ps1` from the repository root.
-5. If your change affects launch policy, update UX, or release trust boundaries, review `docs/update-security.md`, `SECURITY.md`, and the related tests together.
+5. If your change affects how items are launched, update UX, or release trust boundaries, review `docs/update-security.md`, `SECURITY.md`, and the related tests together.
 
 If you changed translations or UI layout, do a quick manual pass through the affected settings or tray-menu surfaces on Windows.
 

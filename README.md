@@ -37,13 +37,11 @@ This application is "portable" so there is no setup package, just extract and go
 - Click **Save**
 - If you don't see the icon in your system tray, open **Settings** → **Personalization** → **Taskbar** → **Other system tray icons** and turn on TrayToolbar
 
-## Configuration and launch policy
+## Configuration
 
 TrayToolbar stores its current configuration in `%LOCALAPPDATA%\TrayToolbar\TrayToolbarConfig.json`.
 
-The default launch policy trusts items that originate from your configured folders and always allows TrayToolbar GitHub Releases URLs for update flows.
-
-For the full configuration schema, command-line reference, and launch-policy details, see [docs/developer-guide.md](docs/developer-guide.md).
+For the full configuration schema and command-line reference, see [docs/developer-guide.md](docs/developer-guide.md).
 
 ## Sponsors
 
