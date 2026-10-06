@@ -15,10 +15,13 @@ TrayToolbar treats these as separate areas:
 2. **Release asset trust**: determine whether the downloaded archive matches the expected release contract
 3. **Execution behavior**: describe how TrayToolbar initiates launches from menus, shortcuts, and notifications
 
-For automatic updates, release asset trust now has two fail-closed stages:
+For automatic updates, release asset trust has three fail-closed stages:
 
 - GitHub release metadata plus SHA-256 archive validation
 - Authenticode validation of the staged `TrayToolbar.exe` against the configured TrayToolbar signer policy
+- Authenticode validation of every other executable or library in the package against the library signer policy
+
+A 1.x release ships one `TrayToolbar.exe`; the package rules below also admit a folder layout (the exe plus runtime libraries and per-language resource folders) so a 1.9+ install can update to a 2.x release.
 
 ## Release metadata source
 
@@ -31,8 +34,8 @@ GitHub's `releases/latest` behavior excludes drafts and prereleases, which match
 
 Relevant implementation:
 
-- `src/TrayToolbar/Services/GitHubReleaseClient.cs`
-- `src/TrayToolbar/Models/Release.cs`
+- `src/TrayToolbar.Core/Services/GitHubReleaseClient.cs`
+- `src/TrayToolbar.Core/Models/Release.cs`
 
 TrayToolbar currently consumes these fields:
 
@@ -46,7 +49,7 @@ TrayToolbar currently consumes these fields:
 
 ## Update eligibility rules
 
-Update availability is determined by `src/TrayToolbar/UpdateLogic.cs`.
+Update availability is determined by `src/TrayToolbar.Core/UpdateLogic.cs`.
 
 Current rules:
 
@@ -85,8 +88,8 @@ TrayToolbar validates all of the following before it will use a downloaded asset
 
 Relevant implementation:
 
-- `src/TrayToolbar/UpdateLogic.cs`
-- `src/TrayToolbar/Models/UpdatePackage.cs`
+- `src/TrayToolbar.Core/UpdateLogic.cs`
+- `src/TrayToolbar.Core/Models/UpdatePackage.cs`
 
 ## Download, extraction, and execution flow
 
@@ -99,30 +102,33 @@ Current behavior:
 1. download the expected zip asset into the isolated directory
 2. compute the SHA-256 hash of the downloaded zip
 3. compare it to the GitHub-provided asset digest
-4. open the archive and validate basic archive bounds
-5. extract only the expected root updater executable:
-   - `TrayToolbar.exe`
+4. open the archive and validate every entry (see the archive handling notes)
+5. extract the whole archive into `extract\`
 6. run Windows Authenticode validation (`WinVerifyTrust`) on the staged `TrayToolbar.exe` with trust UI disabled
 7. require the signer identity to match TrayToolbar's configured publisher allow-list
-8. start that extracted executable with:
+8. run the same validation on every other `.exe` and `.dll` in the package against the library allow-list
+9. start the extracted root executable with:
    - `--update <path to installed TrayToolbar.exe>`
 
 TrayToolbar intentionally does **not** trust arbitrary extracted file names for execution.
-It only executes the expected updater executable after digest verification and Authenticode verification both succeed.
+It only executes the root `TrayToolbar.exe` after digest verification and Authenticode verification both succeed, and it refuses the whole package if any executable or library in it fails verification.
 
 Relevant implementation:
 
-- `src/TrayToolbar/UpdateHelper.cs`
+- `src/TrayToolbar.Core/UpdateHelper.cs`
 
 ### Archive handling notes
 
-TrayToolbar currently applies these lightweight safety checks before extraction:
+TrayToolbar applies these safety checks before extraction:
 
-- maximum entry count threshold
-- maximum total uncompressed size threshold
-- exactly one executable entry named `TrayToolbar.exe` at the archive root
+- at most 512 entries
+- at most 512 MiB uncompressed in total
+- every entry path is relative, contains no `.` or `..` segments and no drive or stream separator (`:`)
+- exactly one entry named `TrayToolbar.exe`, and it is at the archive root
+- non-executable files (`.json`, resources, and so on) are covered by the archive digest only
 
 Failure paths attempt to delete the staged temp directory when practical.
+Staged update directories that are more than a day old are deleted on the next normal start, because a staged updater cannot delete the folder it runs from.
 
 ### Authenticode validation policy
 
@@ -132,7 +138,7 @@ Current runtime requirements:
 
 - `WinVerifyTrust` must succeed for the staged `TrayToolbar.exe`
 - trust UI is disabled so update verification stays non-interactive
-- the signer certificate identity must match `UpdateSignerPolicy.Default` in `src/TrayToolbar/Services/AuthenticodeUpdateSignatureVerifier.cs`
+- the signer certificate identity must match `UpdateSignerPolicy.Default` in `src/TrayToolbar.Core/Services/AuthenticodeUpdateSignatureVerifier.cs`
 - thumbprint pinning is supported by that policy object but is currently left empty so the initial runtime policy is publisher-based
 
 Current allow-list shape:
@@ -140,6 +146,13 @@ Current allow-list shape:
 - accepted publisher name: `SignPath Foundation`
 - accepted subject distinguished names: none pinned yet
 - accepted signer thumbprints: none pinned yet
+
+Every other `.exe` or `.dll` in the package must pass the same `WinVerifyTrust` check against `UpdateSignerPolicy.Libraries`:
+
+- accepted publisher names: `SignPath Foundation` and `Microsoft Corporation`
+
+That admits TrayToolbar's own SignPath-signed assemblies and the Microsoft-signed runtime libraries a folder-shaped release ships, and rejects anything else.
+A release that ships additional assemblies must have them signed by SignPath, or the update is refused.
 
 If the signing certificate changes in a way that affects the signer subject or if thumbprint pinning is introduced, update `UpdateSignerPolicy.Default` before publishing the next release.
 
@@ -156,14 +169,15 @@ When the staged updater starts with `--update`, it:
 - validates the target executable path shape
 - re-runs Authenticode validation on the running staged updater executable before installation
 - broadcasts the settings-form exit message
-- retries copying the staged updater executable over the target executable
+- retries copying every file in the staged folder into the install folder, libraries and resources first and the executable last, so a failed copy leaves the old version runnable
+- leaves files the new version does not ship untouched, because the install folder may hold the user's own scripts or logs
 - restarts the target executable with:
   - `--show --newversion`
 
 Relevant implementation:
 
 - `src/TrayToolbar/Program.cs`
-- `src/TrayToolbar/UpdateHelper.cs`
+- `src/TrayToolbar.Core/UpdateHelper.cs`
 
 ## Launches initiated by TrayToolbar
 
@@ -207,10 +221,10 @@ If release packaging or execution behavior changes, contributors must update **a
 
 - `build.ps1` release artifact output
 - `.github/workflows/dotnet-desktop.yml`
-- `src/TrayToolbar/UpdateLogic.cs`
-- `src/TrayToolbar/UpdateHelper.cs`
+- `src/TrayToolbar.Core/UpdateLogic.cs`
+- `src/TrayToolbar.Core/UpdateHelper.cs`
 - `src/TrayToolbar/Program.cs`
-- any affected files in `src/TrayToolbar/Services/`, especially `AuthenticodeUpdateSignatureVerifier.cs`
+- any affected files in `src/TrayToolbar.Core/Services/`, especially `AuthenticodeUpdateSignatureVerifier.cs`
 - update-related and execution-related tests in `src/TrayToolbar.Tests/`
 - `CHANGELOG.md`
 - this document
@@ -221,6 +235,7 @@ At minimum, re-check:
 - asset names
 - architecture mapping
 - whether the archive still contains a root `TrayToolbar.exe`
+- whether every other `.exe` or `.dll` in the archive is signed by a publisher in `UpdateSignerPolicy.Libraries`
 - whether GitHub still provides the required digest field for the published asset
 - whether the signer identity in `UpdateSignerPolicy.Default` still matches the certificate used by SignPath
 - whether any pinned thumbprints in `UpdateSignerPolicy.Default` need rotation before the next release
@@ -238,6 +253,8 @@ What is enforced now:
 - asset naming and URL contract validation
 - SHA-256 verification against GitHub asset metadata
 - Authenticode validation of the staged updater executable before launch and before copy-over-install
+- Authenticode validation of every other executable and library in the package
+- entry path validation that rejects paths escaping the staging directory
 - isolated temp staging
 
 What is not enforced yet:

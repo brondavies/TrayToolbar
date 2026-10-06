@@ -28,6 +28,7 @@ internal static class Program
             InstanceMessages.NotifyExistingInstance();
             return;
         }
+        UpdateHelper.CleanupStaleUpdateDirectories();
 
         if (ConfigHelper.SupportsToastNotifications)
         {
