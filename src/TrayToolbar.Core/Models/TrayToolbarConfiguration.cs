@@ -169,23 +169,4 @@ public class FolderConfig
             Recursive = Recursive
         };
     }
-
-    internal Bitmap? GetIcon(bool small = false)
-    {
-        if (Icon.HasValue() && File.Exists(Icon.ToLocalPath()))
-        {
-            try
-            {
-                return System.Drawing.Icon.ExtractIcon(Icon.ToLocalPath(), IconIndex, small)?.ToBitmap()
-                    ?? GetDefaultIcon(small);
-            }
-            catch { }
-        }
-        return GetDefaultIcon(small);
-    }
-
-    private Bitmap? GetDefaultIcon(bool small)
-    {
-        return Name?.ToLocalPath().GetImage(!small);
-    }
 }

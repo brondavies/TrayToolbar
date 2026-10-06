@@ -1,12 +1,9 @@
-using System.Diagnostics;
 using System.Security.Principal;
 
 using TrayToolbar.Extensions;
-using TrayToolbar.Models;
 using TrayToolbar.Services;
 
-using Windows.Win32;
-using Windows.Win32.Foundation;
+using R = TrayToolbar.Resources.Resources;
 
 namespace TrayToolbar;
 
@@ -16,6 +13,7 @@ internal static class Program
     static void Main()
     {
         ApplicationConfiguration.Initialize();
+        ConfigHelper.ReportError = message => MessageBox.Show(message, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         // Handle automatic update
         if (UpdateHelper.ProcessUpdate())
@@ -27,7 +25,7 @@ internal static class Program
         if (!EnsureSingleInstance())
         {
             // Notify existing instance to show the SettingsForm
-            NotifyExistingInstance();
+            InstanceMessages.NotifyExistingInstance();
             return;
         }
 
@@ -62,35 +60,11 @@ internal static class Program
 
     internal static bool Launch(string fileName)
     {
-        if (ShortcutTargetResolver.TryCreateShortcutStartInfo(fileName, out var shortcutStartInfo)
-            && TryLaunch(shortcutStartInfo))
-        {
-            return true;
-        }
-
-        return TryLaunch(new ProcessStartInfo(fileName)
-        {
-            UseShellExecute = true,
-        });
-    }
-
-    static bool TryLaunch(ProcessStartInfo startInfo)
-    {
-        try
-        {
-            ConfigHelper.ProcessLauncher.Start(startInfo);
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
+        return Launcher.Launch(fileName);
     }
 
     #region Single Instance
 
-    internal static readonly uint WM_EXITSETTINGSFORM = PInvoke.RegisterWindowMessage("TrayToolbar.ExitSettingsForm.241ba8ec-76fa-4b62-91ff-2f5d060f5db7");
-    internal static readonly uint WM_SHOWSETTINGSFORM = PInvoke.RegisterWindowMessage("TrayToolbar.ShowSettingsForm.729a0e10-3131-4e69-ba45-23660c5a91bf");
     private static Mutex? _mutex;
 
     internal static bool EnsureSingleInstance()
@@ -104,11 +78,6 @@ internal static class Program
             try { _mutex.Dispose(); } catch { }
         }
         return created;
-    }
-
-    internal static void NotifyExistingInstance()
-    {
-        PInvoke.PostMessage(HWND.HWND_BROADCAST, WM_SHOWSETTINGSFORM, 0, 0);
     }
 
     #endregion

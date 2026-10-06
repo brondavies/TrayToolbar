@@ -6,11 +6,6 @@ using TrayToolbar.Extensions;
 using TrayToolbar.Models;
 using TrayToolbar.Services;
 
-using Windows.Win32;
-using Windows.Win32.Foundation;
-
-using R = TrayToolbar.Resources.Resources;
-
 namespace TrayToolbar;
 
 internal class UpdateHelper
@@ -60,7 +55,7 @@ internal class UpdateHelper
         {
             Debug.WriteLine($"TrayToolbar update failed: {ex}");
             CleanupDirectory(operationDirectory);
-            MessageBox.Show(ex.Message, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            ConfigHelper.ReportError(ex.Message);
         }
     }
 
@@ -76,14 +71,14 @@ internal class UpdateHelper
                     targetExe,
                     () =>
                     {
-                        PInvoke.PostMessage(HWND.HWND_BROADCAST, Program.WM_EXITSETTINGSFORM, 0, 0);
+                        InstanceMessages.RequestExit();
                         Thread.Sleep(2000); //wait for existing process to exit
                     });
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"TrayToolbar staged update failed: {ex}");
-                MessageBox.Show(ex.Message, R.Error, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ConfigHelper.ReportError(ex.Message);
             }
             return true;
         }

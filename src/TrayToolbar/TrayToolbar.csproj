@@ -40,17 +40,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\Resources.Designer.cs">
+    <ProjectReference Include="..\TrayToolbar.Core\TrayToolbar.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Images.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
+      <DependentUpon>Images.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\Resources.resx">
+    <EmbeddedResource Update="Resources\Images.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <LastGenOutput>Images.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

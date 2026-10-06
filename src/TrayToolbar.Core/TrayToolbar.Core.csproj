@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>TrayToolbar</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <GenerateSatelliteAssembliesForCore>true</GenerateSatelliteAssembliesForCore>
+    <Platforms>AnyCPU;x64;ARM64</Platforms>
+    <Title>TrayToolbar.Core</Title>
+    <Copyright>© Brontech, LLC</Copyright>
+    <!-- TrayToolbar.csproj is the version source of truth; the release tooling only updates that file -->
+    <Version>$([System.Text.RegularExpressions.Regex]::Replace($([System.IO.File]::ReadAllText('$(MSBuildThisFileDirectory)..\TrayToolbar\TrayToolbar.csproj')), '(?s).*&lt;Version&gt;([^&lt;]+)&lt;/Version&gt;.*', '$1'))</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

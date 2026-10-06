@@ -16,5 +16,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TrayToolbar\TrayToolbar.csproj" />
+    <ProjectReference Include="..\TrayToolbar.Core\TrayToolbar.Core.csproj" />
   </ItemGroup>
 </Project>

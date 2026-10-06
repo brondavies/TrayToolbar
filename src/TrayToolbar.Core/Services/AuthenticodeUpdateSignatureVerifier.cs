@@ -267,7 +267,11 @@ internal sealed class AuthenticodeUpdateSignatureVerifier(UpdateSignerPolicy? po
 
     static X509Certificate2 LoadSignerCertificate(string filePath)
     {
+        // .NET 9+ marks CreateFromSignedFile obsolete without offering a managed replacement
+        // for reading the Authenticode signer out of a PE file
+#pragma warning disable SYSLIB0057
         using var signerCertificate = X509Certificate.CreateFromSignedFile(filePath);
+#pragma warning restore SYSLIB0057
         return new X509Certificate2(signerCertificate);
     }
 

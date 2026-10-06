@@ -70,31 +70,11 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap add {
-            get {
-                object obj = ResourceManager.GetObject("add", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add Folder.
         /// </summary>
         internal static string Add_Folder {
             get {
                 return ResourceManager.GetString("Add Folder", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap add_small {
-            get {
-                object obj = ResourceManager.GetObject("add-small", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -140,16 +120,6 @@ namespace TrayToolbar.Resources {
         internal static string Dark {
             get {
                 return ResourceManager.GetString("Dark", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap delete {
-            get {
-                object obj = ResourceManager.GetObject("delete", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -433,16 +403,6 @@ namespace TrayToolbar.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap TrayIcon {
-            get {
-                object obj = ResourceManager.GetObject("TrayIcon", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to TrayToolbar.
         /// </summary>
         internal static string TrayToolbar {
@@ -502,16 +462,6 @@ namespace TrayToolbar.Resources {
         internal static string Updated_to_version {
             get {
                 return ResourceManager.GetString("Updated to version", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap warning {
-            get {
-                object obj = ResourceManager.GetObject("warning", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         

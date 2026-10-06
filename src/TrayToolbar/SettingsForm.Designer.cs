@@ -324,7 +324,7 @@
             // AddFolderButton
             // 
             AddFolderButton.AutoSize = true;
-            AddFolderButton.Image = Resources.Resources.add_small;
+            AddFolderButton.Image = Resources.Images.add_small;
             AddFolderButton.ImageAlign = ContentAlignment.MiddleLeft;
             AddFolderButton.Location = new Point(116, 28);
             AddFolderButton.Name = "AddFolderButton";

@@ -127,9 +127,6 @@
     <value>Exit</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="add" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>add.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>
@@ -160,9 +157,6 @@
   <data name="Browse Folder" xml:space="preserve">
     <value>Browse Folder</value>
   </data>
-  <data name="warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="The folder does not exist" xml:space="preserve">
     <value>The folder does not exist.</value>
   </data>
@@ -190,9 +184,6 @@
   <data name="Theme" xml:space="preserve">
     <value>Theme</value>
   </data>
-  <data name="delete" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>delete.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Menu Font Size" xml:space="preserve">
     <value>Menu font size</value>
   </data>
@@ -210,12 +201,6 @@
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Folders</value>
-  </data>
-  <data name="TrayIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>TrayIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="add-small" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>add-small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Clear</value>
