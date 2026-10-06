@@ -4,6 +4,17 @@
 - GitHub release assets: <https://github.com/brondavies/TrayToolbar/releases>
 - Update and packaging trust boundary: [`update-security.md`](update-security.md)
 
+## 1.8.4
+
+## Highlights
+
+- No more Start menu shortcut. Since 1.7.0 TrayToolbar recreated a `TrayToolbar` shortcut in the Start menu's Programs folder on every launch, so it kept coming back in All apps after being deleted. Notifications only need the registry registration, so the shortcut is gone and the one earlier versions created is removed on first launch.
+- Faster wheel scrolling. Long menus now scroll by the Windows "lines to scroll" setting, three items per notch by default instead of about one, or a page at a time when Windows is set to scroll one screen at a time. The wheel also works over the menu's scroll arrows.
+- Letter keys reach off-screen items. Pressing a letter that several items start with now scrolls a long menu to the selected item, as the arrow keys already did.
+- Regular expressions in file filters. Wrap an entry in slashes, such as `/^[a-z]{4,6}\d{6,}/`, in **Include files** or **Exclude files** to match file names with a regular expression. Handy for hiding generated files whose names change daily.
+- Quick link to releases. The tray icon's right-click menu has a new **TrayToolbar on GitHub** item that opens the releases page.
+- **Full changelog**: see [`../CHANGELOG.md`](../CHANGELOG.md).
+
 ## 1.8.3
 
 ## Highlights
