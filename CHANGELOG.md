@@ -8,6 +8,8 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-11-11
+
 ### Added
 
 - Added an About dialog, opened from the tray icon's right-click menu and from the Settings window, with the version, architecture, runtime, copyright, links to the releases page and issue tracker, a *Check for updates* button and *Update now*. The "TrayToolbar on GitHub" menu item and the *Update now* link moved into it; the "A new version is available!" notice stays on the Settings window and opens About.
@@ -157,7 +159,8 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - None.
 
-[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.8.4...HEAD
+[Unreleased]: https://github.com/brondavies/TrayToolbar/compare/v1.9.0...HEAD
+[1.9.0]: https://github.com/brondavies/TrayToolbar/compare/v1.8.4...v1.9.0
 [1.8.4]: https://github.com/brondavies/TrayToolbar/compare/v1.8.3...v1.8.4
 [1.8.3]: https://github.com/brondavies/TrayToolbar/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/brondavies/TrayToolbar/compare/v1.8.1...v1.8.2
