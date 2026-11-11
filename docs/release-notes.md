@@ -6,6 +6,8 @@
 
 ## 1.9.0
 
+**Updating from 1.8.x?** Install the .NET Desktop Runtime 10 first: `winget install Microsoft.DotNet.DesktopRuntime.10`. If a .NET prompt appears when you click **Update now**, install the runtime and click **Update now** again; 1.8.x keeps running until the update completes.
+
 ## Highlights
 
 - Runs on .NET 10. Support for .NET 8 ends on 10 November 2026, so TrayToolbar now needs the .NET Desktop Runtime 10 (see Requirements below). Everything else about the portable install is unchanged.
