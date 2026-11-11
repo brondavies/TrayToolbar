@@ -118,141 +118,168 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Cancel" xml:space="preserve">
-    <value>Отмена</value>
+    <value>취소</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Ошибка</value>
+    <value>오류</value>
   </data>
   <data name="Exclude files" xml:space="preserve">
-    <value>Исключить файлы</value>
+    <value>파일 제외</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Выход</value>
+    <value>출구</value>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Папки</value>
+    <value>폴더</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Параметры</value>
+    <value>옵션</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Обновить</value>
+    <value>새로 고치다</value>
   </data>
   <data name="Run on log in" xml:space="preserve">
-    <value>Запускать при входе в систему</value>
+    <value>로그인 시 실행</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Сохранить</value>
+    <value>구하다</value>
   </data>
   <data name="The folder does not exist" xml:space="preserve">
-    <value>Папка не существует.</value>
+    <value>폴더가 존재하지 않습니다.</value>
   </data>
   <data name="The folder value must be set" xml:space="preserve">
-    <value>Значение папки должно быть установлено.</value>
+    <value>폴더 값을 설정해야 합니다.</value>
   </data>
   <data name="TrayToolbar" xml:space="preserve">
-    <value>TrayToolbar</value>
+    <value>트레이툴바</value>
   </data>
   <data name="TrayToolbar Settings" xml:space="preserve">
-    <value>Настройки TrayToolbar</value>
+    <value>트레이툴바 설정</value>
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
-    <value>Доступна новая версия!</value>
+    <value>새 버전을 사용할 수 있습니다!</value>
   </data>
   <data name="Add Folder" xml:space="preserve">
-    <value>Добавить папку</value>
+    <value>폴더 추가</value>
   </data>
   <data name="Browse Folder" xml:space="preserve">
-    <value>Обзор папки</value>
+    <value>폴더 찾아보기</value>
   </data>
   <data name="Include Subfolders" xml:space="preserve">
-    <value>Включить подпапки</value>
+    <value>하위 폴더 포함</value>
   </data>
   <data name="Open Folder" xml:space="preserve">
-    <value>Открыть папку</value>
+    <value>폴더 열기</value>
   </data>
   <data name="Remove Folder" xml:space="preserve">
-    <value>Удалить папку</value>
+    <value>폴더 제거</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Темная</value>
+    <value>어두운</value>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Светлая</value>
+    <value>빛</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>Система</value>
+    <value>체계</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Тема</value>
+    <value>주제</value>
   </data>
   <data name="Exclude folders" xml:space="preserve">
-    <value>Исключить папки</value>
+    <value>폴더 제외</value>
   </data>
   <data name="Menu Font Size" xml:space="preserve">
-    <value>Размер шрифта меню</value>
+    <value>메뉴 글꼴 크기</value>
   </data>
   <data name="Icon Size" xml:space="preserve">
-    <value>Размер значка</value>
+    <value>아이콘 크기</value>
   </data>
   <data name="Small" xml:space="preserve">
-    <value>Маленький</value>
+    <value>작은</value>
   </data>
   <data name="Large" xml:space="preserve">
-    <value>Большой</value>
+    <value>크기가 큰</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Прозрачный</value>
+    <value>분명한</value>
   </data>
   <data name="OK" xml:space="preserve">
-    <value>ХОРОШО</value>
+    <value>좋아요</value>
   </data>
   <data name="Press the keys to use as the shortcut key" xml:space="preserve">
-    <value>Нажмите клавиши, которые будут использоваться в качестве сочетания клавиш</value>
+    <value>단축키로 사용할 키를 누르세요</value>
   </data>
   <data name="Set" xml:space="preserve">
-    <value>Набор</value>
+    <value>세트</value>
   </data>
   <data name="Shortcut Key" xml:space="preserve">
-    <value>Сочетание клавиш</value>
+    <value>단축키</value>
   </data>
   <data name="Include files" xml:space="preserve">
-    <value>включенные файлы</value>
+    <value>파일 유형 포함</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Язык</value>
+    <value>언어</value>
   </data>
   <data name="Show links to folders as submenus" xml:space="preserve">
-    <value>Показывать ссылки на папки в виде подменю</value>
+    <value>폴더 링크를 하위 메뉴로 표시</value>
   </data>
   <data name="Select icon" xml:space="preserve">
-    <value>Выберите значок</value>
+    <value>아이콘 선택</value>
   </data>
   <data name="You are using a prerelease version" xml:space="preserve">
-    <value>Вы используете предварительную версию</value>
+    <value>사전 릴리스 버전을 사용하고 있습니다.</value>
   </data>
   <data name="Notify me when a new version is available" xml:space="preserve">
-    <value>Сообщите мне, когда будет доступна новая версия</value>
+    <value>새 버전이 출시되면 알려주세요</value>
   </data>
   <data name="TrayToolbar Location" xml:space="preserve">
-    <value>Расположение TrayToolbar</value>
+    <value>트레이툴바 위치</value>
   </data>
   <data name="Are you sure you want to update to the latest version" xml:space="preserve">
-    <value>Вы уверены, что хотите обновить программу до последней версии?</value>
+    <value>최신 버전으로 업데이트하시겠습니까?</value>
   </data>
   <data name="Update now" xml:space="preserve">
-    <value>Обновить сейчас</value>
+    <value>지금 업데이트하세요</value>
   </data>
   <data name="Update TrayToolbar" xml:space="preserve">
-    <value>Обновить панель инструментов в трее</value>
+    <value>트레이 툴바 업데이트</value>
   </data>
   <data name="Updated to version" xml:space="preserve">
-    <value>Обновлено до версии {0}!</value>
+    <value>{0} 버전으로 업데이트되었습니다!</value>
   </data>
   <data name="Is not a valid regular expression" xml:space="preserve">
-    <value>{0} не является допустимым регулярным выражением.</value>
+    <value>{0}은(는) 올바른 정규식이 아닙니다.</value>
   </data>
   <data name="TrayToolbar on GitHub" xml:space="preserve">
-    <value>TrayToolbar на GitHub</value>
+    <value>GitHub의 트레이툴바</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>정보</value>
+  </data>
+  <data name="Check for updates" xml:space="preserve">
+    <value>업데이트 확인</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>버전 {0} ({1})</value>
+  </data>
+  <data name="Report an issue" xml:space="preserve">
+    <value>문제 신고</value>
+  </data>
+  <data name="SignPath sponsor" xml:space="preserve">
+    <value>Windows용 무료 코드 서명은 SignPath.io에서, 인증서는 SignPath Foundation에서 제공합니다</value>
+  </data>
+  <data name="Last checked" xml:space="preserve">
+    <value>마지막 확인: {0}</value>
+  </data>
+  <data name="You are up to date" xml:space="preserve">
+    <value>최신 버전입니다</value>
+  </data>
+  <data name="Checking for updates" xml:space="preserve">
+    <value>업데이트를 확인하는 중…</value>
+  </data>
+  <data name="Could not check for updates" xml:space="preserve">
+    <value>업데이트를 확인할 수 없습니다.</value>
   </data>
 </root>

@@ -68,6 +68,15 @@ internal sealed class UpdateSignerPolicy
         acceptedSubjectDistinguishedNames: [],
         acceptedSignerThumbprints: []);
 
+    /// <summary>
+    /// Policy for the other executables and libraries in an update package: TrayToolbar's own
+    /// assemblies are SignPath-signed and runtime libraries shipped with a release are Microsoft-signed
+    /// </summary>
+    public static UpdateSignerPolicy Libraries { get; } = new(
+        acceptedPublisherNames: ["SignPath Foundation", "Microsoft Corporation"],
+        acceptedSubjectDistinguishedNames: [],
+        acceptedSignerThumbprints: []);
+
     public IReadOnlyCollection<string> AcceptedPublisherNames { get; }
     public IReadOnlyCollection<string> AcceptedSubjectDistinguishedNames { get; }
     public IReadOnlyCollection<string> AcceptedSignerThumbprints { get; }
@@ -178,6 +187,11 @@ internal sealed class AuthenticodeUpdateSignatureVerifier(UpdateSignerPolicy? po
 
     public UpdateSignatureVerificationResult VerifyForUpdate(string filePath)
     {
+        return Verify(filePath, policy);
+    }
+
+    public UpdateSignatureVerificationResult Verify(string filePath, UpdateSignerPolicy signerPolicy)
+    {
         if (string.IsNullOrWhiteSpace(filePath) || !File.Exists(filePath))
         {
             return UpdateSignatureVerificationResult.Failure(
@@ -199,7 +213,7 @@ internal sealed class AuthenticodeUpdateSignatureVerifier(UpdateSignerPolicy? po
             var subject = signerCertificate.Subject ?? string.Empty;
             var thumbprint = UpdateSignerPolicy.NormalizeThumbprint(signerCertificate.Thumbprint);
 
-            if (!policy.Matches(signerCertificate, out var mismatchReason))
+            if (!signerPolicy.Matches(signerCertificate, out var mismatchReason))
             {
                 return UpdateSignatureVerificationResult.Failure(
                     UpdateSignatureFailureReason.UnexpectedPublisher,
@@ -267,7 +281,11 @@ internal sealed class AuthenticodeUpdateSignatureVerifier(UpdateSignerPolicy? po
 
     static X509Certificate2 LoadSignerCertificate(string filePath)
     {
+        // .NET 9+ marks CreateFromSignedFile obsolete without offering a managed replacement
+        // for reading the Authenticode signer out of a PE file
+#pragma warning disable SYSLIB0057
         using var signerCertificate = X509Certificate.CreateFromSignedFile(filePath);
+#pragma warning restore SYSLIB0057
         return new X509Certificate2(signerCertificate);
     }
 

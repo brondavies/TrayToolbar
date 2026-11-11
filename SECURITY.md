@@ -63,7 +63,7 @@ Current runtime trust model for automatic updates:
 
 - GitHub release metadata and asset SHA-256 digests must match the expected release contract
 - the staged updater executable must pass `WinVerifyTrust` with trust UI disabled
-- the signer identity must match `UpdateSignerPolicy.Default` in `src/TrayToolbar/Services/AuthenticodeUpdateSignatureVerifier.cs`
+- the signer identity must match `UpdateSignerPolicy.Default` in `src/TrayToolbar.Core/Services/AuthenticodeUpdateSignatureVerifier.cs`
 
 Practical notes:
 

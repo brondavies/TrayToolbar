@@ -292,7 +292,7 @@ internal partial class NotificationsHelper
     private static IntPtr QueryInterface(IntPtr instance, Guid interfaceId)
     {
         var iid = interfaceId;
-        var hr = Marshal.QueryInterface(instance, ref iid, out var queriedInterface);
+        var hr = Marshal.QueryInterface(instance, in iid, out var queriedInterface);
         Marshal.ThrowExceptionForHR(hr);
         return queriedInterface;
     }

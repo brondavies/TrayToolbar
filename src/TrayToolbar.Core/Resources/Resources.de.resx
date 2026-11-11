@@ -118,141 +118,168 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Cancel" xml:space="preserve">
-    <value>Annuler</value>
+    <value>Abbrechen</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Erreur</value>
+    <value>Fehler</value>
   </data>
   <data name="Exclude files" xml:space="preserve">
-    <value>Fichiers à exclure</value>
+    <value>Dateien ausschließen</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Quitter</value>
+    <value>Beenden</value>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Dossiers</value>
+    <value>Ordner</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>Optionen</value>
   </data>
   <data name="Run on log in" xml:space="preserve">
-    <value>Lancer à l'ouverture de session</value>
+    <value>Beim Anmelden ausführen</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Enregistrer</value>
+    <value>Speichern</value>
   </data>
   <data name="The folder does not exist" xml:space="preserve">
-    <value>Le dossier n'existe pas</value>
+    <value>Der Ordner existiert nicht.</value>
   </data>
   <data name="The folder value must be set" xml:space="preserve">
-    <value>La valeur du dossier doit être définie.</value>
+    <value>Der Ordnerpfad muss festgelegt werden.</value>
   </data>
   <data name="TrayToolbar" xml:space="preserve">
     <value>TrayToolbar</value>
   </data>
   <data name="TrayToolbar Settings" xml:space="preserve">
-    <value>Paramètres de TrayToolbar</value>
+    <value>TrayToolbar-Einstellungen</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Rafraîchir</value>
+    <value>Aktualisieren</value>
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
-    <value>Une nouvelle version est disponible!</value>
+    <value>Eine neue Version ist verfügbar!</value>
   </data>
   <data name="Add Folder" xml:space="preserve">
-    <value>Ajouter un dossier</value>
+    <value>Ordner hinzufügen</value>
   </data>
   <data name="Browse Folder" xml:space="preserve">
-    <value>Choisir un dossier</value>
+    <value>Ordner durchsuchen</value>
   </data>
   <data name="Include Subfolders" xml:space="preserve">
-    <value>Inclure les sous-dossiers</value>
+    <value>Inklusive Unterordner</value>
   </data>
   <data name="Open Folder" xml:space="preserve">
-    <value>Ouvrir le dossier</value>
+    <value>Ordner öffnen</value>
   </data>
   <data name="Remove Folder" xml:space="preserve">
-    <value>Supprimer le dossier</value>
+    <value>Ordner entfernen</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Sombre</value>
+    <value>Dunkel</value>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Clair</value>
+    <value>Licht</value>
   </data>
   <data name="System" xml:space="preserve">
-    <value>Système</value>
+    <value>System</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Thème</value>
+    <value>Thema</value>
   </data>
   <data name="Exclude folders" xml:space="preserve">
-    <value>Dossiers à exclure</value>
+    <value>Ordner ausschließen</value>
   </data>
   <data name="Menu Font Size" xml:space="preserve">
-    <value>Taille de la police du menu</value>
+    <value>Menü Schriftgröße</value>
   </data>
   <data name="Icon Size" xml:space="preserve">
-    <value>Taille des icônes</value>
+    <value>Symbolgröße</value>
   </data>
   <data name="Small" xml:space="preserve">
-    <value>Petites</value>
+    <value>Klein</value>
   </data>
   <data name="Large" xml:space="preserve">
-    <value>Grandes</value>
+    <value>Groß</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Effacer</value>
+    <value>Löschen</value>
   </data>
   <data name="OK" xml:space="preserve">
-    <value>Valider</value>
+    <value>OK</value>
   </data>
   <data name="Press the keys to use as the shortcut key" xml:space="preserve">
-    <value>Appuyez sur les touches à utiliser comme raccourci clavier</value>
+    <value>Drücken Sie die Tasten, die Sie als Tastenkombination verwenden möchten</value>
   </data>
   <data name="Set" xml:space="preserve">
-    <value>Définir</value>
+    <value>Festlegen</value>
   </data>
   <data name="Shortcut Key" xml:space="preserve">
-    <value>Touche de raccourci</value>
+    <value>Tastenkombination</value>
   </data>
   <data name="Include files" xml:space="preserve">
-    <value>Fichiers à inclure</value>
+    <value>Dateien einschließen</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Langue</value>
+    <value>Sprache</value>
   </data>
   <data name="Show links to folders as submenus" xml:space="preserve">
-    <value>Afficher les liens vers les dossiers sous forme de sous-menus</value>
+    <value>Ordnerverknüpfungen als Untermenüs anzeigen</value>
   </data>
   <data name="Select icon" xml:space="preserve">
-    <value>Sélectionner l'icône</value>
+    <value>Symbol auswählen</value>
   </data>
   <data name="You are using a prerelease version" xml:space="preserve">
-    <value>Vous utilisez une version préliminaire</value>
+    <value>Sie verwenden eine Vorabversion</value>
   </data>
   <data name="Notify me when a new version is available" xml:space="preserve">
-    <value>Prévenez-moi lorsqu'une nouvelle version est disponible</value>
+    <value>Benachrichtigen Sie mich, wenn eine neue Version verfügbar ist</value>
   </data>
   <data name="TrayToolbar Location" xml:space="preserve">
-    <value>Emplacement de TrayToolbar</value>
+    <value>TrayToolbar-Speicherort</value>
   </data>
   <data name="Are you sure you want to update to the latest version" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir effectuer la mise à jour vers la dernière version ?</value>
+    <value>Möchten Sie wirklich auf die neueste Version aktualisieren?</value>
   </data>
   <data name="Update now" xml:space="preserve">
-    <value>Mettez à jour maintenant</value>
+    <value>Jetzt aktualisieren</value>
   </data>
   <data name="Update TrayToolbar" xml:space="preserve">
-    <value>Mettre à jour la barre d'outils de la zone de notification</value>
+    <value>Aktualisieren Sie die TrayToolbar</value>
   </data>
   <data name="Updated to version" xml:space="preserve">
-    <value>Mise à jour vers la version {0} !</value>
+    <value>Aktualisiert auf Version {0}!</value>
   </data>
   <data name="Is not a valid regular expression" xml:space="preserve">
-    <value>{0} n'est pas une expression régulière valide.</value>
+    <value>{0} ist kein gültiger regulärer Ausdruck.</value>
   </data>
   <data name="TrayToolbar on GitHub" xml:space="preserve">
-    <value>TrayToolbar sur GitHub</value>
+    <value>TrayToolbar auf GitHub</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="Check for updates" xml:space="preserve">
+    <value>Nach Updates suchen</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version {0} ({1})</value>
+  </data>
+  <data name="Report an issue" xml:space="preserve">
+    <value>Problem melden</value>
+  </data>
+  <data name="SignPath sponsor" xml:space="preserve">
+    <value>Kostenlose Codesignierung unter Windows von SignPath.io, Zertifikat von SignPath Foundation</value>
+  </data>
+  <data name="Last checked" xml:space="preserve">
+    <value>Zuletzt geprüft: {0}</value>
+  </data>
+  <data name="You are up to date" xml:space="preserve">
+    <value>Sie sind auf dem neuesten Stand</value>
+  </data>
+  <data name="Checking for updates" xml:space="preserve">
+    <value>Suche nach Updates…</value>
+  </data>
+  <data name="Could not check for updates" xml:space="preserve">
+    <value>Updates konnten nicht geprüft werden.</value>
   </data>
 </root>

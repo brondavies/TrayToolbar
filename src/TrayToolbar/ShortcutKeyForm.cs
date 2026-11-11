@@ -1,4 +1,6 @@
-﻿using TrayToolbar.Extensions;
+﻿using System.ComponentModel;
+
+using TrayToolbar.Extensions;
 
 using Windows.Win32;
 
@@ -22,6 +24,8 @@ public partial class ShortcutKeyForm : Form
         }
     }
 
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public string Hotkey
     {
         get => HotkeyValue.Text;

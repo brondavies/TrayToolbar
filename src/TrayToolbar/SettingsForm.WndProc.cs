@@ -16,14 +16,14 @@ partial class SettingsForm
     protected override void WndProc(ref Message m)
     {
         // Second instance launch activation
-        if (m.Msg == Program.WM_SHOWSETTINGSFORM)
+        if (m.Msg == InstanceMessages.WM_SHOWSETTINGSFORM)
         {
             // Bring existing instance to foreground
             ShowNormal();
             PInvoke.SetForegroundWindow(new HWND(Handle));
         }
         // Exit request from an update that needs to replace the application
-        else if (m.Msg == Program.WM_EXITSETTINGSFORM)
+        else if (m.Msg == InstanceMessages.WM_EXITSETTINGSFORM)
         {
             Quit();
         }

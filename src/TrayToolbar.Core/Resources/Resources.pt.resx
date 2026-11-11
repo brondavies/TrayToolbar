@@ -121,64 +121,64 @@
     <value>Cancelar</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Erro</value>
   </data>
   <data name="Exclude files" xml:space="preserve">
-    <value>Excluir archivos</value>
+    <value>Arquivos excluídos</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Salir</value>
+    <value>Sair</value>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Carpetas</value>
+    <value>Pastas</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Opciones</value>
+    <value>Opções</value>
   </data>
   <data name="Run on log in" xml:space="preserve">
-    <value>Ejecutar al iniciar sesión</value>
+    <value>Executar na inicialização</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Guardar</value>
+    <value>Salvar</value>
   </data>
   <data name="The folder does not exist" xml:space="preserve">
-    <value>La carpeta no existe.</value>
+    <value>A pasta não existe.</value>
   </data>
   <data name="The folder value must be set" xml:space="preserve">
-    <value>Se debe establecer el valor de la carpeta.</value>
+    <value>O caminho da pasta deve ser definido.</value>
   </data>
   <data name="TrayToolbar" xml:space="preserve">
     <value>TrayToolbar</value>
   </data>
   <data name="TrayToolbar Settings" xml:space="preserve">
-    <value>Configuración de la barra de herramientas de la bandeja</value>
+    <value>Configurações do TrayToolbar</value>
   </data>
   <data name="Refresh" xml:space="preserve">
-    <value>Actualizar</value>
+    <value>Atualizar</value>
   </data>
   <data name="A_new_version_is_available" xml:space="preserve">
-    <value>¡Una nueva version esta disponible!</value>
+    <value>Uma nova versão está disponível!</value>
   </data>
   <data name="Add Folder" xml:space="preserve">
-    <value>Agregar carpeta</value>
+    <value>Adicionar Pasta</value>
   </data>
   <data name="Browse Folder" xml:space="preserve">
-    <value>Examinar carpeta</value>
+    <value>Procurar Pasta</value>
   </data>
   <data name="Include Subfolders" xml:space="preserve">
-    <value>Incluir subcarpétas</value>
+    <value>Incluir Subpastas</value>
   </data>
   <data name="Open Folder" xml:space="preserve">
-    <value>Abrir Carpeta</value>
+    <value>Abrir Pasta</value>
   </data>
   <data name="Remove Folder" xml:space="preserve">
-    <value>Quitar carpeta</value>
+    <value>Remover Pasta</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Oscuro</value>
+    <value>Escuro</value>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Ligero</value>
+    <value>Claro</value>
   </data>
   <data name="System" xml:space="preserve">
     <value>Sistema</value>
@@ -187,72 +187,99 @@
     <value>Tema</value>
   </data>
   <data name="Exclude folders" xml:space="preserve">
-    <value>Excluir carpetas</value>
+    <value>Pastas excluídas</value>
   </data>
   <data name="Menu Font Size" xml:space="preserve">
-    <value>Tamaño de fuente del menú</value>
+    <value>Tamanho da Fonte do Menu</value>
   </data>
   <data name="Icon Size" xml:space="preserve">
-    <value>Tamaño del icono</value>
+    <value>Ícone</value>
   </data>
   <data name="Small" xml:space="preserve">
-    <value>Pequeño</value>
+    <value>Pequeno</value>
   </data>
   <data name="Large" xml:space="preserve">
     <value>Grande</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Claro</value>
+    <value>Limpar</value>
   </data>
   <data name="OK" xml:space="preserve">
-    <value>DE ACUERDO</value>
+    <value>OK</value>
   </data>
   <data name="Press the keys to use as the shortcut key" xml:space="preserve">
-    <value>Presione las teclas para usarlas como tecla de acceso directo</value>
+    <value>Pressione as teclas para usar como a tecla de atalho</value>
   </data>
   <data name="Set" xml:space="preserve">
-    <value>Establecer</value>
+    <value>Definir</value>
   </data>
   <data name="Shortcut Key" xml:space="preserve">
-    <value>Tecla de atajo</value>
+    <value>Tecla de Atalho</value>
   </data>
   <data name="Include files" xml:space="preserve">
-    <value>Archivos incluidos</value>
+    <value>Arquivos incluídos</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Idioma</value>
+    <value>Linguagem</value>
   </data>
   <data name="Show links to folders as submenus" xml:space="preserve">
-    <value>Mostrar enlaces a carpetas como submenús</value>
+    <value>Exibir links para pastas como submenus</value>
   </data>
   <data name="Select icon" xml:space="preserve">
-    <value>Seleccionar icono</value>
+    <value>Selecionar ícone</value>
   </data>
   <data name="You are using a prerelease version" xml:space="preserve">
-    <value>Estás usando una versión preliminar</value>
+    <value>Você está usando uma versão de pré-lançamento</value>
   </data>
   <data name="Notify me when a new version is available" xml:space="preserve">
-    <value>Avísame cuando haya una nueva versión disponible</value>
+    <value>Avise-me quando uma nova versão estiver disponível</value>
   </data>
   <data name="TrayToolbar Location" xml:space="preserve">
-    <value>Ubicación de TrayToolbar</value>
+    <value>Localização do TrayToolbar</value>
   </data>
   <data name="Are you sure you want to update to the latest version" xml:space="preserve">
-    <value>¿Estás seguro de que deseas actualizar a la última versión?</value>
+    <value>Tem certeza de que deseja atualizar para a versão mais recente?</value>
   </data>
   <data name="Update now" xml:space="preserve">
-    <value>Actualizar ahora</value>
+    <value>Atualize agora</value>
   </data>
   <data name="Update TrayToolbar" xml:space="preserve">
-    <value>Actualizar TrayToolbar</value>
+    <value>Atualizar a barra de ferramentas da bandeja</value>
   </data>
   <data name="Updated to version" xml:space="preserve">
-    <value>¡Actualizado a la versión {0}!</value>
+    <value>Atualizado para a versão {0}!</value>
   </data>
   <data name="Is not a valid regular expression" xml:space="preserve">
-    <value>{0} no es una expresión regular válida.</value>
+    <value>{0} não é uma expressão regular válida.</value>
   </data>
   <data name="TrayToolbar on GitHub" xml:space="preserve">
-    <value>TrayToolbar en GitHub</value>
+    <value>TrayToolbar no GitHub</value>
+  </data>
+  <data name="About" xml:space="preserve">
+    <value>Sobre</value>
+  </data>
+  <data name="Check for updates" xml:space="preserve">
+    <value>Verificar atualizações</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versão {0} ({1})</value>
+  </data>
+  <data name="Report an issue" xml:space="preserve">
+    <value>Relatar um problema</value>
+  </data>
+  <data name="SignPath sponsor" xml:space="preserve">
+    <value>Assinatura de código gratuita no Windows fornecida por SignPath.io, certificado da SignPath Foundation</value>
+  </data>
+  <data name="Last checked" xml:space="preserve">
+    <value>Última verificação: {0}</value>
+  </data>
+  <data name="You are up to date" xml:space="preserve">
+    <value>Você está atualizado</value>
+  </data>
+  <data name="Checking for updates" xml:space="preserve">
+    <value>Verificando atualizações…</value>
+  </data>
+  <data name="Could not check for updates" xml:space="preserve">
+    <value>Não foi possível verificar atualizações.</value>
   </data>
 </root>

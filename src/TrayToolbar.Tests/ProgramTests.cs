@@ -1,7 +1,4 @@
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-
-using TrayToolbar.Services;
 
 namespace TrayToolbar.Tests;
 
@@ -73,7 +70,10 @@ public class ProgramTests
     }
 
     [TestMethod]
-    public void Launch_resolves_executable_shortcuts_and_preserves_shortcut_metadata()
+    [DataRow("magnify.exe", "/test-argument", false, DisplayName = "Executable with arguments")]
+    [DataRow("cmd.exe", "/c exit 0", true, DisplayName = "Run as administrator")]
+    [DataRow("mmc.exe", @"""%windir%\System32\virtmgmt.msc""", false, DisplayName = "Environment variables in arguments")]
+    public void Launch_shell_executes_executable_shortcuts(string target, string arguments, bool runAsUser)
     {
         using var scope = new ConfigHelperStateScope();
         var processLauncher = new FakeProcessLauncher();
@@ -81,51 +81,22 @@ public class ProgramTests
 
         var tempDirectory = Path.Combine(Path.GetTempPath(), $"TrayToolbar-ShortcutTests-{Guid.NewGuid():N}");
         Directory.CreateDirectory(tempDirectory);
-        var shortcutPath = Path.Combine(tempDirectory, "Magnify.lnk");
-        var targetPath = Path.Combine(Environment.SystemDirectory, "magnify.exe");
+        var shortcutPath = Path.Combine(tempDirectory, "Executable.lnk");
 
         try
         {
-            CreateShortcut(shortcutPath, targetPath, "/test-argument", tempDirectory, windowStyle: 3);
+            // The shell expands environment variables and honors the run-as flag only when it
+            // launches the .lnk itself, as Explorer does
+            CreateShortcut(shortcutPath, Path.Combine(Environment.SystemDirectory, target), arguments, tempDirectory, windowStyle: 3, runAsUser: runAsUser);
 
             var launched = Program.Launch(shortcutPath);
 
             Assert.IsTrue(launched);
             Assert.AreEqual(1, processLauncher.StartedProcesses.Count);
-            Assert.IsTrue(
-                string.Equals(targetPath, processLauncher.StartedProcesses[0].FileName, StringComparison.OrdinalIgnoreCase),
-                $"Expected shortcut target '{targetPath}' but got '{processLauncher.StartedProcesses[0].FileName}'.");
-            Assert.AreEqual("/test-argument", processLauncher.StartedProcesses[0].Arguments);
-            Assert.AreEqual(tempDirectory, processLauncher.StartedProcesses[0].WorkingDirectory);
-            Assert.AreEqual(ProcessWindowStyle.Maximized, processLauncher.StartedProcesses[0].WindowStyle);
+            Assert.AreEqual(shortcutPath, processLauncher.StartedProcesses[0].FileName);
+            Assert.AreEqual(string.Empty, processLauncher.StartedProcesses[0].Arguments);
+            Assert.AreEqual(string.Empty, processLauncher.StartedProcesses[0].Verb);
             Assert.IsTrue(processLauncher.StartedProcesses[0].UseShellExecute);
-        }
-        finally
-        {
-            Directory.Delete(tempDirectory, recursive: true);
-        }
-    }
-
-    [TestMethod]
-    public void TryCreateShortcutStartInfo_maps_runas_shortcuts_to_the_runas_verb()
-    {
-        var tempDirectory = Path.Combine(Path.GetTempPath(), $"TrayToolbar-ShortcutTests-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(tempDirectory);
-        var shortcutPath = Path.Combine(tempDirectory, "Cmd.lnk");
-        var targetPath = Path.Combine(Environment.SystemDirectory, "cmd.exe");
-
-        try
-        {
-            CreateShortcut(shortcutPath, targetPath, "/c exit 0", tempDirectory, runAsUser: true);
-
-            var created = ShortcutTargetResolver.TryCreateShortcutStartInfo(shortcutPath, out var startInfo);
-
-            Assert.IsTrue(created);
-            Assert.IsTrue(string.Equals(targetPath, startInfo.FileName, StringComparison.OrdinalIgnoreCase));
-            Assert.AreEqual("/c exit 0", startInfo.Arguments);
-            Assert.AreEqual(tempDirectory, startInfo.WorkingDirectory);
-            Assert.AreEqual("runas", startInfo.Verb);
-            Assert.IsTrue(startInfo.UseShellExecute);
         }
         finally
         {
@@ -166,7 +137,9 @@ public class ProgramTests
     }
 
     [TestMethod]
-    public void Launch_resolves_non_executable_shortcuts_without_arguments()
+    [DataRow("", DisplayName = "Without arguments")]
+    [DataRow("/unexpected-argument", DisplayName = "With arguments")]
+    public void Launch_shell_executes_non_executable_shortcuts(string arguments)
     {
         using var scope = new ConfigHelperStateScope();
         var processLauncher = new FakeProcessLauncher();
@@ -180,38 +153,7 @@ public class ProgramTests
 
         try
         {
-            CreateShortcut(shortcutPath, documentPath, string.Empty, tempDirectory);
-
-            var launched = Program.Launch(shortcutPath);
-
-            Assert.IsTrue(launched);
-            Assert.AreEqual(1, processLauncher.StartedProcesses.Count);
-            Assert.AreEqual(documentPath, processLauncher.StartedProcesses[0].FileName);
-            Assert.AreEqual(tempDirectory, processLauncher.StartedProcesses[0].WorkingDirectory);
-            Assert.IsTrue(processLauncher.StartedProcesses[0].UseShellExecute);
-        }
-        finally
-        {
-            Directory.Delete(tempDirectory, recursive: true);
-        }
-    }
-
-    [TestMethod]
-    public void Launch_keeps_shell_launch_behavior_for_non_executable_shortcuts_with_arguments()
-    {
-        using var scope = new ConfigHelperStateScope();
-        var processLauncher = new FakeProcessLauncher();
-        ConfigHelper.ProcessLauncher = processLauncher;
-
-        var tempDirectory = Path.Combine(Path.GetTempPath(), $"TrayToolbar-ShortcutTests-{Guid.NewGuid():N}");
-        Directory.CreateDirectory(tempDirectory);
-        var documentPath = Path.Combine(tempDirectory, "notes.txt");
-        var shortcutPath = Path.Combine(tempDirectory, "Notes.lnk");
-        File.WriteAllText(documentPath, "hello");
-
-        try
-        {
-            CreateShortcut(shortcutPath, documentPath, "/unexpected-argument", tempDirectory);
+            CreateShortcut(shortcutPath, documentPath, arguments, tempDirectory);
 
             var launched = Program.Launch(shortcutPath);
 

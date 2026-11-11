@@ -100,12 +100,11 @@ body:
     id: config-details
     attributes:
       label: Relevant configuration details (sanitized)
-      description: If the bug depends on folder paths, filters, hotkeys, update settings, language settings, or `LaunchPolicy`, paste only the relevant parts and remove personal information.
+      description: If the bug depends on folder paths, filters, hotkeys, update settings, or language settings, paste only the relevant parts and remove personal information.
       placeholder: |
         - Folders: ...
         - Recursive: true/false
         - IgnoreFiles / IncludeFiles: ...
-        - LaunchPolicy: ConfiguredSources / NetworkBlocked / LocalOnly
         - Theme / Language: ...
         - CheckForUpdates / NotifyOnUpdateAvailable: ...
     validations:

@@ -94,7 +94,9 @@ public class AuthenticodeUpdateSignatureVerifierTests
 
             try
             {
+#pragma warning disable SYSLIB0057 // no managed replacement reads the Authenticode signer from a PE file
                 using var certificate = new X509Certificate2(X509Certificate.CreateFromSignedFile(candidate));
+#pragma warning restore SYSLIB0057
                 publisher = UpdateSignerPolicy.GetPublisherIdentity(certificate);
                 if (publisher.HasValue())
                 {

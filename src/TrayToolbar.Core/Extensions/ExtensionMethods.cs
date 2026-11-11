@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 
@@ -10,16 +9,6 @@ public static class ExtensionMethods
     public static string FileExtension(this string file)
     {
         return Path.GetExtension(file).ToLowerInvariant();
-    }
-
-    public static Icon GetIcon(this string path)
-    {
-        return ShellIcons.FetchIcon(path, false);
-    }
-
-    public static Bitmap GetImage(this string file, bool large = false)
-    {
-        return ShellIcons.FetchIconAsBitmap(file, large);
     }
 
     public static bool HasValue([NotNullWhen(true)] this string? value)
@@ -130,12 +119,6 @@ public static class ExtensionMethods
         }
         catch { }
         return shortcutPath;
-    }
-
-    public static void ShowContextMenu(this NotifyIcon notifyIcon)
-    {
-        MethodInfo? mi = typeof(NotifyIcon).GetMethod("ShowContextMenu", BindingFlags.Instance | BindingFlags.NonPublic);
-        mi?.Invoke(notifyIcon, null);
     }
 
     public static string[] SplitPaths(this string value, char[]? splitchars = null)

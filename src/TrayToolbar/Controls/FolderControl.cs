@@ -1,4 +1,6 @@
-﻿using TrayToolbar.Extensions;
+﻿using System.ComponentModel;
+
+using TrayToolbar.Extensions;
 using TrayToolbar.Models;
 
 using Windows.Win32;
@@ -21,12 +23,16 @@ public partial class FolderControl : UserControl
         UpdateConfig();
     }
 
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool ShowRemoveButton
     {
         get => DeleteFolderButton.Visible;
         set => DeleteFolderButton.Visible = value;
     }
 
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public FolderConfig Config
     {
         get => config;
@@ -37,6 +43,8 @@ public partial class FolderControl : UserControl
         }
     }
 
+    [Browsable(false)]
+    [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
     public bool Error
     {
         get => ErrorIcon.Visible;

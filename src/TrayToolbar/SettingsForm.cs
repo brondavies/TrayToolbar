@@ -28,6 +28,10 @@ public partial class SettingsForm : Form
 
     private System.Threading.Timer? _updateCheckTimer;
 
+    private UpdateCheckResult? _lastUpdateCheck;
+
+    private DateTime? _lastUpdateCheckUtc;
+
     internal static readonly CultureInfo[] SupportedLanguages = [
         CultureInfo.GetCultureInfo("en"),
         CultureInfo.GetCultureInfo("es"),
@@ -63,27 +67,44 @@ public partial class SettingsForm : Form
         HotKeys.HotKeyPressed += HotKey_Pressed;
     }
 
-    private void SetupUpdateCheckTimer()
+    /// <summary>
+    /// Starts or stops update checking to match the configuration; a user who turns
+    /// "Check for updates" off never contacts GitHub
+    /// </summary>
+    private void ApplyUpdateCheckSettings()
     {
-        var interval = TimeSpan.FromMinutes(Configuration.UpdateCheckInterval);
-        _updateCheckTimer = new System.Threading.Timer(
-            callback: _ => CheckForUpdateAsync(),
-            state: null,
-            dueTime: interval,
-            period: interval
-        );
+        _updateCheckTimer?.Dispose();
+        _updateCheckTimer = null;
+        if (!UpdateChecker.ShouldCheckOnStartup(Configuration))
+        {
+            return;
+        }
+        if (UpdateChecker.ShouldCheckPeriodically(Configuration))
+        {
+            var interval = TimeSpan.FromMinutes(Configuration.UpdateCheckInterval);
+            _updateCheckTimer = new System.Threading.Timer(
+                callback: _ => CheckForUpdateAsync(),
+                state: null,
+                dueTime: interval,
+                period: interval
+            );
+        }
+        CheckForUpdateAsync();
     }
 
     private void CheckForUpdateAsync()
     {
-        ConfigHelper.CheckForUpdate().ContinueWith(r =>
+        UpdateChecker.CheckAsync().ContinueWith(r => OnUpdateCheckCompleted(r.Result));
+    }
+
+    private void OnUpdateCheckCompleted(UpdateCheckResult result)
+    {
+        _lastUpdateCheck = result;
+        _lastUpdateCheckUtc = DateTime.UtcNow;
+        if (result.Status is UpdateCheckStatus.UpdateAvailable or UpdateCheckStatus.Prerelease)
         {
-            if (UpdateLogic.TryGetAvailableUpdate(r.Result, ConfigHelper.ApplicationVersion, out var version, out var updateUrl))
-            {
-                var prerelease = IsPrereleaseVersion(version);
-                ShowUpdateAvailable(updateUrl, prerelease);
-            }
-        });
+            ShowUpdateAvailable(result.ReleaseUrl!, result.Status == UpdateCheckStatus.Prerelease);
+        }
     }
 
     private void HotKey_Pressed(int value, EventArgs e)
@@ -126,7 +147,7 @@ public partial class SettingsForm : Form
     const string Command_Open = "Open";
     const string Command_Exit = "Exit";
     const string Command_Locate = "Locate";
-    const string Command_GitHub = "GitHub";
+    const string Command_About = "About";
 
     private void LoadResources(string? language)
     {
@@ -156,7 +177,8 @@ public partial class SettingsForm : Form
         AddFolderButton.Text = R.Add_Folder;
         Text = $"{R.TrayToolbar_Settings} ({ConfigHelper.ApplicationVersion})";
         NewVersionLabel.Text = isPrerelease ? R.You_are_using_a_prerelease_version : R.A_new_version_is_available;
-        UpdateNowLabel.Text = R.Update_now;
+        AboutLabel.Text = R.About;
+        CheckForUpdatesCheckbox.Text = R.Check_for_updates;
         LanguageLabel.Text = R.Language;
         ShowFolderLinksAsSubMenusCheckbox.Text = R.Show_links_to_folders_as_submenus;
 
@@ -166,7 +188,7 @@ public partial class SettingsForm : Form
             new ToolStripMenuItem { Text = R.Options, CommandParameter = Command_Options },
             new ToolStripMenuItem { Text = R.Open_Folder, CommandParameter = Command_Open },
             new ToolStripMenuItem { Text = R.TrayToolbar_Location, CommandParameter = Command_Locate },
-            new ToolStripMenuItem { Text = R.TrayToolbar_on_GitHub, CommandParameter = Command_GitHub },
+            new ToolStripMenuItem { Text = R.About, CommandParameter = Command_About },
             new ToolStripMenuItem { Text = R.Exit, CommandParameter = Command_Exit }
         ]);
 
@@ -191,7 +213,6 @@ public partial class SettingsForm : Form
             : R.A_new_version_is_available;
         NewVersionLabel.Tag = updateUri;
         NewVersionLabel.Visible = true;
-        UpdateNowLabel.Visible = !prerelease;
         if (!prerelease && Configuration.NotifyOnUpdateAvailable && ConfigHelper.SupportsToastNotifications)
         {
             NotificationsHelper.Notify(R.A_new_version_is_available, updateUri, R.Update_now, NotificationsHelper.UPDATE_ACTION);
@@ -481,6 +502,8 @@ public partial class SettingsForm : Form
         LanguageSelectList.SelectedIndex = SupportedLanguages.IndexOf(l => l.TwoLetterISOLanguageName == Configuration.Language) + 1;
         NotifyOnUpdateAvailableCheckbox.Checked = Configuration.NotifyOnUpdateAvailable;
         RunOnLoginCheckbox.Checked = ConfigHelper.IsAutoStartupConfigured();
+        CheckForUpdatesCheckbox.Checked = Configuration.CheckForUpdates;
+        NotifyOnUpdateAvailableCheckbox.Enabled = Configuration.CheckForUpdates;
         if (SystemTheme.IsDarkModeSupported())
         {
             ThemeToggleButton.Theme = (ThemeToggleEnum)Configuration.Theme;
@@ -492,19 +515,7 @@ public partial class SettingsForm : Form
             var row = tableLayout.GetRow(ThemeToggleButton);
             tableLayout.RowStyles[row].Height = 0;
         }
-        if (Configuration.CheckForUpdates)
-        {
-            if (Configuration.NotifyOnUpdateAvailable)
-            {
-                SetupUpdateCheckTimer();
-            }
-            CheckForUpdateAsync();
-        }
-    }
-
-    static bool IsPrereleaseVersion(string version)
-    {
-        return UpdateLogic.IsPrereleaseVersion(ConfigHelper.ApplicationVersion, version);
+        ApplyUpdateCheckSettings();
     }
 
     private IEnumerable<FolderControl> FolderControls()
@@ -744,8 +755,8 @@ public partial class SettingsForm : Form
             case Command_Locate:
                 Program.Launch(ConfigHelper.ApplicationRoot);
                 break;
-            case Command_GitHub:
-                Program.Launch(UpdateLogic.ReleasesPageUrl);
+            case Command_About:
+                ShowAbout();
                 break;
             case Command_Exit:
                 Quit();
@@ -828,6 +839,7 @@ public partial class SettingsForm : Form
         Configuration.ShowFolderLinksAsSubMenus = ShowFolderLinksAsSubMenusCheckbox.Checked;
         Configuration.Theme = (int)ThemeToggleButton.Theme;
         Configuration.LargeIcons = IconSizeLargeCheckbox.Checked;
+        Configuration.CheckForUpdates = CheckForUpdatesCheckbox.Checked;
         Configuration.NotifyOnUpdateAvailable = NotifyOnUpdateAvailableCheckbox.Checked;
         if (FontSizeInput.Validate())
         {
@@ -839,6 +851,7 @@ public partial class SettingsForm : Form
             Close();
         }
         ConfigHelper.SetStartupKey(RunOnLoginCheckbox.Checked);
+        ApplyUpdateCheckSettings();
     }
 
     private bool ValidateFolderConfigurations()
@@ -899,7 +912,32 @@ public partial class SettingsForm : Form
 
     private void NewVersionLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
     {
-        Program.Launch($"{NewVersionLabel.Tag}");
+        ShowAbout();
+    }
+
+    private void AboutLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+    {
+        ShowAbout();
+    }
+
+    private void CheckForUpdatesCheckbox_CheckedChanged(object sender, EventArgs e)
+    {
+        NotifyOnUpdateAvailableCheckbox.Enabled = CheckForUpdatesCheckbox.Checked;
+    }
+
+    private void ShowAbout(bool justUpdated = false)
+    {
+        using var about = new AboutForm(_lastUpdateCheck, _lastUpdateCheckUtc, justUpdated);
+        about.UpdateCheckCompleted += (_, result) => OnUpdateCheckCompleted(result);
+        if (Visible)
+        {
+            about.ShowDialog(this);
+        }
+        else
+        {
+            about.StartPosition = FormStartPosition.CenterScreen;
+            about.ShowDialog();
+        }
     }
 
     private void AddFolderButton_Click(object sender, EventArgs e)
@@ -990,9 +1028,7 @@ public partial class SettingsForm : Form
         if (NewVersionMessage)
         {
             NewVersionMessage = false;
-            MessageBox.Show(this,
-                string.Format(R.Updated_to_version, ConfigHelper.ApplicationVersion),
-                R.Update_TrayToolbar, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            ShowAbout(justUpdated: true);
         }
     }
 
@@ -1013,15 +1049,4 @@ public partial class SettingsForm : Form
         LoadResources(code);
     }
 
-    private void UpdateNowLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-    {
-        var result = MessageBox.Show(this,
-            R.Are_you_sure_you_want_to_update_to_the_latest_version,
-            R.Update_TrayToolbar,
-            MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-        if (result == DialogResult.Yes)
-        {
-            ConfigHelper.UpdateToLatestVersion();
-        }
-    }
 }

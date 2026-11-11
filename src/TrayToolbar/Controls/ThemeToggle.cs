@@ -34,6 +34,7 @@ public partial class ThemeToggle : UserControl
     [DisplayName("Theme")]
     [Category("Appearance")]
     [Description("The selected theme")]
+    [DefaultValue(ThemeToggleEnum.SYSTEM_THEME)]
     public ThemeToggleEnum Theme
     {
         get
