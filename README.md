@@ -25,7 +25,7 @@ This application runs on .NET Desktop Runtime 10.  Download and install the runt
 
 [Download .NET 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
-[Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.12-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.12-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
+[Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.15-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.15-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
 
 **Updating from 1.8.x?** Install the .NET Desktop Runtime 10 first: `winget install Microsoft.DotNet.DesktopRuntime.10`. If a .NET prompt appears when you click **Update now**, install the runtime and click **Update now** again; 1.8.x keeps running until the update completes.
 

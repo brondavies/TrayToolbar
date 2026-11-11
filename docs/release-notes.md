@@ -68,7 +68,7 @@ Installs on 1.7.1 or earlier hit the same wall from the other side. 1.7.1 shippe
 ## Requirements
 
 - This application runs on .NET Desktop Runtime 10. Download and install the runtime here:
-  [Download .NET 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) | [Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.12-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.12-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
+  [Download .NET 10.0](https://dotnet.microsoft.com/en-us/download/dotnet/10.0) | [Arm64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.15-windows-arm64-installer) | [x64](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-10.0.15-windows-x64-installer) | [winget instructions](https://learn.microsoft.com/dotnet/core/install/windows?WT.mc_id=dotnet-35129-website#install-with-windows-package-manager-winget)
 
 ## Installation
 
