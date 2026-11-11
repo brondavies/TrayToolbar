@@ -12,6 +12,7 @@
 - About dialog. The tray icon's right-click menu and the Settings window have a new **About** entry showing the version, architecture, runtime and copyright, with links to the GitHub releases page and the issue tracker, a **Check for updates** button and **Update now**. The "TrayToolbar on GitHub" menu item and the **Update now** link moved there; the "A new version is available!" notice stays on the Settings window and opens About.
 - Opt out of updates. A **Check for updates** checkbox in Settings turns update checks off completely. TrayToolbar 2.0 will require Windows 11 and will be a larger download; untick the box to stay on the 1.x line.
 - Ready for 2.0. The updater can install releases that ship as a folder rather than a single executable, verifies every library in the package, and cleans up its temporary files. Existing 1.8.x installs should update to 1.9.0 before 2.0 is released.
+- Shortcuts behave as in Explorer. TrayToolbar now hands every `.lnk` to Windows instead of starting its target itself, so shortcuts whose arguments use environment variables such as `%windir%` open correctly.
 - **Full changelog**: see [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md).
 
 ## 1.8.4

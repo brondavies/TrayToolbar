@@ -1,30 +1,19 @@
 using System.Diagnostics;
 
-using TrayToolbar.Services;
-
 namespace TrayToolbar;
 
 internal static class Launcher
 {
+    // Shortcuts are shell-executed like everything else, so Windows applies the same
+    // environment-variable expansion, run-as-administrator flag and MSI resolution as Explorer.
     internal static bool Launch(string fileName)
-    {
-        if (ShortcutTargetResolver.TryCreateShortcutStartInfo(fileName, out var shortcutStartInfo)
-            && TryLaunch(shortcutStartInfo))
-        {
-            return true;
-        }
-
-        return TryLaunch(new ProcessStartInfo(fileName)
-        {
-            UseShellExecute = true,
-        });
-    }
-
-    static bool TryLaunch(ProcessStartInfo startInfo)
     {
         try
         {
-            ConfigHelper.ProcessLauncher.Start(startInfo);
+            ConfigHelper.ProcessLauncher.Start(new ProcessStartInfo(fileName)
+            {
+                UseShellExecute = true,
+            });
             return true;
         }
         catch

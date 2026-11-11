@@ -154,13 +154,7 @@ Treat these switches as implementation contract, not polished product CLI surfac
 
 `Program.Launch(...)` hands the clicked item to `Launcher` in `TrayToolbar.Core`, which starts it through the Windows shell (`UseShellExecute = true`). There is no allow-list: anything that appears in a menu came from a configured folder, and the only URLs TrayToolbar launches itself are the GitHub release and issue links behind the update and About surfaces.
 
-`.lnk` files get extra handling so they behave as they would from Explorer:
-
-- the shortcut is read with `IShellLink` (`ShortcutTargetResolver`) for its target, arguments, working directory, window style and run-as-administrator flag
-- when the target is an executable (`.exe`, `.com`, `.bat`, `.cmd`) and exists, the target is started directly with those settings, so arguments, working directory and `runas` are honored
-- otherwise, or when the shortcut is advertised (MSI), its target is missing, or the start fails, the `.lnk` file itself is shell-executed and Windows resolves it
-
-Every other item type (`.url` files, documents, folders, executables) is shell-executed as-is.
+Every item type (`.lnk` and `.url` files, documents, folders, executables) is shell-executed as-is. TrayToolbar does not resolve a `.lnk` before launching it, so Windows handles it exactly as Explorer does: environment variables in the target, arguments and working directory are expanded, the window style and run-as-administrator flag are honored, and advertised (MSI) shortcuts are resolved by Windows Installer. `ShortcutTargetResolver` only reads `.lnk` targets to decide which folder links become submenus.
 
 Run-on-login is configured in the current user's registry hive:
 
@@ -412,7 +406,7 @@ For shortcut issues:
 - hotkeys are stored as strings such as `CTRL + ALT + T`
 - conflicting system-wide shortcuts can prevent the expected behavior
 - each tray icon maps to a folder index, so deleting or reordering folders can change which menu a hotkey opens
-- `.url` and `.lnk` files now pass through launch-policy evaluation instead of launching blindly
+- a `.lnk` that misbehaves from TrayToolbar but works from Explorer is a bug: both shell-execute the shortcut
 
 ### Where are crash logs and other diagnostics?
 

@@ -179,8 +179,8 @@ New in Core:
   `NIM_ADD` retry (#76), `WM_POWERBROADCAST` resume check via `Shell_NotifyIconGetRect`,
   `WM_HOTKEY` dispatch, `WM_SETTINGCHANGE` (theme + environment), the single-instance
   broadcast messages, owner window for `IContextMenu` and `DoDragDrop`.
-- **`Launch/`** — `Launcher` (today's `Program.Launch` rules, unchanged: `.lnk` metadata
-  honored, everything else shell-executed) plus `ShellExecuteEx` with a PIDL for shell items.
+- **`Launch/`** — `Launcher` (today's `Program.Launch` rules, unchanged: every item,
+  `.lnk` included, shell-executed as-is) plus `ShellExecuteEx` with a PIDL for shell items.
 - **`Notifications/`** — `INotificationService` with `AppNotificationManager` implementation
   and the existing COM activator as fallback.
 - **`Updates/`** — updater v2: whole-zip extraction, folder staging, atomic swap on next
@@ -338,8 +338,8 @@ Rules:
 - Registry: `HKCU\...\Run\TrayToolbar`, `RunNotification\StartupTNotiTrayToolbar`, the
   AUMID `Brontech.TrayToolbar` and its activator CLSID.
 - Mutex `Local\TrayToolbar_<SID>` and the two broadcast window messages (same GUIDs).
-- Launch rules (`.lnk` handling, advertised shortcuts, runas, arguments only for
-  exe/com/bat/cmd, working directory, window style), launch logging formats, hotkey string
+- Launch rules (every item shell-executed as-is, so `.lnk` files behave as in Explorer),
+  launch logging formats, hotkey string
   format (`⊞ + CTRL + ALT + SHIFT + Key`), 10 languages with runtime switching, update
   eligibility rules and signer policy, release URL allow-list.
 - Behaviours: spinner while loading, click-while-loading opens when ready (10 s window),
