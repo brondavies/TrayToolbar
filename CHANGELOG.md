@@ -24,6 +24,7 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 - Cancelling the Settings window no longer starts a second update-check timer.
 - Temporary update folders left behind by earlier updates are removed on the next start.
+- Shortcuts (`.lnk`) now launch as they do from Explorer. TrayToolbar started an executable shortcut's target itself, which skipped the environment-variable expansion Windows applies, so a shortcut such as `%windir%\System32\mmc.exe "%windir%\System32\virtmgmt.msc"` passed `%windir%` literally and failed. Every shortcut is now shell-executed ([#120](https://github.com/brondavies/TrayToolbar/issues/120)).
 
 ## [1.8.4] - 2026-10-06
 
