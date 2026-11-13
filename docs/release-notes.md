@@ -4,6 +4,15 @@
 - GitHub release assets: <https://github.com/brondavies/TrayToolbar/releases>
 - Update and packaging trust boundary: [`update-security.md`](https://github.com/brondavies/TrayToolbar/blob/master/docs/update-security.md)
 
+## 1.9.1
+
+**Updating from 1.8.x?** Install the .NET Desktop Runtime 10 first: `winget install Microsoft.DotNet.DesktopRuntime.10`. If a .NET prompt appears when you click **Update now**, install the runtime and click **Update now** again; 1.8.x keeps running until the update completes. The 1.9.0 notes below cover everything else that changed since 1.8.4.
+
+## Highlights
+
+- Internet shortcuts no longer stall the menu. A `.url` file that repeated a key threw while TrayToolbar read its icon, so the folder's menu kept loading forever, and dropping such a file into a watched folder crashed the app. TrayToolbar now reads only the `[InternetShortcut]` section, and a file it can't read gets the standard icon instead of holding up the rest of the menu.
+- **Full changelog**: see [`CHANGELOG.md`](https://github.com/brondavies/TrayToolbar/blob/master/CHANGELOG.md).
+
 ## 1.9.0
 
 **Updating from 1.8.x?** Install the .NET Desktop Runtime 10 first: `winget install Microsoft.DotNet.DesktopRuntime.10`. If a .NET prompt appears when you click **Update now**, install the runtime and click **Update now** again; 1.8.x keeps running until the update completes.

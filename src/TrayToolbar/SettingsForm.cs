@@ -350,12 +350,28 @@ public partial class SettingsForm : Form
         {
             foreach (var file in EnumerateFiles(fullPath, folder.Recursive))
             {
-                MenuItems[folder].CreateMenuItem(file, folder);
+                TryCreateMenuItem(MenuItems[folder], file, folder);
             }
         }
         else if (File.Exists(fullPath) && Configuration.IncludesFile(fullPath))
         {
-            MenuItems[folder].CreateMenuItem(fullPath, folder);
+            TryCreateMenuItem(MenuItems[folder], fullPath, folder);
+        }
+    }
+
+    /// <summary>
+    /// Adds one file to a menu; a file that can't be read is left out instead of stopping
+    /// the rest of the menu from loading or crashing the folder watcher
+    /// </summary>
+    private static void TryCreateMenuItem(MenuItemCollection menu, string file, FolderConfig folder)
+    {
+        try
+        {
+            menu.CreateMenuItem(file, folder);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"TrayToolbar could not add '{file}' to the menu: {ex}");
         }
     }
 
@@ -616,7 +632,7 @@ public partial class SettingsForm : Form
             foreach (var file in EnumerateFiles(folder.Name.ToLocalPath(), folder.Recursive))
             {
                 if (token.IsCancellationRequested == true) { return; }
-                Invoke(() => menu.CreateMenuItem(file, folder));
+                Invoke(() => TryCreateMenuItem(menu, file, folder));
             }
             SetupLeftClickMenu(menu);
         }
