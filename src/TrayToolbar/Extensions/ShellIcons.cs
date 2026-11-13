@@ -39,22 +39,14 @@ public static class ShellIcons
             var fi = new FileInfo(path);
             if (fi.Exists && fi.Length < 1_000_000) // limit to files under 1MB to guard against potential memory overuse
             {
-                var dict = new Dictionary<string, string>();
-                foreach (var line in File.ReadAllLines(path))
-                {
-                    var parts = line.Split('=', 2);
-                    if (parts.Length == 2)
-                    {
-                        dict.Add(parts[0].ToLowerInvariant(), parts[1]);
-                    }
-                }
+                var dict = ReadInternetShortcutKeys(File.ReadAllLines(path));
                 dict.TryGetValue("url", out var url);
                 dict.TryGetValue("iconfile", out var iconFile);
                 dict.TryGetValue("iconindex", out var iconIndex);
                 if (iconFile.HasValue() && File.Exists(iconFile.ToLocalPath()))
                 {
                     _ = int.TryParse(iconIndex, out int id); // will be 0 if parse fails
-                    var icon = Icon.ExtractIcon(iconFile, id, !large);
+                    var icon = Icon.ExtractIcon(iconFile.ToLocalPath(), id, !large);
                     if (icon != null) return icon;
                 }
                 //no iconfile was set or it didn't contain an icon, check the url
@@ -70,16 +62,44 @@ public static class ShellIcons
                     //try getting an icon from the target if it's a local path
                     if (File.Exists(url.ToLocalPath()))
                     {
-                        return ExtractFromPath(url, large);
+                        return ExtractFromPath(url.ToLocalPath(), large);
                     }
                 }
             }
         }
-        catch (IOException)
+        catch (Exception)
         {
-            //File was probably locked
+            //The file was locked, malformed, or named an icon that couldn't be read; use the shell's icon
         }
         return ExtractFromPath(path, large);
+    }
+
+    /// <summary>
+    /// Reads the keys of a .url file's [InternetShortcut] section. Other sections can repeat
+    /// key names (property-store sections share Prop3, and [InternetShortcut.W] repeats URL in
+    /// another encoding), so they are skipped, and a key repeated within the section keeps its
+    /// last value
+    /// </summary>
+    internal static Dictionary<string, string> ReadInternetShortcutKeys(IEnumerable<string> lines)
+    {
+        var keys = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        var inShortcutSection = false;
+        foreach (var rawLine in lines)
+        {
+            var line = rawLine.Trim();
+            if (line.StartsWith('[') && line.EndsWith(']'))
+            {
+                inShortcutSection = line.Is("[InternetShortcut]");
+                continue;
+            }
+            if (!inShortcutSection) continue;
+            var parts = line.Split('=', 2);
+            if (parts.Length == 2)
+            {
+                keys[parts[0]] = parts[1];
+            }
+        }
+        return keys;
     }
 
     static readonly int SETTINGS_ICON_INDEX = ConfigHelper.WindowsMajorVersion == 11 ? 314 : 316;

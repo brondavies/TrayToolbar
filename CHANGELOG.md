@@ -8,6 +8,10 @@ For narrative release summaries, packaging notes, and upgrade context that is ea
 
 ## [Unreleased]
 
+### Fixed
+
+- Folders with internet shortcuts (`.url`) no longer keep loading forever, and adding one to a watched folder no longer crashes TrayToolbar. A `.url` file that repeated a key, such as `Prop3` in two property sections, threw while its icon was read. TrayToolbar now reads only the `[InternetShortcut]` section, uses the shell's icon for a file it can't read, and skips an item that still fails instead of stopping the rest of the menu ([#123](https://github.com/brondavies/TrayToolbar/issues/123)).
+
 ## [1.9.0] - 2026-11-11
 
 ### Added
